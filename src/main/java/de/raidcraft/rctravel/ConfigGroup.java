@@ -12,14 +12,14 @@ public class ConfigGroup implements Group {
     private String name;
     private String iconName;
     private double defaultPrice;
-    private int scheduleCooldown;
+    private int scheduledCooldown;
 
     public ConfigGroup(ConfigurationSection config) {
 
         this.name = config.getString("name");
         this.iconName = config.getString("icon", "sign");
         this.defaultPrice = config.getDouble("default-price", 0);
-        this.scheduleCooldown = config.getInt("schedule", 900);
+        this.scheduledCooldown = config.getInt("scheduled-cooldown", 900);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class ConfigGroup implements Group {
     }
 
     @Override
-    public int getScheduleCooldown() {
+    public int getScheduledCooldown() {
 
-        return scheduleCooldown;
+        return scheduledCooldown;
     }
 }
