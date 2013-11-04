@@ -7,6 +7,8 @@ public interface Group {
 
     public String getName();
 
+    public String getPlainName();
+
     public String getIconName();
 
     public double getDefaultPrice();

@@ -3,7 +3,6 @@ package de.raidcraft.rctravel;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Station;
-import de.raidcraft.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.Marker;
@@ -34,9 +33,9 @@ public class DynmapManager {
 
     private MarkerSet getMarkerSet(Group group) {
 
-        MarkerSet markerSet = markerAPI.getMarkerSet(StringUtils.formatName(group.getName()));
+        MarkerSet markerSet = markerAPI.getMarkerSet(group.getPlainName());
         if(markerSet == null) {
-            markerSet = markerAPI.createMarkerSet(StringUtils.formatName(group.getName()), group.getName(), null, true);
+            markerSet = markerAPI.createMarkerSet(group.getPlainName(), group.getName(), null, true);
         }
         return markerSet;
     }
@@ -53,7 +52,7 @@ public class DynmapManager {
 
         removeMarker(station, group);
 
-        markerSet.createMarker(StringUtils.formatName(station.getName())
+        markerSet.createMarker(station.getPlainName()
                 , station.getName()
                 , station.getLocation().getWorld().getName()
                 , station.getLocation().getBlockX()
@@ -68,7 +67,7 @@ public class DynmapManager {
         MarkerSet markerSet = getMarkerSet(group);
 
         for (Marker marker : markerSet.getMarkers()) {
-            if (marker.getLabel().equalsIgnoreCase(station.getName()) || marker.getLabel().equalsIgnoreCase(StringUtils.formatName(station.getName()))) {
+            if (marker.getLabel().equalsIgnoreCase(station.getName()) || marker.getLabel().equalsIgnoreCase(station.getPlainName())) {
                 marker.deleteMarker();
             }
         }

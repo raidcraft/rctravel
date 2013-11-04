@@ -1,8 +1,12 @@
 package de.raidcraft.rctravel.conversations;
 
 import com.sk89q.minecraft.util.commands.*;
+import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.RCTravelPlugin;
+import de.raidcraft.rctravel.api.group.Group;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author Philip Urban
@@ -41,8 +45,9 @@ public class TravelCommands {
         public void reload(CommandContext args, CommandSender sender) throws CommandException {
 
             plugin.reload();
-            plugin.getStationManager().loadStations();
+            //XXX order is important!
             plugin.getGroupManager().loadGroups();
+            plugin.getStationManager().loadStations();
         }
 
         @Command(
@@ -54,7 +59,22 @@ public class TravelCommands {
         @CommandPermissions("rctravel.cmd.create")
         public void create(CommandContext args, CommandSender sender) throws CommandException {
 
+            if(!(sender instanceof Player)) throw new CommandException("Player required!");
+            Player player = (Player)sender;
 
+            // check if group exists
+            Group group = plugin.getGroupManager().getGroup(args.getString(0));
+            if(group == null) {
+                throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
+            }
+
+            try {
+                plugin.getStationManager().createStation(args.getString(1), player.getLocation(), group);
+            } catch (RaidCraftException e) {
+                throw new CommandException(e.getMessage());
+            }
+
+            sender.sendMessage(ChatColor.GREEN + "Die Station '" + args.getString(1) + "' wurde erfolgreich erstellt!");
         }
     }
 }

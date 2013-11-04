@@ -1,6 +1,7 @@
 package de.raidcraft.rctravel;
 
 import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -29,6 +30,12 @@ public class ConfigGroup implements Group {
     public String getName() {
 
         return name;
+    }
+
+    @Override
+    public String getPlainName() {
+
+        return StringUtils.formatName(name);
     }
 
     @Override

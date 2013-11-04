@@ -10,6 +10,8 @@ public interface Station {
 
     public String getName();
 
+    public String getPlainName();
+
     public Location getLocation();
 
     public void travel(Player player);

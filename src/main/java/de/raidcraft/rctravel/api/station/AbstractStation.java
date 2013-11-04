@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel.api.station;
 
+import de.raidcraft.util.StringUtils;
 import org.bukkit.Location;
 
 /**
@@ -20,6 +21,12 @@ public abstract class AbstractStation implements Station {
     public String getName() {
 
         return name;
+    }
+
+    @Override
+    public String getPlainName() {
+
+        return StringUtils.formatName(name);
     }
 
     @Override

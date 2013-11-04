@@ -22,13 +22,27 @@ public class GroupManager {
         loadGroups();
     }
 
+    public Group getGroup(String groupName) {
+
+        Group group = cachedGroups.get(groupName);
+        if(group == null) {
+            for(Group gr : cachedGroups.values()) {
+                if(gr.getName().startsWith(groupName)) {
+                    group = gr;
+                    break;
+                }
+            }
+        }
+        return group;
+    }
+
     public void loadGroups() {
 
         cachedGroups.clear();
         loadDir("groups");
     }
 
-    public void loadDir(String dirName) {
+    private void loadDir(String dirName) {
 
         File configFolder = new File(plugin.getDataFolder(), dirName);
         configFolder.mkdirs();
