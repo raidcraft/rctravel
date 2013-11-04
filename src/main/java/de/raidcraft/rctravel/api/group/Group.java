@@ -12,4 +12,6 @@ public interface Group {
     public String getIconName();
 
     public double getDefaultPrice();
+
+    public int getScheduleCooldown();
 }
