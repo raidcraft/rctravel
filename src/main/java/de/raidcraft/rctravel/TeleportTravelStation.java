@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel;
 
+import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.api.station.AbstractChargeableStation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,5 +19,10 @@ public class TeleportTravelStation extends AbstractChargeableStation {
     public void travel(Player player) {
 
         player.teleport(getLocation());
+    }
+
+    public boolean isLocked() {
+
+        return RaidCraft.getComponent(RCTravelPlugin.class).getStationLockTask().isLocked(this);
     }
 }

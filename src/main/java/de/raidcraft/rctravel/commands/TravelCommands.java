@@ -1,4 +1,4 @@
-package de.raidcraft.rctravel.conversations;
+package de.raidcraft.rctravel.commands;
 
 import com.sk89q.minecraft.util.commands.*;
 import de.raidcraft.api.RaidCraftException;
@@ -45,9 +45,6 @@ public class TravelCommands {
         public void reload(CommandContext args, CommandSender sender) throws CommandException {
 
             plugin.reload();
-            //XXX order is important!
-            plugin.getGroupManager().loadGroups();
-            plugin.getStationManager().loadStations();
         }
 
         @Command(
@@ -69,7 +66,7 @@ public class TravelCommands {
             }
 
             try {
-                plugin.getStationManager().createStation(args.getString(1), player.getLocation(), group);
+                plugin.getStationManager().createStation(args.getString(1), player, group);
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }

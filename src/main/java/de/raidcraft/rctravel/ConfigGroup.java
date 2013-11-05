@@ -19,7 +19,7 @@ public class ConfigGroup implements Group {
         this.name = config.getString("name");
         this.iconName = config.getString("icon", "sign");
         this.defaultPrice = config.getDouble("default-price", 0);
-        this.scheduledCooldown = config.getInt("scheduled-cooldown", 900);
+        this.scheduledCooldown = config.getInt("scheduled-cooldown", 15);
     }
 
     @Override

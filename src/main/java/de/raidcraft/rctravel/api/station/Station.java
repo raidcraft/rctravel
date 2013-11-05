@@ -15,4 +15,8 @@ public interface Station {
     public Location getLocation();
 
     public void travel(Player player);
+
+    public boolean equals(Object obj);
+
+    public int hashCode();
 }

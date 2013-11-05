@@ -43,7 +43,7 @@ public abstract class AbstractStation implements Station {
 
         AbstractStation that = (AbstractStation) o;
 
-        return name.equals(that.name);
+        return name.equalsIgnoreCase(that.name);
 
     }
 

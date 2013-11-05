@@ -1,8 +1,9 @@
 package de.raidcraft.rctravel;
 
 import de.raidcraft.api.BasePlugin;
-import de.raidcraft.rctravel.conversations.TravelCommands;
+import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.tables.TTravelStation;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class RCTravelPlugin extends BasePlugin {
     private StationManager stationManager;
     private GroupManager groupManager;
     private DynmapManager dynmapManager;
+    private StationLockTask stationLockTask;
 
     @Override
     public void enable() {
@@ -24,10 +26,24 @@ public class RCTravelPlugin extends BasePlugin {
         stationManager = new StationManager(this);
         groupManager = new GroupManager(this);
         dynmapManager = new DynmapManager(this);
+        stationLockTask = new StationLockTask(this);
+
+        // start station schedule calculation
+        // every 5 seconds one station will be checked
+        Bukkit.getScheduler().runTaskTimer(this, stationLockTask, 0, 5 * 20);
     }
 
     @Override
     public void disable() {
+    }
+
+    @Override
+    public void reload() {
+
+        //XXX order is important!
+        getGroupManager().loadGroups();
+        getStationManager().reload();
+        getStationLockTask().reload();
     }
 
     @Override
@@ -51,5 +67,10 @@ public class RCTravelPlugin extends BasePlugin {
     public DynmapManager getDynmapManager() {
 
         return dynmapManager;
+    }
+
+    public StationLockTask getStationLockTask() {
+
+        return stationLockTask;
     }
 }

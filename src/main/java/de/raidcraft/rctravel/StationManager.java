@@ -8,6 +8,7 @@ import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
 import de.raidcraft.util.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,12 @@ public class StationManager {
     private RCTravelPlugin plugin;
     // map: key -> group name | value -> list of stations
     private Map<String, List<Station>> cachedStations = new CaseInsensitiveMap<>();
+    List<GroupedStation> groupedStations = new ArrayList<>();
 
     public StationManager(RCTravelPlugin plugin) {
 
         this.plugin = plugin;
-        loadStations();
+        reload();
     }
 
     public void loadStations() {
@@ -53,7 +55,25 @@ public class StationManager {
         return cachedStations.get(StringUtils.formatName(group));
     }
 
-    public void createStation(String stationName, Location location, Group group) throws RaidCraftException {
+    public void buildGroupedStations() {
+
+        groupedStations.clear();
+        for(Map.Entry<String, List<Station>> entry : cachedStations.entrySet()) {
+            Group group = plugin.getGroupManager().getGroup(entry.getKey());
+            if(group == null) continue;
+            for(Station station : entry.getValue()) {
+                GroupedStation groupedStation = new GroupedStation(station, group);
+                groupedStations.add(groupedStation);
+            }
+        }
+    }
+
+    public List<GroupedStation> getGroupedStations() {
+
+        return groupedStations;
+    }
+
+    public void createStation(String stationName, Player player, Group group) throws RaidCraftException {
 
         // check if station with same name already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class).find(TTravelStation.class).where().ieq("name", stationName).findUnique();
@@ -61,8 +81,9 @@ public class StationManager {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
 
-        Station station = new TeleportTravelStation(stationName, location, group.getDefaultPrice());
+        Station station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice());
         plugin.getDynmapManager().addStationMarker(station, group);
+        //TODO save schematic
         addToCache(station, group);
         saveStation(station, group);
     }
@@ -89,5 +110,11 @@ public class StationManager {
         tTravelStation.setPrice(0);
 
         RaidCraft.getDatabase(RCTravelPlugin.class).save(tTravelStation);
+    }
+
+    public void reload() {
+
+        loadStations();
+        buildGroupedStations();
     }
 }
