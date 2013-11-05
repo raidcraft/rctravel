@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel;
 
+import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Station;
 
 import java.util.*;
@@ -12,9 +13,7 @@ import java.util.*;
 public class StationLockTask implements Runnable {
 
     private RCTravelPlugin plugin;
-    // cooldown in minutes
-    // if cooldown is < 0 then station is unlocked
-    private Map<Station, Integer> remainingCooldowns = new HashMap<>();
+    private Map<Station, Cooldown> remainingCooldowns = new HashMap<>();
     private int index = 0;
 
     public StationLockTask(RCTravelPlugin plugin) {
@@ -31,18 +30,55 @@ public class StationLockTask implements Runnable {
 
     public boolean isLocked(Station station) {
 
-        return !(!remainingCooldowns.containsKey(station) || remainingCooldowns.get(station) < 0);
+        return (remainingCooldowns.containsKey(station) && remainingCooldowns.get(station).isLocked());
     }
 
     public int getRemainingCooldown(Station station) {
 
         if(!isLocked(station)) return 0;
-        return remainingCooldowns.get(station);
+        return remainingCooldowns.get(station).getRemainingCooldown();
     }
 
     @Override
     public void run() {
 
-        //TODO
+        List<GroupedStation> groupedStations = plugin.getStationManager().getGroupedStations();
+        if(index >= groupedStations.size()) index = 0;
+        GroupedStation groupedStation = groupedStations.get(index);
+        if(!remainingCooldowns.containsKey(groupedStation.getStation())) {
+            remainingCooldowns.put(groupedStation.getStation(), new Cooldown(groupedStation.getGroup()));
+        }
+
+        //TODO calculate if station get unlocked e.g.
+        remainingCooldowns.get(groupedStation.getStation()).process();
+
+        index++;
+    }
+
+    public class Cooldown {
+
+        // unlock time is negativ, lock time positiv
+        private int cooldown;
+
+        public Cooldown(Group group) {
+
+            cooldown = -group.getUnlockTime() - 1;
+        }
+
+        public boolean isLocked() {
+
+            return (cooldown > 0);
+        }
+
+        public int getRemainingCooldown() {
+
+            if(cooldown < 0) return 0;
+            return cooldown;
+        }
+
+        public void process() {
+
+            //TODO
+        }
     }
 }

@@ -13,5 +13,7 @@ public interface Group {
 
     public double getDefaultPrice();
 
-    public int getScheduledCooldown();
+    public int getLockTime();
+
+    public int getUnlockTime();
 }
