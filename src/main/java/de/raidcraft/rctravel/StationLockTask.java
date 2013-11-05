@@ -1,9 +1,10 @@
 package de.raidcraft.rctravel;
 
-import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Station;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Philip Urban
@@ -46,10 +47,9 @@ public class StationLockTask implements Runnable {
         if(index >= groupedStations.size()) index = 0;
         GroupedStation groupedStation = groupedStations.get(index);
         if(!remainingCooldowns.containsKey(groupedStation.getStation())) {
-            remainingCooldowns.put(groupedStation.getStation(), new Cooldown(groupedStation.getGroup()));
+            remainingCooldowns.put(groupedStation.getStation(), new Cooldown(groupedStation));
         }
 
-        //TODO calculate if station get unlocked e.g.
         remainingCooldowns.get(groupedStation.getStation()).process();
 
         index++;
@@ -57,12 +57,14 @@ public class StationLockTask implements Runnable {
 
     public class Cooldown {
 
-        // unlock time is negativ, lock time positiv
+        // unlock time is negativ, lock time positive
         private int cooldown;
+        private GroupedStation groupedStation;
 
-        public Cooldown(Group group) {
+        public Cooldown(GroupedStation groupedStation) {
 
-            cooldown = -group.getUnlockTime() - 1;
+            this.groupedStation = groupedStation;
+            cooldown = -groupedStation.getGroup().getUnlockTime() - 1;
         }
 
         public boolean isLocked() {
@@ -78,7 +80,29 @@ public class StationLockTask implements Runnable {
 
         public void process() {
 
-            //TODO
+            boolean wasLocked = isLocked();
+            if(wasLocked) {
+                cooldown--;
+            }
+            else if(cooldown < 0) {
+                cooldown++;
+            }
+
+            // unlock
+            if(wasLocked && !isLocked()) {
+                cooldown = -groupedStation.getGroup().getUnlockTime();
+                if(groupedStation.getStation() instanceof TeleportTravelStation) {
+                    ((TeleportTravelStation) groupedStation.getStation()).setLocked(false);
+                }
+            }
+
+            // lock
+            if(!wasLocked && cooldown == 0) {
+                cooldown = groupedStation.getGroup().getLockTime();
+                if(groupedStation.getStation() instanceof TeleportTravelStation) {
+                    ((TeleportTravelStation) groupedStation.getStation()).setLocked(true);
+                }
+            }
         }
     }
 }

@@ -25,4 +25,13 @@ public class TeleportTravelStation extends AbstractChargeableStation {
 
         return RaidCraft.getComponent(RCTravelPlugin.class).getStationLockTask().isLocked(this);
     }
+
+    /**
+     * Change schematic
+     * @param locked
+     */
+    public void setLocked(boolean locked) {
+
+        //TODO
+    }
 }
