@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.tables.TTravelStation;
@@ -21,6 +22,7 @@ public class RCTravelPlugin extends BasePlugin {
     private DynmapManager dynmapManager;
     private StationLockTask stationLockTask;
     private SchematicManager schematicManager;
+    private WorldEditPlugin worldEdit;
 
     @Override
     public void enable() {
@@ -32,6 +34,7 @@ public class RCTravelPlugin extends BasePlugin {
         dynmapManager = new DynmapManager(this);
         stationLockTask = new StationLockTask(this);
         schematicManager = new SchematicManager(this);
+        worldEdit = (WorldEditPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
@@ -82,5 +85,10 @@ public class RCTravelPlugin extends BasePlugin {
     public SchematicManager getSchematicManager() {
 
         return schematicManager;
+    }
+
+    public WorldEditPlugin getWorldEdit() {
+
+        return worldEdit;
     }
 }

@@ -3,7 +3,9 @@ package de.raidcraft.rctravel.util;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
 import de.raidcraft.api.RaidCraftException;
@@ -25,12 +27,25 @@ public class SchematicManager {
         this.plugin = plugin;
     }
 
-    public void createSchematic(World world, CuboidClipboard clipboard, String schematicName) throws RaidCraftException {
+    public void createSchematic(World world, Selection selection, String schematicName) throws RaidCraftException {
 
         try {
             File file = new File(getSchematicDir(world), schematicName);
 
             BukkitWorld bukkitWorld = new BukkitWorld(world);
+
+            Vector pos1 = selection.getNativeMinimumPoint();
+            Vector pos2 = selection.getNativeMaximumPoint();
+
+            Vector min = new Vector(Math.min(pos1.getX(), pos2.getX()),
+                    Math.min(pos1.getY(), pos2.getY()),
+                    Math.min(pos1.getZ(), pos2.getZ()));
+            Vector max = new Vector(Math.max(pos1.getX(), pos2.getX()),
+                    Math.max(pos1.getY(), pos2.getY()),
+                    Math.max(pos1.getZ(), pos2.getZ()));
+
+            // create clipboard
+            CuboidClipboard clipboard = new CuboidClipboard(max.subtract(min).add(new Vector(1, 1, 1)), min);
             // store blocks
             clipboard.copy(new EditSession(bukkitWorld, Integer.MAX_VALUE));
             // store entities
@@ -50,7 +65,7 @@ public class SchematicManager {
         File file = new File(getSchematicDir(world), schematicName);
         try {
             CuboidClipboard clipboard = MCEditSchematicFormat.MCEDIT.load(file);
-            clipboard.paste(new EditSession(new BukkitWorld(world), Integer.MAX_VALUE), clipboard.getOrigin(), false);
+            clipboard.paste(new EditSession(new BukkitWorld(world), 200000), clipboard.getOrigin(), false);
 //            clipboard.pasteEntities(clipboard.getOrigin());
         } catch (IOException | DataException e) {
             throw new RaidCraftException("Fehler beim laden der Schematic!");

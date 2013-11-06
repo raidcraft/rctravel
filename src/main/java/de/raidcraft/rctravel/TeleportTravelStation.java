@@ -1,6 +1,8 @@
 package de.raidcraft.rctravel;
 
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.station.AbstractChargeableStation;
 import de.raidcraft.rctravel.api.station.SchematicStation;
 import org.bukkit.Location;
@@ -31,7 +33,37 @@ public class TeleportTravelStation extends AbstractChargeableStation implements 
 
     public void changeSchematic(boolean locked) {
 
-        //TODO
+        String schematicName;
+        if(locked) {
+            schematicName = getLockedSchematicName();
+        }
+        else {
+            schematicName = getUnlockedSchematicName();
+        }
+
+        try {
+            RaidCraft.getComponent(RCTravelPlugin.class).getSchematicManager().pasteSchematic(getLocation().getWorld(), schematicName);
+        } catch (RaidCraftException e) {
+            RaidCraft.LOGGER.warning("[RCTravel] " + e.getMessage());
+        }
+    }
+
+    public void createSchematic(Player player, boolean locked) throws RaidCraftException {
+
+        String schematicName;
+        if(locked) {
+            schematicName = getLockedSchematicName();
+        }
+        else {
+            schematicName = getUnlockedSchematicName();
+        }
+
+        RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
+        Selection selection = plugin.getWorldEdit().getSelection(player);
+        if(selection == null) {
+            throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
+        }
+        plugin.getSchematicManager().createSchematic(player.getWorld(), selection, schematicName);
     }
 
     @Override

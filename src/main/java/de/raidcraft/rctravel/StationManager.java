@@ -50,6 +50,20 @@ public class StationManager {
         }
     }
 
+    public Station getStation(Group group, String stationName) {
+
+        Station station = null;
+        for(Station st : getGroupStations(group.getPlainName())) {
+            if(station.getName().equalsIgnoreCase(stationName)) station = st;
+        }
+        if(station == null) {
+            for(Station st : getGroupStations(group.getPlainName())) {
+                if(station.getName().toLowerCase().startsWith(stationName.toLowerCase())) station = st;
+            }
+        }
+        return station;
+    }
+
     public List<Station> getGroupStations(String group) {
 
         return cachedStations.get(StringUtils.formatName(group));
@@ -76,14 +90,15 @@ public class StationManager {
     public void createStation(String stationName, Player player, Group group) throws RaidCraftException {
 
         // check if station with same name already exists
-        TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class).find(TTravelStation.class).where().ieq("name", stationName).findUnique();
+        TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
+                .find(TTravelStation.class).where().ieq("group", group.getPlainName()).ieq("name", stationName).findUnique();
         if(tTravelStation != null) {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
 
-        Station station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice());
+        TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice());
         plugin.getDynmapManager().addStationMarker(station, group);
-        //TODO save schematic
+        station.createSchematic(player, false);
         addToCache(station, group);
         saveStation(station, group);
     }

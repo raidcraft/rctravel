@@ -4,6 +4,8 @@ import com.sk89q.minecraft.util.commands.*;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.station.SchematicStation;
+import de.raidcraft.rctravel.api.station.Station;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -72,6 +74,38 @@ public class TravelCommands {
             }
 
             sender.sendMessage(ChatColor.GREEN + "Die Station '" + args.getString(1) + "' wurde erfolgreich erstellt!");
+        }
+
+        @Command(
+                aliases = {"schematic", "sch"},
+                desc = "Recreate station schematic",
+                min = 2,
+                usage = "<Group> <Station> -l (locked/unlocked)"
+        )
+        @CommandPermissions("rctravel.cmd.reload")
+        public void schematic(CommandContext args, CommandSender sender) throws CommandException {
+
+            if(!(sender instanceof Player)) throw new CommandException("Player required!");
+            Player player = (Player)sender;
+
+            // check if group exists
+            Group group = plugin.getGroupManager().getGroup(args.getString(0));
+            if(group == null) {
+                throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
+            }
+
+            Station station = plugin.getStationManager().getStation(group, args.getString(1));
+            boolean locked = args.hasFlag('l');
+
+            if(!(station instanceof SchematicStation)) {
+                throw new CommandException("Diese Station unterstüzt keine Schematics!");
+            }
+
+            try {
+                ((SchematicStation) station).createSchematic(player, locked);
+            } catch (RaidCraftException e) {
+                throw new CommandException(e.getMessage());
+            }
         }
     }
 }
