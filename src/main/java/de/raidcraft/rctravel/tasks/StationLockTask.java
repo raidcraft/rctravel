@@ -1,5 +1,7 @@
-package de.raidcraft.rctravel;
+package de.raidcraft.rctravel.tasks;
 
+import de.raidcraft.rctravel.GroupedStation;
+import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 

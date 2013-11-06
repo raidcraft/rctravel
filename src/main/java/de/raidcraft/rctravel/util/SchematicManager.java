@@ -1,4 +1,4 @@
-package de.raidcraft.rctravel;
+package de.raidcraft.rctravel.util;
 
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
@@ -7,6 +7,7 @@ import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
 import de.raidcraft.api.RaidCraftException;
+import de.raidcraft.rctravel.RCTravelPlugin;
 import org.bukkit.World;
 
 import java.io.File;

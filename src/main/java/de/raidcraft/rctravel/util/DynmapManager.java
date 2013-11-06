@@ -1,6 +1,7 @@
-package de.raidcraft.rctravel;
+package de.raidcraft.rctravel.util;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Station;
 import org.bukkit.Bukkit;

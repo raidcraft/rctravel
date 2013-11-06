@@ -3,6 +3,9 @@ package de.raidcraft.rctravel;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.tables.TTravelStation;
+import de.raidcraft.rctravel.tasks.StationLockTask;
+import de.raidcraft.rctravel.util.DynmapManager;
+import de.raidcraft.rctravel.util.SchematicManager;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
