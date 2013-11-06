@@ -17,6 +17,7 @@ public class RCTravelPlugin extends BasePlugin {
     private GroupManager groupManager;
     private DynmapManager dynmapManager;
     private StationLockTask stationLockTask;
+    private SchematicManager schematicManager;
 
     @Override
     public void enable() {
@@ -27,6 +28,7 @@ public class RCTravelPlugin extends BasePlugin {
         groupManager = new GroupManager(this);
         dynmapManager = new DynmapManager(this);
         stationLockTask = new StationLockTask(this);
+        schematicManager = new SchematicManager(this);
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
@@ -72,5 +74,10 @@ public class RCTravelPlugin extends BasePlugin {
     public StationLockTask getStationLockTask() {
 
         return stationLockTask;
+    }
+
+    public SchematicManager getSchematicManager() {
+
+        return schematicManager;
     }
 }

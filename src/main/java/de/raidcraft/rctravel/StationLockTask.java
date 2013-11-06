@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel;
 
+import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 
 import java.util.HashMap;
@@ -91,16 +92,16 @@ public class StationLockTask implements Runnable {
             // unlock
             if(wasLocked && !isLocked()) {
                 cooldown = -groupedStation.getGroup().getUnlockTime();
-                if(groupedStation.getStation() instanceof TeleportTravelStation) {
-                    ((TeleportTravelStation) groupedStation.getStation()).setLocked(false);
+                if(groupedStation.getStation() instanceof SchematicStation) {
+                    ((SchematicStation) groupedStation.getStation()).changeSchematic(false);
                 }
             }
 
             // lock
             if(!wasLocked && cooldown == 0) {
                 cooldown = groupedStation.getGroup().getLockTime();
-                if(groupedStation.getStation() instanceof TeleportTravelStation) {
-                    ((TeleportTravelStation) groupedStation.getStation()).setLocked(true);
+                if(groupedStation.getStation() instanceof SchematicStation) {
+                    ((SchematicStation) groupedStation.getStation()).changeSchematic(true);
                 }
             }
         }
