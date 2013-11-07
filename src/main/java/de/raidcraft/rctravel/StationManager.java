@@ -154,12 +154,12 @@ public class StationManager {
         tTravelStation.setYaw((int)(station.getLocation().getYaw() * 100F));
         tTravelStation.setPitch((int)(station.getLocation().getPitch() * 100F));
         tTravelStation.setPrice(0);
-        tTravelStation.setxMin(station.getMinPoint().getBlockX());
-        tTravelStation.setyMin(station.getMinPoint().getBlockY());
-        tTravelStation.setzMin(station.getMinPoint().getBlockZ());
-        tTravelStation.setxMax(station.getMaxPoint().getBlockX());
-        tTravelStation.setyMax(station.getMaxPoint().getBlockY());
-        tTravelStation.setzMax(station.getMaxPoint().getBlockZ());
+        tTravelStation.setXMin(station.getMinPoint().getBlockX());
+        tTravelStation.setYMin(station.getMinPoint().getBlockY());
+        tTravelStation.setZMin(station.getMinPoint().getBlockZ());
+        tTravelStation.setXMax(station.getMaxPoint().getBlockX());
+        tTravelStation.setYMax(station.getMaxPoint().getBlockY());
+        tTravelStation.setZMax(station.getMaxPoint().getBlockZ());
 
         RaidCraft.getDatabase(RCTravelPlugin.class).save(tTravelStation);
     }

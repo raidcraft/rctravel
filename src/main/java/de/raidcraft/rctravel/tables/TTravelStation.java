@@ -134,62 +134,62 @@ public class TTravelStation {
         this.yaw = yaw;
     }
 
-    public int getxMin() {
+    public int getXMin() {
 
         return xMin;
     }
 
-    public void setxMin(int xMin) {
+    public void setXMin(int xMin) {
 
         this.xMin = xMin;
     }
 
-    public int getyMin() {
+    public int getYMin() {
 
         return yMin;
     }
 
-    public void setyMin(int yMin) {
+    public void setYMin(int yMin) {
 
         this.yMin = yMin;
     }
 
-    public int getzMin() {
+    public int getZMin() {
 
         return zMin;
     }
 
-    public void setzMin(int zMin) {
+    public void setZMin(int zMin) {
 
         this.zMin = zMin;
     }
 
-    public int getxMax() {
+    public int getXMax() {
 
         return xMax;
     }
 
-    public void setxMax(int xMax) {
+    public void setXMax(int xMax) {
 
         this.xMax = xMax;
     }
 
-    public int getyMax() {
+    public int getYMax() {
 
         return yMax;
     }
 
-    public void setyMax(int yMax) {
+    public void setYMax(int yMax) {
 
         this.yMax = yMax;
     }
 
-    public int getzMax() {
+    public int getZMax() {
 
         return zMax;
     }
 
-    public void setzMax(int zMax) {
+    public void setZMax(int zMax) {
 
         this.zMax = zMax;
     }
