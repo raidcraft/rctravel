@@ -4,7 +4,7 @@ import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.Station;
-import de.raidcraft.rctravel.events.StationLockStateChangeEvent;
+import de.raidcraft.rctravel.events.Dummy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -95,13 +95,13 @@ public class StationLockTask implements Runnable {
             // unlock
             if(wasLocked && !isLocked()) {
                 cooldown = -groupedStation.getGroup().getUnlockTime();
-                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
+                RaidCraft.callEvent(new Dummy(groupedStation, false));
             }
 
             // lock
             if(!wasLocked && cooldown == 0) {
                 cooldown = groupedStation.getGroup().getLockTime();
-                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
+                RaidCraft.callEvent(new Dummy(groupedStation, false));
             }
         }
     }

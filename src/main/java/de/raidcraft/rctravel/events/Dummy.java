@@ -7,12 +7,12 @@ import org.bukkit.event.HandlerList;
 /**
  * @author Philip Urban
  */
-public class StationLockStateChangeEvent extends Event {
+public class Dummy extends Event {
 
     private GroupedStation groupedStation;
     private boolean newLockState;
 
-    public StationLockStateChangeEvent(GroupedStation groupedStation, boolean newLockState) {
+    public Dummy(GroupedStation groupedStation, boolean newLockState) {
 
         this.groupedStation = groupedStation;
         this.newLockState = newLockState;
