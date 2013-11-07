@@ -1,12 +1,16 @@
 package de.raidcraft.rctravel.api.station;
 
 import de.raidcraft.api.RaidCraftException;
-import org.bukkit.entity.Player;
+import org.bukkit.Location;
 
 /**
  * @author Philip Urban
  */
 public interface SchematicStation {
+
+    public Location getMinPoint();
+
+    public Location getMaxPoint();
 
     public void changeSchematic(boolean locked);
 
@@ -14,5 +18,5 @@ public interface SchematicStation {
 
     public String getUnlockedSchematicName();
 
-    public void createSchematic(Player player, boolean locked) throws RaidCraftException;
+    public void createSchematic(boolean locked) throws RaidCraftException;
 }

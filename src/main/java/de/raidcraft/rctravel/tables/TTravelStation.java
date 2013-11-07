@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel.tables;
 
+import com.sk89q.worldedit.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -26,6 +27,12 @@ public class TTravelStation {
     private int pitch;
     private int yaw;
     private String world;
+    private int xMin;
+    private int yMin;
+    private int zMin;
+    private int xMax;
+    private int yMax;
+    private int zMax;
 
     public int getId() {
 
@@ -125,6 +132,76 @@ public class TTravelStation {
     public void setYaw(int yaw) {
 
         this.yaw = yaw;
+    }
+
+    public int getxMin() {
+
+        return xMin;
+    }
+
+    public void setxMin(int xMin) {
+
+        this.xMin = xMin;
+    }
+
+    public int getyMin() {
+
+        return yMin;
+    }
+
+    public void setyMin(int yMin) {
+
+        this.yMin = yMin;
+    }
+
+    public int getzMin() {
+
+        return zMin;
+    }
+
+    public void setzMin(int zMin) {
+
+        this.zMin = zMin;
+    }
+
+    public int getxMax() {
+
+        return xMax;
+    }
+
+    public void setxMax(int xMax) {
+
+        this.xMax = xMax;
+    }
+
+    public int getyMax() {
+
+        return yMax;
+    }
+
+    public void setyMax(int yMax) {
+
+        this.yMax = yMax;
+    }
+
+    public int getzMax() {
+
+        return zMax;
+    }
+
+    public void setzMax(int zMax) {
+
+        this.zMax = zMax;
+    }
+
+    public Vector getSk89qMinPoint() {
+
+        return new Vector(xMin, yMin, zMin);
+    }
+
+    public Vector getSk89qMaxPoint() {
+
+        return new Vector(xMax, yMax, zMax);
     }
 
     public World getBukkitWorld() {

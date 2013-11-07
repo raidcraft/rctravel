@@ -5,11 +5,11 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.MCEditSchematicFormat;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.RCTravelPlugin;
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.File;
@@ -27,22 +27,19 @@ public class SchematicManager {
         this.plugin = plugin;
     }
 
-    public void createSchematic(World world, Selection selection, String schematicName) throws RaidCraftException {
+    public void createSchematic(World world, Location minPoint, Location maxPoint, String schematicName) throws RaidCraftException {
 
         try {
             File file = new File(getSchematicDir(world), schematicName);
 
             BukkitWorld bukkitWorld = new BukkitWorld(world);
 
-            Vector pos1 = selection.getNativeMinimumPoint();
-            Vector pos2 = selection.getNativeMaximumPoint();
-
-            Vector min = new Vector(Math.min(pos1.getX(), pos2.getX()),
-                    Math.min(pos1.getY(), pos2.getY()),
-                    Math.min(pos1.getZ(), pos2.getZ()));
-            Vector max = new Vector(Math.max(pos1.getX(), pos2.getX()),
-                    Math.max(pos1.getY(), pos2.getY()),
-                    Math.max(pos1.getZ(), pos2.getZ()));
+            Vector min = new Vector(Math.min(minPoint.getX(), maxPoint.getX()),
+                    Math.min(minPoint.getY(), maxPoint.getY()),
+                    Math.min(minPoint.getZ(), maxPoint.getZ()));
+            Vector max = new Vector(Math.max(minPoint.getX(), maxPoint.getX()),
+                    Math.max(minPoint.getY(), maxPoint.getY()),
+                    Math.max(minPoint.getZ(), maxPoint.getZ()));
 
             // create clipboard
             CuboidClipboard clipboard = new CuboidClipboard(max.subtract(min).add(new Vector(1, 1, 1)), min);

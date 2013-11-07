@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel;
 
+import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.group.Group;
@@ -94,6 +95,11 @@ public class StationManager {
                 .find(TTravelStation.class).where().ieq("group", group.getPlainName()).ieq("name", stationName).findUnique();
         if(tTravelStation != null) {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
+        }
+
+        Selection selection = plugin.getWorldEdit().getSelection(player);
+        if(selection == null) {
+            throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
         }
 
         TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice());
