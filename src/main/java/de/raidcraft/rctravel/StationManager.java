@@ -107,8 +107,8 @@ public class StationManager {
         TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
         station.createSchematic(false);
-        addToCache(station, group);
         saveStation(station, group);
+        reload();
     }
 
     public void deleteStation(Group group, Station station) throws RaidCraftException {
