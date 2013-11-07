@@ -1,9 +1,10 @@
 package de.raidcraft.rctravel.tasks;
 
+import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
-import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
+import de.raidcraft.rctravel.events.StationLockStateChangeEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -94,17 +95,13 @@ public class StationLockTask implements Runnable {
             // unlock
             if(wasLocked && !isLocked()) {
                 cooldown = -groupedStation.getGroup().getUnlockTime();
-                if(groupedStation.getStation() instanceof SchematicStation) {
-                    ((SchematicStation) groupedStation.getStation()).changeSchematic(false);
-                }
+                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
             }
 
             // lock
             if(!wasLocked && cooldown == 0) {
                 cooldown = groupedStation.getGroup().getLockTime();
-                if(groupedStation.getStation() instanceof SchematicStation) {
-                    ((SchematicStation) groupedStation.getStation()).changeSchematic(true);
-                }
+                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
             }
         }
     }

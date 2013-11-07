@@ -1,5 +1,6 @@
 package de.raidcraft.rctravel.api.station;
 
+import de.raidcraft.api.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -14,7 +15,7 @@ public interface Station {
 
     public Location getLocation();
 
-    public void travel(Player player);
+    public void travel(Player player, Location target) throws RaidCraftException;
 
     public boolean equals(Object obj);
 

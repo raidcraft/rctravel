@@ -4,6 +4,7 @@ import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.station.AbstractChargeableStation;
 import de.raidcraft.rctravel.api.station.SchematicStation;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -24,9 +25,14 @@ public class TeleportTravelStation extends AbstractChargeableStation implements 
     }
 
     @Override
-    public void travel(Player player) {
+    public void travel(Player player, Location target) throws RaidCraftException {
 
-        player.teleport(getLocation());
+        // check if player is inside of transport region
+        if(RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, minPoint, maxPoint)) {
+            player.teleport(target);
+            player.sendMessage(ChatColor.GREEN + "Du bist an deinem Reiseziel angekommen.");
+        }
+
     }
 
     @Override

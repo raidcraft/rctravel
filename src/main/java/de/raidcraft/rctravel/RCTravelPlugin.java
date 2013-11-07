@@ -1,12 +1,14 @@
 package de.raidcraft.rctravel;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
 import de.raidcraft.rctravel.util.SchematicManager;
+import de.raidcraft.rctravel.util.WorldGuardManager;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -22,19 +24,26 @@ public class RCTravelPlugin extends BasePlugin {
     private DynmapManager dynmapManager;
     private StationLockTask stationLockTask;
     private SchematicManager schematicManager;
+    private WorldGuardManager worldGuardManager;
     private WorldEditPlugin worldEdit;
+    private WorldGuardPlugin worldGuard;
+    private TravelManager travelManager;
 
     @Override
     public void enable() {
 
         registerCommands(TravelCommands.class);
 
+        //XXX order is important!
         stationManager = new StationManager(this);
         groupManager = new GroupManager(this);
         dynmapManager = new DynmapManager(this);
         stationLockTask = new StationLockTask(this);
         schematicManager = new SchematicManager(this);
         worldEdit = (WorldEditPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+        worldGuard = (WorldGuardPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+        worldGuardManager = new WorldGuardManager(this, worldGuard);
+        travelManager = new TravelManager(this);
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
@@ -90,5 +99,20 @@ public class RCTravelPlugin extends BasePlugin {
     public WorldEditPlugin getWorldEdit() {
 
         return worldEdit;
+    }
+
+    public WorldGuardPlugin getWorldGuard() {
+
+        return worldGuard;
+    }
+
+    public WorldGuardManager getWorldGuardManager() {
+
+        return worldGuardManager;
+    }
+
+    public TravelManager getTravelManager() {
+
+        return travelManager;
     }
 }
