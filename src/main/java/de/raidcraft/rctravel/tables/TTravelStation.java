@@ -19,7 +19,7 @@ public class TTravelStation {
     @Id
     private int id;
     private String name;
-    private String group;
+    private String groupName;
     private int price;
     private int x;
     private int y;
@@ -54,14 +54,14 @@ public class TTravelStation {
         this.name = name;
     }
 
-    public String getGroup() {
+    public String getGroupName() {
 
-        return group;
+        return groupName;
     }
 
-    public void setGroup(String group) {
+    public void setGroupName(String groupName) {
 
-        this.group = group;
+        this.groupName = groupName;
     }
 
     public int getPrice() {

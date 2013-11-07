@@ -41,7 +41,7 @@ public class StationManager {
             Location location = tTravelStation.getBukkitLocation();
             if(location == null) continue;
 
-            Group group = plugin.getGroupManager().getGroup(tTravelStation.getGroup());
+            Group group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
             if(group == null) continue;
             double price = group.getDefaultPrice();
             if(tTravelStation.getPrice() == 0) {
@@ -94,7 +94,7 @@ public class StationManager {
 
         // check if station with same name already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("group", group.getPlainName()).ieq("name", stationName).findUnique();
+                .find(TTravelStation.class).where().ieq("group_name", group.getPlainName()).ieq("name", stationName).findUnique();
         if(tTravelStation != null) {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
@@ -115,7 +115,7 @@ public class StationManager {
 
         // delete from database
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("group", group.getPlainName()).ieq("name", station.getName()).findUnique();
+                .find(TTravelStation.class).where().ieq("group_name", group.getPlainName()).ieq("name", station.getName()).findUnique();
         if(tTravelStation != null) {
             RaidCraft.getDatabase(RCTravelPlugin.class).delete(tTravelStation);
         }
@@ -146,7 +146,7 @@ public class StationManager {
 
         TTravelStation tTravelStation = new TTravelStation();
         tTravelStation.setName(station.getName());
-        tTravelStation.setGroup(group.getPlainName());
+        tTravelStation.setGroupName(group.getPlainName());
         tTravelStation.setWorld(station.getLocation().getWorld().getName());
         tTravelStation.setX((int)(station.getLocation().getX() * 100D));
         tTravelStation.setY((int)(station.getLocation().getY() * 100D));
