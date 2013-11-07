@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class SchematicManager {
 
+    private static String SCHEMATIC_SUFFIX = ".schematic";
     private RCTravelPlugin plugin;
 
     public SchematicManager(RCTravelPlugin plugin) {
@@ -30,7 +31,7 @@ public class SchematicManager {
     public void createSchematic(World world, Location minPoint, Location maxPoint, String schematicName) throws RaidCraftException {
 
         try {
-            File file = new File(getSchematicDir(world), schematicName);
+            File file = new File(getSchematicDir(world), schematicName + SCHEMATIC_SUFFIX);
 
             BukkitWorld bukkitWorld = new BukkitWorld(world);
 
@@ -59,7 +60,7 @@ public class SchematicManager {
 
     public void pasteSchematic(World world, String schematicName) throws RaidCraftException {
 
-        File file = new File(getSchematicDir(world), schematicName);
+        File file = new File(getSchematicDir(world), schematicName + SCHEMATIC_SUFFIX);
         try {
             CuboidClipboard clipboard = MCEditSchematicFormat.MCEDIT.load(file);
             clipboard.paste(new EditSession(new BukkitWorld(world), 200000), clipboard.getOrigin(), false);
@@ -74,7 +75,7 @@ public class SchematicManager {
 
     public void deleteSchematic(World world, String schematicName) throws RaidCraftException {
 
-        File file = new File(getSchematicDir(world), schematicName);
+        File file = new File(getSchematicDir(world), schematicName + SCHEMATIC_SUFFIX);
 
         if (!file.delete() ) {
             throw new RaidCraftException("Can't remove schematic file " + file.getAbsolutePath());
