@@ -61,6 +61,11 @@ public class TravelManager {
         }
     }
 
+    public void reload() {
+
+        queuedPlayers.clear();
+    }
+
     public class TargetStation {
 
         private Station station;

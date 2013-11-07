@@ -61,6 +61,7 @@ public class RCTravelPlugin extends BasePlugin {
         getGroupManager().loadGroups();
         getStationManager().reload();
         getStationLockTask().reload();
+        getTravelManager().reload();
     }
 
     @Override
