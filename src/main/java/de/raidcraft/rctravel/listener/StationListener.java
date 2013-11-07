@@ -3,7 +3,7 @@ package de.raidcraft.rctravel.listener;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.SchematicStation;
-import de.raidcraft.rctravel.events.Dummy;
+import de.raidcraft.rctravel.events.StationLockStateChangeEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 public class StationListener implements Listener {
 
     @EventHandler
-    public void onStationLockstateChange(Dummy event) {
+    public void onStationLockstateChange(StationLockStateChangeEvent event) {
 
         // lock
         if(event.getNewLockState()) {
