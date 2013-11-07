@@ -142,7 +142,7 @@ public class StationManager {
         cachedStations.get(group.getPlainName()).add(station);
     }
 
-    private void saveStation(Station station, Group group) {
+    private void saveStation(SchematicStation station, Group group) {
 
         TTravelStation tTravelStation = new TTravelStation();
         tTravelStation.setName(station.getName());
@@ -154,6 +154,12 @@ public class StationManager {
         tTravelStation.setYaw((int)(station.getLocation().getYaw() * 100F));
         tTravelStation.setPitch((int)(station.getLocation().getPitch() * 100F));
         tTravelStation.setPrice(0);
+        tTravelStation.setxMin(station.getMinPoint().getBlockX());
+        tTravelStation.setyMin(station.getMinPoint().getBlockY());
+        tTravelStation.setzMin(station.getMinPoint().getBlockZ());
+        tTravelStation.setxMax(station.getMaxPoint().getBlockX());
+        tTravelStation.setyMax(station.getMaxPoint().getBlockY());
+        tTravelStation.setzMax(station.getMaxPoint().getBlockZ());
 
         RaidCraft.getDatabase(RCTravelPlugin.class).save(tTravelStation);
     }
