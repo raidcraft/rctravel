@@ -11,6 +11,7 @@ public class ConfigGroup implements Group {
 
     private String name;
     private String iconName;
+    private String vehicleName;
     private double defaultPrice;
     private int lockTime;
     private int unlockTime;
@@ -22,12 +23,19 @@ public class ConfigGroup implements Group {
         this.defaultPrice = config.getDouble("default-price", 0);
         this.lockTime = config.getInt("lock-time", 15);
         this.unlockTime = config.getInt("unlock-time", 3);
+        this.vehicleName = config.getString("vehicle-name", "Transportmittel");
     }
 
     @Override
     public String getIconName() {
 
         return iconName;
+    }
+
+    @Override
+    public String getVehicleName() {
+
+        return vehicleName;
     }
 
     @Override

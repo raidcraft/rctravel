@@ -32,7 +32,7 @@ public class TeleportTravelStation extends AbstractChargeableStation implements 
             player.teleport(target);
             player.sendMessage(ChatColor.GREEN + "Du bist an deinem Reiseziel angekommen.");
         }
-
+        throw new RaidCraftException("Der Spieler befindet sich nicht am Abfahrtsort!");
     }
 
     @Override

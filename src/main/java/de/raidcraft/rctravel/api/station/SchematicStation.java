@@ -6,7 +6,7 @@ import org.bukkit.Location;
 /**
  * @author Philip Urban
  */
-public interface SchematicStation {
+public interface SchematicStation extends Station {
 
     public Location getMinPoint();
 

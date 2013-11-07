@@ -11,6 +11,8 @@ public interface Group {
 
     public String getIconName();
 
+    public String getVehicleName();
+
     public double getDefaultPrice();
 
     public int getLockTime();
