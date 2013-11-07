@@ -47,6 +47,7 @@ public class TravelCommands {
         public void reload(CommandContext args, CommandSender sender) throws CommandException {
 
             plugin.reload();
+            sender.sendMessage(ChatColor.GREEN + "RCTravel wurde neugeladen!");
         }
 
         @Command(

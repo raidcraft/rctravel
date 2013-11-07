@@ -58,7 +58,7 @@ public class RCTravelPlugin extends BasePlugin {
     public void reload() {
 
         //XXX order is important!
-        getGroupManager().loadGroups();
+        getGroupManager().reload();
         getStationManager().reload();
         getStationLockTask().reload();
         getTravelManager().reload();

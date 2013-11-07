@@ -19,7 +19,7 @@ public class GroupManager {
     public GroupManager(RCTravelPlugin plugin) {
 
         this.plugin = plugin;
-        loadGroups();
+        reload();
     }
 
     public Group getGroup(String groupName) {
@@ -27,7 +27,7 @@ public class GroupManager {
         Group group = cachedGroups.get(groupName);
         if(group == null) {
             for(Group gr : cachedGroups.values()) {
-                if(gr.getName().startsWith(groupName)) {
+                if(gr.getName().toLowerCase().startsWith(groupName.toLowerCase())) {
                     group = gr;
                     break;
                 }
@@ -65,5 +65,10 @@ public class GroupManager {
                 cachedGroups.put(groupName, new ConfigGroup(configurationSection));
             }
         }
+    }
+
+    public void reload() {
+
+        loadGroups();
     }
 }
