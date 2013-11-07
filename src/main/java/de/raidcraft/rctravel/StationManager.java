@@ -4,6 +4,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
@@ -46,7 +47,8 @@ public class StationManager {
             if(tTravelStation.getPrice() == 0) {
                 price = tTravelStation.getPrice() / 100D;
             }
-            TeleportTravelStation station = new TeleportTravelStation(tTravelStation.getName(), location, price);
+            TeleportTravelStation station =
+                    new TeleportTravelStation(tTravelStation.getName(), location, price, tTravelStation.getBukkitMinPoint(), tTravelStation.getBukkitMaxPoint());
             addToCache(station, group);
         }
     }
@@ -98,15 +100,38 @@ public class StationManager {
         }
 
         Selection selection = plugin.getWorldEdit().getSelection(player);
-        if(selection == null) {
+        if(selection == null || selection.getMinimumPoint() == null || selection.getMaximumPoint() == null) {
             throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
         }
 
-        TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice());
+        TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
-        station.createSchematic(player, false);
+        station.createSchematic(false);
         addToCache(station, group);
         saveStation(station, group);
+    }
+
+    public void deleteStation(Group group, Station station) throws RaidCraftException {
+
+        // delete from database
+        TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
+                .find(TTravelStation.class).where().ieq("group", group.getPlainName()).ieq("name", station.getName()).findUnique();
+        if(tTravelStation != null) {
+            RaidCraft.getDatabase(RCTravelPlugin.class).delete(tTravelStation);
+        }
+
+        // remove from cache
+        cachedStations.get(group.getPlainName()).remove(station);
+
+        // rebuild grouped stations
+        buildGroupedStations();
+
+        // delete schematics if schematic station
+        if(station instanceof SchematicStation) {
+            SchematicStation schematicStation = (SchematicStation)station;
+            plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getUnlockedSchematicName());
+            plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getLockedSchematicName());
+        }
     }
 
     private void addToCache(Station station, Group group) {

@@ -204,6 +204,22 @@ public class TTravelStation {
         return new Vector(xMax, yMax, zMax);
     }
 
+    public Location getBukkitMinPoint() {
+
+        World world = getBukkitWorld();
+        if(world == null) return null;
+
+        return new Location(world, xMin, yMin, zMin);
+    }
+
+    public Location getBukkitMaxPoint() {
+
+        World world = getBukkitWorld();
+        if(world == null) return null;
+
+        return new Location(world, xMax, yMax, zMax);
+    }
+
     public World getBukkitWorld() {
 
         return Bukkit.getWorld(getWorld());

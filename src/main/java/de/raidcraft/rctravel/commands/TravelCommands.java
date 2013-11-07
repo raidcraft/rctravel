@@ -77,6 +77,39 @@ public class TravelCommands {
         }
 
         @Command(
+                aliases = {"delete"},
+                desc = "Delete travel station",
+                min = 2,
+                usage = "<group> <name>"
+        )
+        @CommandPermissions("rctravel.cmd.create")
+        public void delete(CommandContext args, CommandSender sender) throws CommandException {
+
+            if(!(sender instanceof Player)) throw new CommandException("Player required!");
+            Player player = (Player)sender;
+
+            // check if group exists
+            Group group = plugin.getGroupManager().getGroup(args.getString(0));
+            if(group == null) {
+                throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
+            }
+
+            // check if station exists
+            Station station = plugin.getStationManager().getStation(group, args.getString(1));
+            if(station == null) {
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(1) + "'!");
+            }
+
+            try {
+                plugin.getStationManager().deleteStation(group, station);
+            } catch (RaidCraftException e) {
+                throw new CommandException(e.getMessage());
+            }
+
+            sender.sendMessage(ChatColor.GREEN + "Die Station '" + args.getString(1) + "' wurde erfolgreich gelöscht!");
+        }
+
+        @Command(
                 aliases = {"schematic", "sch"},
                 desc = "Recreate station schematic",
                 min = 2,
@@ -102,7 +135,7 @@ public class TravelCommands {
             }
 
             try {
-                ((SchematicStation) station).createSchematic(player, locked);
+                ((SchematicStation) station).createSchematic(locked);
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }
