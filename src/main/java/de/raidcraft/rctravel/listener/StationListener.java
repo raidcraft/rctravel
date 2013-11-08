@@ -54,8 +54,8 @@ public class StationListener implements Listener {
         for(Player player : Bukkit.getOnlinePlayers()) {
             if(!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
             if(player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
-                player.sendMessage(ChatColor.GOLD + "***" + ChatColor.DARK_GREEN + " Das " + groupedStation.getGroup().getVehicleName()
-                        + " von " + groupedStation.getStation().getName() + " ist eingetroffen!");
+                player.sendMessage(ChatColor.GOLD + "*" + ChatColor.DARK_GREEN + " Das " + groupedStation.getGroup().getVehicleName()
+                        + " von " + ChatColor.GOLD + groupedStation.getStation().getName() + ChatColor.DARK_GREEN + " ist eingetroffen!");
             }
         }
     }
@@ -65,8 +65,8 @@ public class StationListener implements Listener {
         for(Player player : Bukkit.getOnlinePlayers()) {
             if(!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
             if(player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
-                player.sendMessage(ChatColor.GOLD + "***" + ChatColor.DARK_RED + "Das " + groupedStation.getGroup().getVehicleName()
-                        + " von " + groupedStation.getStation().getName() + " ist abgereist!");
+                player.sendMessage(ChatColor.GOLD + "*" + ChatColor.DARK_RED + " Das " + groupedStation.getGroup().getVehicleName()
+                        + " von " + ChatColor.GOLD + groupedStation.getStation().getName() + ChatColor.DARK_GREEN + " ist abgereist!");
             }
         }
     }
