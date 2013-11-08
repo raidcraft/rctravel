@@ -12,6 +12,7 @@ public class ConfigGroup implements Group {
     private String name;
     private String iconName;
     private String vehicleName;
+    private String conversationName;
     private double defaultPrice;
     private int lockTime;
     private int unlockTime;
@@ -24,6 +25,7 @@ public class ConfigGroup implements Group {
         this.lockTime = config.getInt("lock-time", 15);
         this.unlockTime = config.getInt("unlock-time", 3);
         this.vehicleName = config.getString("vehicle-name", "Transportmittel");
+        this.conversationName = config.getString("conversation", "rctravel-master");
     }
 
     @Override
@@ -48,6 +50,12 @@ public class ConfigGroup implements Group {
     public String getPlainName() {
 
         return StringUtils.formatName(name);
+    }
+
+    @Override
+    public String getConversationName() {
+
+        return conversationName;
     }
 
     @Override

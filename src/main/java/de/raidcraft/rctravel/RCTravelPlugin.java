@@ -3,6 +3,7 @@ package de.raidcraft.rctravel;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
+import de.raidcraft.api.config.ConfigurationBase;
 import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.tables.TTravelStation;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 public class RCTravelPlugin extends BasePlugin {
 
+    private LocalConfiguration config;
     private StationManager stationManager;
     private GroupManager groupManager;
     private DynmapManager dynmapManager;
@@ -35,6 +37,8 @@ public class RCTravelPlugin extends BasePlugin {
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
+
+        config = new LocalConfiguration(this);
 
         //XXX order is important!
         groupManager = new GroupManager(this);
@@ -59,6 +63,8 @@ public class RCTravelPlugin extends BasePlugin {
     @Override
     public void reload() {
 
+        config = new LocalConfiguration(this);
+
         //XXX order is important!
         getGroupManager().reload();
         getStationManager().reload();
@@ -72,6 +78,14 @@ public class RCTravelPlugin extends BasePlugin {
         List<Class<?>> databases = new ArrayList<>();
         databases.add(TTravelStation.class);
         return databases;
+    }
+
+    public class LocalConfiguration extends ConfigurationBase<RCTravelPlugin> {
+
+        public LocalConfiguration(RCTravelPlugin plugin) {
+
+            super(plugin, "config.yml");
+        }
     }
 
     public StationManager getStationManager() {

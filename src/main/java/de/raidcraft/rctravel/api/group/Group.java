@@ -13,6 +13,8 @@ public interface Group {
 
     public String getVehicleName();
 
+    public String getConversationName();
+
     public double getDefaultPrice();
 
     public int getLockTime();

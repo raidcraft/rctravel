@@ -3,6 +3,7 @@ package de.raidcraft.rctravel;
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
+import de.raidcraft.rcconversations.npc.ConversationsTrait;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
@@ -119,6 +120,7 @@ public class StationManager {
         TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
         station.createSchematic(false);
+        ConversationsTrait.create(station.getLocation(), group.getConversationName(), "Reiseleiter", false);
         saveStation(station, group);
         reload();
     }
