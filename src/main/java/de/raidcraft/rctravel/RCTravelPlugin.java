@@ -35,8 +35,8 @@ public class RCTravelPlugin extends BasePlugin {
         registerCommands(TravelCommands.class);
 
         //XXX order is important!
-        stationManager = new StationManager(this);
         groupManager = new GroupManager(this);
+        stationManager = new StationManager(this);
         dynmapManager = new DynmapManager(this);
         stationLockTask = new StationLockTask(this);
         schematicManager = new SchematicManager(this);
