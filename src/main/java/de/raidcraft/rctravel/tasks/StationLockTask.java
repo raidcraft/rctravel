@@ -38,12 +38,6 @@ public class StationLockTask implements Runnable {
         return (remainingCooldowns.containsKey(station) && remainingCooldowns.get(station).isLocked());
     }
 
-    public int getRemainingCooldown(Station station) {
-
-        if(!isLocked(station)) return 0;
-        return remainingCooldowns.get(station).getRemainingCooldown();
-    }
-
     @Override
     public void run() {
 
@@ -61,47 +55,42 @@ public class StationLockTask implements Runnable {
 
     public class Cooldown {
 
-        // unlock time is negativ, lock time positive
-        private int cooldown;
+        private boolean locked;
+        private long time;
         private GroupedStation groupedStation;
 
         public Cooldown(GroupedStation groupedStation) {
 
             this.groupedStation = groupedStation;
-            cooldown = -groupedStation.getGroup().getUnlockTime() - 1;
+            locked = false;
+            time = System.currentTimeMillis();
         }
 
         public boolean isLocked() {
 
-            return (cooldown > 0);
+            return locked;
         }
 
-        public int getRemainingCooldown() {
+        public int getRemainingTime(int total) {
 
-            if(cooldown < 0) return 0;
-            return cooldown;
+            return (int)(total - ((System.currentTimeMillis() - time) / 1000));
         }
 
         public void process() {
 
-            boolean wasLocked = isLocked();
-            if(wasLocked) {
-                cooldown--;
+            if(locked) {
+                if(getRemainingTime(groupedStation.getGroup().getLockTime()) < 0) {
+                    locked = false;
+                    time = System.currentTimeMillis();
+                    RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
+                }
             }
-            else if(cooldown < 0) {
-                cooldown++;
-            }
-
-            // unlock
-            if(wasLocked && !isLocked()) {
-                cooldown = -groupedStation.getGroup().getUnlockTime();
-                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
-            }
-
-            // lock
-            if(!wasLocked && cooldown == 0) {
-                cooldown = groupedStation.getGroup().getLockTime();
-                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, true));
+            else {
+                if(getRemainingTime(groupedStation.getGroup().getUnlockTime()) < 0) {
+                    locked = true;
+                    time = System.currentTimeMillis();
+                    RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, true));
+                }
             }
         }
     }
