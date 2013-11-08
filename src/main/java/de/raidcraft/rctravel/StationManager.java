@@ -53,15 +53,27 @@ public class StationManager {
         }
     }
 
-    public Station getStation(Group group, String stationName) {
+    public Station getStation(String stationName) {
 
         Station station = null;
-        for(Station st : getGroupStations(group.getPlainName())) {
-            if(st.getName().equalsIgnoreCase(stationName)) station = st;
+        for(List<Station> stList : cachedStations.values()) {
+            if(station != null) break;
+            for(Station st : stList) {
+                if(st.getName().equalsIgnoreCase(stationName)) {
+                    station = st;
+                    break;
+                }
+            }
         }
         if(station == null) {
-            for(Station st : getGroupStations(group.getPlainName())) {
-                if(st.getName().toLowerCase().startsWith(stationName.toLowerCase())) station = st;
+            for(List<Station> stList : cachedStations.values()) {
+                if(station != null) break;
+                for(Station st : stList) {
+                    if(st.getName().toLowerCase().startsWith(stationName.toLowerCase())) {
+                        station = st;
+                        break;
+                    }
+                }
             }
         }
         return station;
@@ -94,7 +106,7 @@ public class StationManager {
 
         // check if station with same name already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("group_name", group.getPlainName()).ieq("name", stationName).findUnique();
+                .find(TTravelStation.class).where().ieq("name", stationName).findUnique();
         if(tTravelStation != null) {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
@@ -111,20 +123,16 @@ public class StationManager {
         reload();
     }
 
-    public void deleteStation(Group group, Station station) throws RaidCraftException {
+    public void deleteStation(Station station) throws RaidCraftException {
 
         // delete from database
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("group_name", group.getPlainName()).ieq("name", station.getName()).findUnique();
+                .find(TTravelStation.class).where().ieq("name", station.getName()).findUnique();
         if(tTravelStation != null) {
             RaidCraft.getDatabase(RCTravelPlugin.class).delete(tTravelStation);
         }
 
-        // remove from cache
-        cachedStations.get(group.getPlainName()).remove(station);
-
-        // rebuild grouped stations
-        buildGroupedStations();
+        reload();
 
         // delete schematics if schematic station
         if(station instanceof SchematicStation) {

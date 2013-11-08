@@ -4,6 +4,7 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.rctravel.commands.TravelCommands;
+import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
@@ -33,6 +34,7 @@ public class RCTravelPlugin extends BasePlugin {
     public void enable() {
 
         registerCommands(TravelCommands.class);
+        registerEvents(new StationListener());
 
         //XXX order is important!
         groupManager = new GroupManager(this);

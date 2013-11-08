@@ -80,8 +80,8 @@ public class TravelCommands {
         @Command(
                 aliases = {"delete"},
                 desc = "Delete travel station",
-                min = 2,
-                usage = "<group> <name>"
+                min = 1,
+                usage = "<name>"
         )
         @CommandPermissions("rctravel.cmd.create")
         public void delete(CommandContext args, CommandSender sender) throws CommandException {
@@ -89,33 +89,27 @@ public class TravelCommands {
             if(!(sender instanceof Player)) throw new CommandException("Player required!");
             Player player = (Player)sender;
 
-            // check if group exists
-            Group group = plugin.getGroupManager().getGroup(args.getString(0));
-            if(group == null) {
-                throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
-            }
-
             // check if station exists
-            Station station = plugin.getStationManager().getStation(group, args.getString(1));
+            Station station = plugin.getStationManager().getStation(args.getString(0));
             if(station == null) {
-                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(1) + "'!");
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
             }
 
             try {
-                plugin.getStationManager().deleteStation(group, station);
+                plugin.getStationManager().deleteStation(station);
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }
 
-            sender.sendMessage(ChatColor.GREEN + "Die Station '" + args.getString(1) + "' wurde erfolgreich gelöscht!");
+            sender.sendMessage(ChatColor.GREEN + "Die Station '" + station.getName() + "' wurde erfolgreich gelöscht!");
         }
 
         @Command(
                 aliases = {"schematic", "sch"},
                 desc = "Recreate station schematic",
                 flags = "l",
-                min = 2,
-                usage = "<Group> <Station> -l (locked/unlocked)"
+                min = 1,
+                usage = "<Station> -l (locked/unlocked)"
         )
         @CommandPermissions("rctravel.cmd.reload")
         public void schematic(CommandContext args, CommandSender sender) throws CommandException {
@@ -129,7 +123,7 @@ public class TravelCommands {
                 throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
             }
 
-            Station station = plugin.getStationManager().getStation(group, args.getString(1));
+            Station station = plugin.getStationManager().getStation(args.getString(0));
             boolean locked = args.hasFlag('l');
 
             if(!(station instanceof SchematicStation)) {
