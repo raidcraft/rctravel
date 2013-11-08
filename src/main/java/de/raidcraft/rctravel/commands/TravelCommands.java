@@ -83,7 +83,7 @@ public class TravelCommands {
                 min = 1,
                 usage = "<name>"
         )
-        @CommandPermissions("rctravel.cmd.create")
+        @CommandPermissions("rctravel.cmd.delete")
         public void delete(CommandContext args, CommandSender sender) throws CommandException {
 
             if(!(sender instanceof Player)) throw new CommandException("Player required!");
@@ -105,13 +105,36 @@ public class TravelCommands {
         }
 
         @Command(
+                aliases = {"tp", "warp", "teleport"},
+                desc = "Warp to station",
+                min = 1,
+                usage = "<Station>"
+        )
+        @CommandPermissions("rctravel.cmd.tp")
+        public void warp(CommandContext args, CommandSender sender) throws CommandException {
+
+            if(!(sender instanceof Player)) throw new CommandException("Player required!");
+            Player player = (Player)sender;
+
+            // check if station exists
+            Station station = plugin.getStationManager().getStation(args.getString(0));
+            if(station == null) {
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+            }
+
+            player.teleport(station.getLocation());
+
+            sender.sendMessage(ChatColor.GREEN + "Du wurdest zur Station '" + station.getName() + "'teleportiert!");
+        }
+
+        @Command(
                 aliases = {"schematic", "sch"},
                 desc = "Recreate station schematic",
                 flags = "l",
                 min = 1,
                 usage = "<Station> -l (locked/unlocked)"
         )
-        @CommandPermissions("rctravel.cmd.reload")
+        @CommandPermissions("rctravel.cmd.schematic")
         public void schematic(CommandContext args, CommandSender sender) throws CommandException {
 
             if(!(sender instanceof Player)) throw new CommandException("Player required!");
