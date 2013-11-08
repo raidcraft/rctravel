@@ -23,7 +23,7 @@ public class StationListener implements Listener {
         if(event.getNewLockState()) {
             if(event.getGroupedStation().getStation() instanceof SchematicStation) {
                 clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
-                ((SchematicStation) event.getGroupedStation()).changeSchematic(true);
+                ((SchematicStation) event.getGroupedStation().getStation()).changeSchematic(true);
             }
             announceDeparture(event.getGroupedStation());
         }
@@ -34,7 +34,7 @@ public class StationListener implements Listener {
             // change schematic
             if(event.getGroupedStation().getStation() instanceof SchematicStation) {
                 clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
-                ((SchematicStation) event.getGroupedStation()).changeSchematic(false);
+                ((SchematicStation) event.getGroupedStation().getStation()).changeSchematic(false);
             }
             announceArrival(event.getGroupedStation());
         }
