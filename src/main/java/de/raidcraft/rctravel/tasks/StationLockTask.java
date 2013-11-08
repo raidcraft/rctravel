@@ -42,15 +42,26 @@ public class StationLockTask implements Runnable {
     public void run() {
 
         List<GroupedStation> groupedStations = plugin.getStationManager().getGroupedStations();
-        if(index >= groupedStations.size()) index = 0;
-        GroupedStation groupedStation = groupedStations.get(index);
-        if(!remainingCooldowns.containsKey(groupedStation.getStation())) {
-            remainingCooldowns.put(groupedStation.getStation(), new Cooldown(groupedStation));
+        // add all stations time shifted to map (preventing laggs)
+        if(index < groupedStations.size()) {
+            GroupedStation groupedStation = groupedStations.get(index);
+            if(!remainingCooldowns.containsKey(groupedStation.getStation())) {
+                remainingCooldowns.put(groupedStation.getStation(), new Cooldown(groupedStation));
+            }
+            index++;
         }
 
-        remainingCooldowns.get(groupedStation.getStation()).process();
+        for(GroupedStation gs : groupedStations) {
+            Cooldown cooldown = remainingCooldowns.get(gs.getStation());
+            if(cooldown == null) continue;
 
-        index++;
+            cooldown.process();
+            if(!cooldown.isLocked()) {
+                // travel queued players
+                RaidCraft.getComponent(RCTravelPlugin.class).getTravelManager().startTravel(cooldown.getGroupedStation().getStation());
+            }
+        }
+
     }
 
     public class Cooldown {
@@ -64,6 +75,11 @@ public class StationLockTask implements Runnable {
             this.groupedStation = groupedStation;
             locked = false;
             time = System.currentTimeMillis();
+        }
+
+        public GroupedStation getGroupedStation() {
+
+            return groupedStation;
         }
 
         public boolean isLocked() {

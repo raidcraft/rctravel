@@ -29,8 +29,6 @@ public class StationListener implements Listener {
         }
         // unlock
         else {
-            // travel queued players
-            RaidCraft.getComponent(RCTravelPlugin.class).getTravelManager().startTravel(event.getGroupedStation().getStation());
             // change schematic
             if(event.getGroupedStation().getStation() instanceof SchematicStation) {
                 clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
