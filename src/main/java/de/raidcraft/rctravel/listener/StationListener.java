@@ -55,7 +55,7 @@ public class StationListener implements Listener {
             if(!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
             if(player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
                 player.sendMessage(ChatColor.GOLD + "*" + ChatColor.DARK_GREEN + " Das " + groupedStation.getGroup().getVehicleName()
-                        + " von " + ChatColor.GOLD + groupedStation.getStation().getName() + ChatColor.DARK_GREEN + " ist eingetroffen!");
+                        + " von " + ChatColor.GREEN + groupedStation.getStation().getName() + ChatColor.DARK_GREEN + " ist eingetroffen!");
             }
         }
     }
@@ -66,7 +66,7 @@ public class StationListener implements Listener {
             if(!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
             if(player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
                 player.sendMessage(ChatColor.GOLD + "*" + ChatColor.DARK_RED + " Das " + groupedStation.getGroup().getVehicleName()
-                        + " von " + ChatColor.GOLD + groupedStation.getStation().getName() + ChatColor.DARK_GREEN + " ist abgereist!");
+                        + " von " + ChatColor.RED + groupedStation.getStation().getName() + ChatColor.DARK_RED + " ist abgereist!");
             }
         }
     }
