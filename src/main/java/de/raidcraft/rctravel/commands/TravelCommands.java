@@ -141,6 +141,7 @@ public class TravelCommands {
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }
+            player.sendMessage(ChatColor.GREEN + "Die Schematic für die Station '" + station.getName() + "' wurde erstellt!");
         }
     }
 }
