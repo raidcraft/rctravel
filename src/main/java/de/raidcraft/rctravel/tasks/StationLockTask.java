@@ -101,7 +101,7 @@ public class StationLockTask implements Runnable {
             // lock
             if(!wasLocked && cooldown == 0) {
                 cooldown = groupedStation.getGroup().getLockTime();
-                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
+                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, true));
             }
         }
     }
