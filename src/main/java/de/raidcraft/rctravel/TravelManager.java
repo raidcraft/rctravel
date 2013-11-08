@@ -16,16 +16,16 @@ import java.util.Map;
 public class TravelManager {
 
     private RCTravelPlugin plugin;
-    private Map<String, TargetStation> queuedPlayers = new CaseInsensitiveMap<>();
+    private Map<String, Journey> queuedPlayers = new CaseInsensitiveMap<>();
 
     public TravelManager(RCTravelPlugin plugin) {
 
         this.plugin = plugin;
     }
 
-    public void queuePlayer(Player player, TargetStation targetStation) {
+    public void queuePlayer(Player player, Journey journey) {
 
-        queuedPlayers.put(player.getName(), targetStation);
+        queuedPlayers.put(player.getName(), journey);
     }
 
     public void removeFromQueue(Player player) {
@@ -35,7 +35,7 @@ public class TravelManager {
 
     public void startTravel(Station station) {
 
-        for(Map.Entry<String, TargetStation> entry : new CaseInsensitiveMap<>(queuedPlayers).entrySet()) {
+        for(Map.Entry<String, Journey> entry : new CaseInsensitiveMap<>(queuedPlayers).entrySet()) {
             if(!entry.getValue().getStation().equals(station)) continue;
             Player player = Bukkit.getPlayer(entry.getKey());
             if(player == null) continue;
@@ -43,12 +43,12 @@ public class TravelManager {
                 Station target = entry.getValue().getTarget();
                 // check money
                 if(target instanceof Chargeable) {
-                    if(!RaidCraft.getEconomy().hasEnough(player.getName(), ((Chargeable) target).getPrice())) {
+                    if(!RaidCraft.getEconomy().hasEnough(player.getName(), ((Chargeable) target).getPrice((int) station.getLocation().distance(target.getLocation())))) {
                         throw new RaidCraftException("Not enough money!");
                     }
                 }
 
-                station.travel(player, entry.getValue().getTarget().getLocation());
+                station.travel(player, entry.getValue().getTarget());
 
                 // charge player
                 if(entry.getValue().getTarget() instanceof Chargeable) {
@@ -64,27 +64,5 @@ public class TravelManager {
     public void reload() {
 
         queuedPlayers.clear();
-    }
-
-    public class TargetStation {
-
-        private Station station;
-        private Station target;
-
-        public TargetStation(Station station, Station target) {
-
-            this.station = station;
-            this.target = target;
-        }
-
-        public Station getStation() {
-
-            return station;
-        }
-
-        public Station getTarget() {
-
-            return target;
-        }
     }
 }

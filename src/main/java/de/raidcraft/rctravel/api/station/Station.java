@@ -15,7 +15,7 @@ public interface Station {
 
     public Location getLocation();
 
-    public void travel(Player player, Location target) throws RaidCraftException;
+    public void travel(Player player, Station station) throws RaidCraftException;
 
     public boolean equals(Object obj);
 

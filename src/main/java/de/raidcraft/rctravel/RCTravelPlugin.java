@@ -4,7 +4,12 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
+import de.raidcraft.rcconversations.actions.ActionManager;
 import de.raidcraft.rctravel.commands.TravelCommands;
+import de.raidcraft.rctravel.conversations.CheckTravelPlayerAction;
+import de.raidcraft.rctravel.conversations.FindTravelStationAction;
+import de.raidcraft.rctravel.conversations.TravelToStationAction;
+import de.raidcraft.rctravel.conversations.ListStationsAction;
 import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
@@ -37,6 +42,11 @@ public class RCTravelPlugin extends BasePlugin {
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
+
+        ActionManager.registerAction(new CheckTravelPlayerAction());
+        ActionManager.registerAction(new FindTravelStationAction());
+        ActionManager.registerAction(new TravelToStationAction());
+        ActionManager.registerAction(new ListStationsAction());
 
         config = new LocalConfiguration(this);
 

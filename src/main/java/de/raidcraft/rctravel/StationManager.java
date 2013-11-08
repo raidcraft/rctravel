@@ -5,6 +5,7 @@ import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rcconversations.npc.ConversationsTrait;
 import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
@@ -80,9 +81,35 @@ public class StationManager {
         return station;
     }
 
+    public List<Station> getDiscoveredStations(Group group, String player) {
+
+        List<Station> stations = new ArrayList<>();
+        List<Station> groupStations = cachedStations.get(group.getPlainName());
+        if(groupStations == null) return stations;
+
+        for(Station station : groupStations) {
+            if(station instanceof Discoverable) {
+                if(!((Discoverable) station).hasDiscovered(player)) continue;
+            }
+            stations.add(station);
+        }
+        return stations;
+    }
+
     public List<Station> getGroupStations(String group) {
 
         return cachedStations.get(StringUtils.formatName(group));
+    }
+
+    public Station getNearbyStation(Location location, int radius) {
+
+        for(GroupedStation groupedStation : groupedStations) {
+            if(!groupedStation.getStation().getLocation().getWorld().equals(location.getWorld())) continue;
+            if(groupedStation.getStation().getLocation().distance(location) <= radius) {
+                return groupedStation.getStation();
+            }
+        }
+        return null;
     }
 
     public void buildGroupedStations() {

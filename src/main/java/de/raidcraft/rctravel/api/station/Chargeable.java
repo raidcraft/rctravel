@@ -6,4 +6,6 @@ package de.raidcraft.rctravel.api.station;
 public interface Chargeable {
 
     public double getPrice();
+
+    public double getPrice(int distance);
 }
