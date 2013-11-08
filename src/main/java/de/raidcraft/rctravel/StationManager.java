@@ -57,11 +57,11 @@ public class StationManager {
 
         Station station = null;
         for(Station st : getGroupStations(group.getPlainName())) {
-            if(station.getName().equalsIgnoreCase(stationName)) station = st;
+            if(st.getName().equalsIgnoreCase(stationName)) station = st;
         }
         if(station == null) {
             for(Station st : getGroupStations(group.getPlainName())) {
-                if(station.getName().toLowerCase().startsWith(stationName.toLowerCase())) station = st;
+                if(st.getName().toLowerCase().startsWith(stationName.toLowerCase())) station = st;
             }
         }
         return station;
