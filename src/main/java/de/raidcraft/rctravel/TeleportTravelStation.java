@@ -39,6 +39,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
         if(RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, minPoint, maxPoint)) {
             player.teleport(targetSation.getLocation());
             player.sendMessage(ChatColor.GREEN + "Du bist an deinem Reiseziel angekommen.");
+            return;
         }
         throw new RaidCraftException("Der Spieler befindet sich nicht am Abfahrtsort!");
     }
