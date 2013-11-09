@@ -9,6 +9,7 @@ import de.raidcraft.rcconversations.api.conversation.Conversation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.Station;
+import de.raidcraft.util.DateUtil;
 import org.bukkit.ChatColor;
 
 /**
@@ -44,6 +45,8 @@ public class FindTravelStationAction extends AbstractAction {
 
         conversation.set("rct_station_name", station.getPlainName());
         conversation.set("rct_station_friendlyname", station.getName());
+        conversation.set("rct_station_cooldown", DateUtil.formatSeconds(plugin.getStationLockTask().getRemainingTime(station)));
+        conversation.set("rct_station_friendlystate", (plugin.getStationLockTask().isLocked(station)) ? "auf Reise" : "Abfahrt bereit");
         if(success != null) {
             conversation.setCurrentStage(success);
             conversation.triggerCurrentStage();
