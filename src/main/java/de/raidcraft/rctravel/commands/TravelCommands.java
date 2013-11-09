@@ -147,6 +147,9 @@ public class TravelCommands {
             }
 
             Station station = plugin.getStationManager().getStation(args.getString(0));
+            if(station == null) {
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+            }
             boolean locked = args.hasFlag('l');
 
             if(!(station instanceof SchematicStation)) {

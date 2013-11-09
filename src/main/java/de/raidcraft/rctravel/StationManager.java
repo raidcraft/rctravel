@@ -104,7 +104,7 @@ public class StationManager {
     public Station getNearbyStation(Location location, int radius) {
 
         for(GroupedStation groupedStation : groupedStations) {
-            if(!groupedStation.getStation().getLocation().getWorld().equals(location.getWorld())) continue;
+            if(!groupedStation.getStation().getLocation().getWorld().getName().equalsIgnoreCase(location.getWorld().getName())) continue;
             if(groupedStation.getStation().getLocation().distance(location) <= radius) {
                 return groupedStation.getStation();
             }
