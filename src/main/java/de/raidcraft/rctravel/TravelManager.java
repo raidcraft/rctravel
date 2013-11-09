@@ -41,15 +41,16 @@ public class TravelManager {
             if(player == null) continue;
             try {
                 Station target = entry.getValue().getTarget();
+                Station start = entry.getValue().getStation();
                 // check money
                 if(target instanceof Chargeable) {
-                    if(!RaidCraft.getEconomy().hasEnough(player.getName(), ((Chargeable) target).getPrice((int) station.getLocation().distance(target.getLocation())))) {
+                    if(!RaidCraft.getEconomy().hasEnough(player.getName(), ((Chargeable) target).getPrice((int) start.getLocation().distance(target.getLocation())))) {
                         throw new RaidCraftException("Not enough money!");
                     }
                 }
 
-                station.travel(player, entry.getValue().getTarget());
-
+                start.travel(player, entry.getValue().getTarget());
+                queuedPlayers.remove(entry.getKey());
                 // charge player
                 if(entry.getValue().getTarget() instanceof Chargeable) {
                     RaidCraft.getEconomy().substract(player.getName(), ((Chargeable) entry.getValue().getTarget()).getPrice());
@@ -57,7 +58,6 @@ public class TravelManager {
             } catch (RaidCraftException e) {
                 // ignore travel exceptions here
             }
-            queuedPlayers.remove(entry.getKey());
         }
     }
 
