@@ -154,6 +154,14 @@ public class StationManager {
 
     public void deleteStation(Station station) throws RaidCraftException {
 
+        GroupedStation groupedStation = null;
+        for(GroupedStation gs : groupedStations) {
+            if(gs.getStation().equals(station)) {
+                groupedStation = gs;
+                break;
+            }
+        }
+
         // delete from database
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
                 .find(TTravelStation.class).where().ieq("name", station.getName()).findUnique();
@@ -169,6 +177,12 @@ public class StationManager {
             plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getUnlockedSchematicName());
             plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getLockedSchematicName());
         }
+
+        // delete dynmap marker
+        if(groupedStation != null) {
+            plugin.getDynmapManager().removeMarker(groupedStation.getStation(), groupedStation.getGroup());
+        }
+        plugin.reload();
     }
 
     private void addToCache(Station station, Group group) {
