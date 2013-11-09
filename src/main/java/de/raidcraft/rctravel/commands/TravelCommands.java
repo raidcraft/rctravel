@@ -140,12 +140,6 @@ public class TravelCommands {
             if(!(sender instanceof Player)) throw new CommandException("Player required!");
             Player player = (Player)sender;
 
-            // check if group exists
-            Group group = plugin.getGroupManager().getGroup(args.getString(0));
-            if(group == null) {
-                throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
-            }
-
             Station station = plugin.getStationManager().getStation(args.getString(0));
             if(station == null) {
                 throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
