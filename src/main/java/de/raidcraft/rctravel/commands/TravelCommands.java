@@ -124,7 +124,7 @@ public class TravelCommands {
 
             player.teleport(station.getLocation());
 
-            sender.sendMessage(ChatColor.GREEN + "Du wurdest zur Station '" + station.getName() + "'teleportiert!");
+            sender.sendMessage(ChatColor.GREEN + "Du wurdest zur Station '" + station.getName() + "' teleportiert!");
         }
 
         @Command(

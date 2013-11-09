@@ -73,7 +73,8 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
         try {
             RaidCraft.getComponent(RCTravelPlugin.class).getSchematicManager().pasteSchematic(getLocation().getWorld(), schematicName);
             LocalWorld world = new BukkitWorld(getLocation().getWorld());
-            world.removeEntities(EntityType.ITEMS, new Vector(), 30);
+            Vector origin = new Vector(getLocation().getX(), getLocation().getY(), getLocation().getZ());
+            world.removeEntities(EntityType.ITEMS, origin, 30);
         } catch (RaidCraftException e) {
             RaidCraft.LOGGER.warning("[RCTravel] " + e.getMessage());
         }
