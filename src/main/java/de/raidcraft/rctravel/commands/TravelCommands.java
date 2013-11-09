@@ -132,7 +132,7 @@ public class TravelCommands {
                 desc = "Recreate station schematic",
                 flags = "l",
                 min = 1,
-                usage = "<Station> -l (locked/unlocked)"
+                usage = "<Station> -u (unlocked)"
         )
         @CommandPermissions("rctravel.cmd.schematic")
         public void schematic(CommandContext args, CommandSender sender) throws CommandException {
@@ -144,7 +144,7 @@ public class TravelCommands {
             if(station == null) {
                 throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
             }
-            boolean locked = args.hasFlag('l');
+            boolean locked = !args.hasFlag('u');
 
             if(!(station instanceof SchematicStation)) {
                 throw new CommandException("Diese Station unterstüzt keine Schematics!");
