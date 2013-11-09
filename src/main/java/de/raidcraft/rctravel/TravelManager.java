@@ -2,6 +2,7 @@ package de.raidcraft.rctravel;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
+import de.raidcraft.api.economy.BalanceSource;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.util.CaseInsensitiveMap;
@@ -53,7 +54,7 @@ public class TravelManager {
                 queuedPlayers.remove(entry.getKey());
                 // charge player
                 if(entry.getValue().getTarget() instanceof Chargeable) {
-                    RaidCraft.getEconomy().substract(player.getName(), ((Chargeable) entry.getValue().getTarget()).getPrice());
+                    RaidCraft.getEconomy().substract(player.getName(), ((Chargeable) entry.getValue().getTarget()).getPrice(), BalanceSource.TRAVEL, start.getName() + " -> " + target.getName());
                 }
             } catch (RaidCraftException e) {
                 // ignore travel exceptions here
