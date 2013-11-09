@@ -33,7 +33,7 @@ public class CheckTravelPlayerAction extends AbstractAction {
 
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
         Station startStation = plugin.getStationManager().getStation(startName);
-        Station targetStation = plugin.getStationManager().getStation(startName);
+        Station targetStation = plugin.getStationManager().getStation(targetName);
 
         if(startStation == null) {
             setErrorMsg(conversation, "Es ist ein Fehler aufgetreten! Bitte informiere das Raid-Craft Team!");
