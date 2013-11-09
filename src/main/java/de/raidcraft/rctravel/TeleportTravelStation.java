@@ -1,5 +1,9 @@
 package de.raidcraft.rctravel;
 
+import com.sk89q.worldedit.EntityType;
+import com.sk89q.worldedit.LocalWorld;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.station.AbstractStation;
@@ -68,6 +72,8 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
 
         try {
             RaidCraft.getComponent(RCTravelPlugin.class).getSchematicManager().pasteSchematic(getLocation().getWorld(), schematicName);
+            LocalWorld world = new BukkitWorld(getLocation().getWorld());
+            world.removeEntities(EntityType.ITEMS, new Vector(), 30);
         } catch (RaidCraftException e) {
             RaidCraft.LOGGER.warning("[RCTravel] " + e.getMessage());
         }
