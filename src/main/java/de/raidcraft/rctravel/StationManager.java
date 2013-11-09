@@ -46,7 +46,7 @@ public class StationManager {
             Group group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
             if(group == null) continue;
             double price = group.getDefaultPrice();
-            if(tTravelStation.getPrice() == 0) {
+            if(tTravelStation.getPrice() != 0) {
                 price = tTravelStation.getPrice() / 100D;
             }
             TeleportTravelStation station =
