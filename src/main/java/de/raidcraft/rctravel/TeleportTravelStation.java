@@ -25,6 +25,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
         super(name, location);
         this.minPoint = minPoint;
         this.maxPoint = maxPoint;
+        this.price = price;
     }
 
     @Override
