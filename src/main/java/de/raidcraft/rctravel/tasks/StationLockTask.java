@@ -81,6 +81,7 @@ public class StationLockTask implements Runnable {
             this.groupedStation = groupedStation;
             locked = false;
             time = System.currentTimeMillis();
+            RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
         }
 
         public GroupedStation getGroupedStation() {
