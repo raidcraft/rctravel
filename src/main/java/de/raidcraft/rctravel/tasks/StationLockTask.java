@@ -44,6 +44,12 @@ public class StationLockTask implements Runnable {
         return (remainingCooldowns.containsKey(station) && remainingCooldowns.get(station).isLocked());
     }
 
+    public void setLocked(Station station, boolean locked) {
+
+        if(!remainingCooldowns.containsKey(station)) return;
+        remainingCooldowns.get(station).setLocked(locked);
+    }
+
     @Override
     public void run() {
 
@@ -94,6 +100,20 @@ public class StationLockTask implements Runnable {
             return locked;
         }
 
+        public void setLocked(boolean locked) {
+
+            if(locked) {
+                this.locked = true;
+                time = System.currentTimeMillis();
+                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, true));
+            }
+            else {
+                this.locked = false;
+                time = System.currentTimeMillis();
+                RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
+            }
+        }
+
         private int getRemainingTime(int total) {
 
             return (int)(total - ((System.currentTimeMillis() - time) / 1000));
@@ -113,16 +133,12 @@ public class StationLockTask implements Runnable {
 
             if(locked) {
                 if(getRemainingTime() < 0) {
-                    locked = false;
-                    time = System.currentTimeMillis();
-                    RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
+                    setLocked(false);
                 }
             }
             else {
                 if(getRemainingTime() < 0) {
-                    locked = true;
-                    time = System.currentTimeMillis();
-                    RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, true));
+                    setLocked(true);
                 }
             }
         }

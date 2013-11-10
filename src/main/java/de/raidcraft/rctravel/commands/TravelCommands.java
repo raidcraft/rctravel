@@ -163,5 +163,26 @@ public class TravelCommands {
             }
             player.sendMessage(ChatColor.GREEN + "Die Schematic für die Station '" + station.getName() + "' wurde erstellt!");
         }
+
+        @Command(
+                aliases = {"arrive", "come"},
+                desc = "Forced station to get unlocked",
+                min = 1,
+                usage = "<Station>"
+        )
+        @CommandPermissions("rctravel.cmd.tp")
+        public void arrive(CommandContext args, CommandSender sender) throws CommandException {
+
+            if(!(sender instanceof Player)) throw new CommandException("Player required!");
+            Player player = (Player)sender;
+
+            // check if station exists
+            Station station = plugin.getStationManager().getStation(args.getString(0));
+            if(station == null) {
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+            }
+
+            plugin.getStationLockTask().setLocked(station, false);
+        }
     }
 }
