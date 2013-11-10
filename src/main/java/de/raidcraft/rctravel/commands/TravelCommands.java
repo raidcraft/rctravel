@@ -2,6 +2,7 @@ package de.raidcraft.rctravel.commands;
 
 import com.sk89q.minecraft.util.commands.*;
 import de.raidcraft.api.RaidCraftException;
+import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.SchematicStation;
@@ -47,6 +48,11 @@ public class TravelCommands {
         public void reload(CommandContext args, CommandSender sender) throws CommandException {
 
             plugin.reload();
+
+            // update dynmap marker
+            for(GroupedStation groupedStation : plugin.getStationManager().getGroupedStations()) {
+                plugin.getDynmapManager().addStationMarker(groupedStation.getStation(), groupedStation.getGroup());
+            }
             sender.sendMessage(ChatColor.GREEN + "RCTravel wurde neugeladen!");
         }
 
