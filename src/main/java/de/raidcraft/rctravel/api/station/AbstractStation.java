@@ -20,7 +20,7 @@ public abstract class AbstractStation implements Station {
     @Override
     public String getName() {
 
-        return name;
+        return name.replace("_", " ");
     }
 
     @Override
