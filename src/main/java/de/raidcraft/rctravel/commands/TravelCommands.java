@@ -136,7 +136,7 @@ public class TravelCommands {
         @Command(
                 aliases = {"schematic", "sch"},
                 desc = "Recreate station schematic",
-                flags = "l",
+                flags = "u",
                 min = 1,
                 usage = "<Station> -u (unlocked)"
         )
