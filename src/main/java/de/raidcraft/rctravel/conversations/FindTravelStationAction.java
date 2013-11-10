@@ -45,6 +45,7 @@ public class FindTravelStationAction extends AbstractAction {
 
         conversation.set("rct_station_name", station.getPlainName());
         conversation.set("rct_station_friendlyname", station.getName());
+        conversation.set("rct_station_vehicle", plugin.getStationManager().getGroupedStation(station).getGroup().getVehicleName());
         conversation.set("rct_station_cooldown", DateUtil.formatSeconds(plugin.getStationLockTask().getRemainingTime(station)));
         conversation.set("rct_station_friendlystate", (plugin.getStationLockTask().isLocked(station)) ? "auf Reise" : "Abfahrt bereit");
         if(success != null) {

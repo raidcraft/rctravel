@@ -81,6 +81,17 @@ public class StationManager {
         return station;
     }
 
+    public GroupedStation getGroupedStation(Station station) {
+
+        for(GroupedStation groupedStation : groupedStations) {
+
+            if(groupedStation.getStation().equals(station)) {
+                return groupedStation;
+            }
+        }
+        return null;
+    }
+
     public List<Station> getDiscoveredStations(Group group, String player) {
 
         List<Station> stations = new ArrayList<>();
