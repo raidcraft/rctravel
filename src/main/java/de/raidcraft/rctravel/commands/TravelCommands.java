@@ -84,7 +84,7 @@ public class TravelCommands {
         }
 
         @Command(
-                aliases = {"delete"},
+                aliases = {"delete", "remove"},
                 desc = "Delete travel station",
                 min = 1,
                 usage = "<name>"
@@ -101,8 +101,11 @@ public class TravelCommands {
                 throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
             }
 
+            GroupedStation groupedStation = plugin.getStationManager().getGroupedStation(station);
+
             try {
                 plugin.getStationManager().deleteStation(station);
+                plugin.getNpcManager().removeDragonGuard(groupedStation);
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }

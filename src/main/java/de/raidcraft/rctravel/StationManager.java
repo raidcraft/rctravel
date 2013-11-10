@@ -11,12 +11,11 @@ import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
 import de.raidcraft.util.StringUtils;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Philip Urban
@@ -90,6 +89,18 @@ public class StationManager {
             }
         }
         return null;
+    }
+
+    public Set<GroupedStation> getGroupedStationsByChunk(Chunk chunk) {
+
+        Set<GroupedStation> gps = new HashSet<>();
+        for(GroupedStation groupedStation : gps) {
+            if(chunk.getX() == groupedStation.getStation().getLocation().getChunk().getX()
+                    && chunk.getZ() == groupedStation.getStation().getLocation().getChunk().getZ()) {
+                gps.add(groupedStation);
+            }
+        }
+        return gps;
     }
 
     public List<Station> getDiscoveredStations(Group group, String player) {

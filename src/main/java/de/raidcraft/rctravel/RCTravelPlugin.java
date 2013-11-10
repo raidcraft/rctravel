@@ -8,12 +8,14 @@ import de.raidcraft.rcconversations.actions.ActionManager;
 import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.conversations.CheckTravelPlayerAction;
 import de.raidcraft.rctravel.conversations.FindTravelStationAction;
-import de.raidcraft.rctravel.conversations.TravelToStationAction;
 import de.raidcraft.rctravel.conversations.ListStationsAction;
+import de.raidcraft.rctravel.conversations.TravelToStationAction;
+import de.raidcraft.rctravel.listener.ChunkListener;
 import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
+import de.raidcraft.rctravel.util.NPCManager;
 import de.raidcraft.rctravel.util.SchematicManager;
 import de.raidcraft.rctravel.util.WorldGuardManager;
 import org.bukkit.Bukkit;
@@ -36,12 +38,14 @@ public class RCTravelPlugin extends BasePlugin {
     private WorldEditPlugin worldEdit;
     private WorldGuardPlugin worldGuard;
     private TravelManager travelManager;
+    private NPCManager npcManager;
 
     @Override
     public void enable() {
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
+        registerEvents(new ChunkListener());
 
         ActionManager.registerAction(new CheckTravelPlayerAction());
         ActionManager.registerAction(new FindTravelStationAction());
@@ -60,6 +64,7 @@ public class RCTravelPlugin extends BasePlugin {
         worldGuard = (WorldGuardPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         worldGuardManager = new WorldGuardManager(this, worldGuard);
         travelManager = new TravelManager(this);
+        npcManager = new NPCManager(this);
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
@@ -141,5 +146,10 @@ public class RCTravelPlugin extends BasePlugin {
     public TravelManager getTravelManager() {
 
         return travelManager;
+    }
+
+    public NPCManager getNpcManager() {
+
+        return npcManager;
     }
 }
