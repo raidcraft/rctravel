@@ -9,7 +9,7 @@ import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -28,16 +28,18 @@ public class ChunkListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
 
-        Bukkit.getScheduler().runTaskLater(RaidCraft.getComponent(RCTravelPlugin.class), new TravelMasterChecker(new ChunkLocation(event.getChunk())), 1*20);
+        Bukkit.getScheduler().runTaskLater(RaidCraft.getComponent(RCTravelPlugin.class), new TravelMasterChecker(event.getWorld(), new ChunkLocation(event.getChunk())), 10);
     }
 
     public class TravelMasterChecker implements Runnable {
 
         private ChunkLocation chunkLocation;
+        private World world;
 
-        public TravelMasterChecker(ChunkLocation chunkLocation) {
+        public TravelMasterChecker(World world, ChunkLocation chunkLocation) {
 
             this.chunkLocation = chunkLocation;
+            this.world = world;
         }
 
         @Override
@@ -53,7 +55,7 @@ public class ChunkListener implements Listener {
                 Set<ChunkLocation> affectedChunks = NPCRegistry.INST.getAffectedChunkLocations(chunkLocation);
                 boolean found = false;
                 for(ChunkLocation cl : affectedChunks) {
-                    for(Entity entity : .getWorld().getChunkAt(cl.getX(), cl.getZ()).getEntities()) {
+                    for(Entity entity : chunkLocation.getChunk(world).getEntities()) {
                         if(!(entity instanceof LivingEntity)) continue;
                         if(entity.getLocation().distance(groupedStation.getStation().getLocation()) <= 5) {
                             NPC npc = RaidCraft.getComponent(RCConversationsPlugin.class).getCitizens().getNPCRegistry().getNPC(entity);
