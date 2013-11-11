@@ -4,6 +4,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rcconversations.npc.ConversationsTrait;
+import de.raidcraft.rcconversations.util.ChunkLocation;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.SchematicStation;
@@ -11,7 +12,6 @@ import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
 import de.raidcraft.util.StringUtils;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -91,12 +91,12 @@ public class StationManager {
         return null;
     }
 
-    public Set<GroupedStation> getGroupedStationsByChunk(Chunk chunk) {
+    public Set<GroupedStation> getGroupedStationsByChunk(ChunkLocation chunkLocation) {
 
         Set<GroupedStation> gps = new HashSet<>();
         for(GroupedStation groupedStation : groupedStations) {
-            if(chunk.getX() == groupedStation.getStation().getLocation().getChunk().getX()
-                    && chunk.getZ() == groupedStation.getStation().getLocation().getChunk().getZ()) {
+            ChunkLocation stationChunkLocation = new ChunkLocation(groupedStation.getStation().getLocation());
+            if(chunkLocation.equals(stationChunkLocation)) {
                 gps.add(groupedStation);
             }
         }

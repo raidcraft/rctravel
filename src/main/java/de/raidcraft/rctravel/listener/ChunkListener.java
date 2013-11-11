@@ -28,32 +28,32 @@ public class ChunkListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
 
-        Bukkit.getScheduler().runTaskLater(RaidCraft.getComponent(RCTravelPlugin.class), new TravelMasterChecker(event.getChunk()), 3*20);
+        Bukkit.getScheduler().runTaskLater(RaidCraft.getComponent(RCTravelPlugin.class), new TravelMasterChecker(new ChunkLocation(event.getChunk())), 1*20);
     }
 
     public class TravelMasterChecker implements Runnable {
 
-        private Chunk chunk;
+        private ChunkLocation chunkLocation;
 
-        public TravelMasterChecker(Chunk chunk) {
+        public TravelMasterChecker(ChunkLocation chunkLocation) {
 
-            this.chunk = chunk;
+            this.chunkLocation = chunkLocation;
         }
 
         @Override
         public void run() {
 
-            Set<GroupedStation> stations = RaidCraft.getComponent(RCTravelPlugin.class).getStationManager().getGroupedStationsByChunk(chunk);
+            Set<GroupedStation> stations = RaidCraft.getComponent(RCTravelPlugin.class).getStationManager().getGroupedStationsByChunk(chunkLocation);
 
             // if there are stations without npcs -> create new
 
             for(GroupedStation groupedStation : new HashSet<>(stations)) {
 
                 // check a second time
-                Set<ChunkLocation> affectedChunks = NPCRegistry.INST.getAffectedChunkLocations(chunk);
+                Set<ChunkLocation> affectedChunks = NPCRegistry.INST.getAffectedChunkLocations(chunkLocation);
                 boolean found = false;
                 for(ChunkLocation cl : affectedChunks) {
-                    for(Entity entity : chunk.getWorld().getChunkAt(cl.getX(), cl.getZ()).getEntities()) {
+                    for(Entity entity : .getWorld().getChunkAt(cl.getX(), cl.getZ()).getEntities()) {
                         if(!(entity instanceof LivingEntity)) continue;
                         if(entity.getLocation().distance(groupedStation.getStation().getLocation()) <= 5) {
                             NPC npc = RaidCraft.getComponent(RCConversationsPlugin.class).getCitizens().getNPCRegistry().getNPC(entity);
