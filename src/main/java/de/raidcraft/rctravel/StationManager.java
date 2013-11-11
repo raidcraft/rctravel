@@ -94,7 +94,7 @@ public class StationManager {
     public Set<GroupedStation> getGroupedStationsByChunk(Chunk chunk) {
 
         Set<GroupedStation> gps = new HashSet<>();
-        for(GroupedStation groupedStation : gps) {
+        for(GroupedStation groupedStation : groupedStations) {
             if(chunk.getX() == groupedStation.getStation().getLocation().getChunk().getX()
                     && chunk.getZ() == groupedStation.getStation().getLocation().getChunk().getZ()) {
                 gps.add(groupedStation);
