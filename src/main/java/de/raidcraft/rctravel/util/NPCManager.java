@@ -18,12 +18,12 @@ public class NPCManager {
         this.plugin = plugin;
     }
 
-    public void createDragonGuard(GroupedStation groupedStation) {
+    public void createNPC(GroupedStation groupedStation) {
 
         ConversationsTrait.create(groupedStation.getStation().getLocation(), groupedStation.getGroup().getConversationName(), "Reiseleiter", false);
     }
 
-    public void removeDragonGuard(GroupedStation groupedStation) {
+    public void removeNPC(GroupedStation groupedStation) {
 
         for(NPC npc : NPCRegistry.INST.getSpawnedNPCs(groupedStation.getStation().getLocation().getChunk())) {
             ConversationsTrait trait = npc.getTrait(ConversationsTrait.class);

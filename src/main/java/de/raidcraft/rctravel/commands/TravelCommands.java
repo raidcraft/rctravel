@@ -105,7 +105,7 @@ public class TravelCommands {
 
             try {
                 plugin.getStationManager().deleteStation(station);
-                plugin.getNpcManager().removeDragonGuard(groupedStation);
+                plugin.getNpcManager().removeNPC(groupedStation);
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }

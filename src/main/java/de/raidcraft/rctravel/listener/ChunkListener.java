@@ -74,7 +74,7 @@ public class ChunkListener implements Listener {
 
             for(GroupedStation groupedStation : stations) {
                 RaidCraft.LOGGER.info("Create Travel NPC for station: '" + groupedStation.getStation().getName() + "'!");
-                RaidCraft.getComponent(RCTravelPlugin.class).getNpcManager().createDragonGuard(groupedStation);
+                RaidCraft.getComponent(RCTravelPlugin.class).getNpcManager().createNPC(groupedStation);
             }
         }
     }
