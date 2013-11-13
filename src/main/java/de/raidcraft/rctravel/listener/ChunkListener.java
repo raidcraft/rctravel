@@ -61,6 +61,10 @@ public class ChunkListener implements Listener {
                             NPC npc = RaidCraft.getComponent(RCConversationsPlugin.class).getCitizens().getNPCRegistry().getNPC(entity);
                             if(npc == null) continue;
                             ConversationsTrait trait = npc.getTrait(ConversationsTrait.class);
+                            if(trait == null) {
+                                npc.destroy();
+                                continue;
+                            }
                             if(!trait.getConversationName().equalsIgnoreCase(groupedStation.getGroup().getConversationName())) continue;
                             stations.remove(groupedStation);
                             if(found) {
