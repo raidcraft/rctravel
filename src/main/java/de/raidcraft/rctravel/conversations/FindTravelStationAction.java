@@ -6,6 +6,7 @@ import de.raidcraft.rcconversations.api.action.ActionArgumentException;
 import de.raidcraft.rcconversations.api.action.ActionArgumentList;
 import de.raidcraft.rcconversations.api.action.ActionInformation;
 import de.raidcraft.rcconversations.api.conversation.Conversation;
+import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.Station;
@@ -43,9 +44,11 @@ public class FindTravelStationAction extends AbstractAction {
             }
         }
 
+        GroupedStation groupedStation = plugin.getStationManager().getGroupedStation(station);
         conversation.set("rct_station_name", station.getPlainName());
+        conversation.set("rct_station_group", groupedStation.getGroup().getPlainName());
         conversation.set("rct_station_friendlyname", station.getName());
-        conversation.set("rct_station_vehicle", plugin.getStationManager().getGroupedStation(station).getGroup().getVehicleName());
+        conversation.set("rct_station_vehicle", groupedStation.getGroup().getVehicleName());
         conversation.set("rct_station_cooldown", DateUtil.formatSeconds(plugin.getStationLockTask().getRemainingTime(station)));
         conversation.set("rct_station_friendlystate", (plugin.getStationLockTask().isLocked(station)) ? "auf Reise" : "Abfahrt bereit");
         if(success != null) {

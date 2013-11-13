@@ -9,6 +9,7 @@ import de.raidcraft.rcconversations.api.answer.SimpleAnswer;
 import de.raidcraft.rcconversations.api.conversation.Conversation;
 import de.raidcraft.rcconversations.api.stage.SimpleStage;
 import de.raidcraft.rcconversations.api.stage.Stage;
+import de.raidcraft.rcconversations.util.ParseString;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Chargeable;
@@ -30,6 +31,7 @@ public class ListStationsAction extends AbstractAction {
     public void run(Conversation conversation, ActionArgumentList args) throws ActionArgumentException {
 
         String groupName = args.getString("group");
+        groupName = ParseString.INST.parse(conversation, groupName);
         String typeName = args.getString("type");
         ListType type = ListType.valueOf(typeName);
         if(type == null) {
