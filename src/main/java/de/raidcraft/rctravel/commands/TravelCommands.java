@@ -96,9 +96,9 @@ public class TravelCommands {
             Player player = (Player)sender;
 
             // check if station exists
-            Station station = plugin.getStationManager().getStation(args.getString(0));
+            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
             if(station == null) {
-                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
 
             GroupedStation groupedStation = plugin.getStationManager().getGroupedStation(station);
@@ -126,9 +126,9 @@ public class TravelCommands {
             Player player = (Player)sender;
 
             // check if station exists
-            Station station = plugin.getStationManager().getStation(args.getString(0));
+            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
             if(station == null) {
-                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
 
             player.teleport(station.getLocation());
@@ -149,9 +149,9 @@ public class TravelCommands {
             if(!(sender instanceof Player)) throw new CommandException("Player required!");
             Player player = (Player)sender;
 
-            Station station = plugin.getStationManager().getStation(args.getString(0));
+            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
             if(station == null) {
-                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
             boolean locked = !args.hasFlag('u');
 
@@ -180,9 +180,9 @@ public class TravelCommands {
             Player player = (Player)sender;
 
             // check if station exists
-            Station station = plugin.getStationManager().getStation(args.getString(0));
+            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
             if(station == null) {
-                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getString(0) + "'!");
+                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
 
             plugin.getStationLockTask().setLocked(station, false);
