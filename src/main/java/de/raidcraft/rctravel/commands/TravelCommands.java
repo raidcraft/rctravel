@@ -75,12 +75,12 @@ public class TravelCommands {
             }
 
             try {
-                plugin.getStationManager().createStation(args.getString(1), player, group);
+                Station station = plugin.getStationManager().createStation(args.getJoinedStrings(1).replace(" ", "_"), player, group);
+                sender.sendMessage(ChatColor.GREEN + "Die Station '" + station.getName() + "' wurde erfolgreich erstellt!");
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
             }
 
-            sender.sendMessage(ChatColor.GREEN + "Die Station '" + args.getString(1) + "' wurde erfolgreich erstellt!");
         }
 
         @Command(

@@ -70,7 +70,7 @@ public class StationManager {
             for(List<Station> stList : cachedStations.values()) {
                 if(station != null) break;
                 for(Station st : stList) {
-                    if(StringUtils.formatName(st.getName()).startsWith(StringUtils.formatName(stationName))) {
+                    if(st.getPlainName().startsWith(StringUtils.formatName(stationName))) {
                         station = st;
                         break;
                     }
@@ -152,7 +152,7 @@ public class StationManager {
         return groupedStations;
     }
 
-    public void createStation(String stationName, Player player, Group group) throws RaidCraftException {
+    public Station createStation(String stationName, Player player, Group group) throws RaidCraftException {
 
         // check if station with same name already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
@@ -172,6 +172,7 @@ public class StationManager {
         ConversationsTrait.create(station.getLocation(), group.getConversationName(), "Reiseleiter", false);
         saveStation(station, group);
         reload();
+        return station;
     }
 
     public void deleteStation(Station station) throws RaidCraftException {
