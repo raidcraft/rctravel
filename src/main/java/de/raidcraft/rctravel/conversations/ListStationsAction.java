@@ -47,6 +47,10 @@ public class ListStationsAction extends AbstractAction {
         }
         Station currentStation = plugin.getStationManager().getStation(conversation.getString("rct_station_name"));
 
+        if(currentStation == null) {
+            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + conversation.getString("rct_station_name") + "' does not exists!");
+        }
+
         String confirmStage = args.getString("confirmstage");
         String returnStage = args.getString("returnstage");
         int pageSize = args.getInt("pagesize", 4);
@@ -68,7 +72,7 @@ public class ListStationsAction extends AbstractAction {
 
         if(type == ListType.FREE) {
             List<Station> freeStations = new ArrayList<>();
-            double price = 0;
+            double price;
             for(Station s : stations) {
                 price = 0;
                 if(s instanceof Chargeable) {
@@ -153,6 +157,7 @@ public class ListStationsAction extends AbstractAction {
         StringBuilder builder = new StringBuilder();
         double price  = 0;
         if(target instanceof Chargeable) {
+            RaidCraft.LOGGER.info("DEBUG station: " + start);
             price = ((Chargeable) target).getPrice((int)start.getLocation().distance(target.getLocation()));
             if(!RaidCraft.getEconomy().hasEnough(player.getName(), price)) {
                 builder.append(ChatColor.DARK_GRAY);

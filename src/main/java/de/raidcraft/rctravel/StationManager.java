@@ -70,7 +70,7 @@ public class StationManager {
             for(List<Station> stList : cachedStations.values()) {
                 if(station != null) break;
                 for(Station st : stList) {
-                    if(st.getName().toLowerCase().startsWith(stationName.toLowerCase())) {
+                    if(StringUtils.formatName(st.getName()).startsWith(StringUtils.formatName(stationName))) {
                         station = st;
                         break;
                     }
