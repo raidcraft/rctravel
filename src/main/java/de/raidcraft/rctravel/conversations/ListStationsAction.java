@@ -157,7 +157,6 @@ public class ListStationsAction extends AbstractAction {
         StringBuilder builder = new StringBuilder();
         double price  = 0;
         if(target instanceof Chargeable) {
-            RaidCraft.LOGGER.info("DEBUG station: " + start);
             price = ((Chargeable) target).getPrice((int)start.getLocation().distance(target.getLocation()));
             if(!RaidCraft.getEconomy().hasEnough(player.getName(), price)) {
                 builder.append(ChatColor.DARK_GRAY);
