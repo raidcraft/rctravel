@@ -2,6 +2,7 @@ package de.raidcraft.rctravel;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rcconversations.npc.ConversationsTrait;
 import de.raidcraft.rcconversations.util.ChunkLocation;
@@ -20,7 +21,7 @@ import java.util.*;
 /**
  * @author Philip Urban
  */
-public class StationManager {
+public class StationManager implements Component {
 
     private RCTravelPlugin plugin;
     // map: key -> group name | value -> list of stations
@@ -30,12 +31,24 @@ public class StationManager {
     public StationManager(RCTravelPlugin plugin) {
 
         this.plugin = plugin;
-        reload();
+        RaidCraft.registerComponent(StationManager.class, this);
+        load();
+    }
+
+    private void load() {
+
+        loadStations();
+        buildGroupedStations();
+    }
+
+    public void reload() {
+
+        cachedStations.clear();
+        groupedStations.clear();
+        load();
     }
 
     public void loadStations() {
-
-        cachedStations.clear();
 
         List<TTravelStation> tTravelStations = RaidCraft.getDatabase(RCTravelPlugin.class).find(TTravelStation.class).findList();
         for(TTravelStation tTravelStation : tTravelStations) {
@@ -236,11 +249,5 @@ public class StationManager {
         tTravelStation.setZMax(station.getMaxPoint().getBlockZ());
 
         RaidCraft.getDatabase(RCTravelPlugin.class).save(tTravelStation);
-    }
-
-    public void reload() {
-
-        loadStations();
-        buildGroupedStations();
     }
 }
