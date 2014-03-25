@@ -29,29 +29,29 @@ public class FindTravelStationAction extends AbstractAction {
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
         Station station = plugin.getStationManager().getNearbyStation(conversation.getHost().getLocation(), radius);
 
-        if(station == null) {
-            if(failure != null) {
+        if (station == null) {
+            if (failure != null) {
                 conversation.setCurrentStage(failure);
                 conversation.triggerCurrentStage();
             }
             return;
         }
 
-        if(station instanceof Discoverable) {
-            if(!((Discoverable) station).hasDiscovered(conversation.getPlayer().getName())) {
+        if (station instanceof Discoverable) {
+            if (!((Discoverable) station).hasDiscovered(conversation.getPlayer().getName())) {
                 ((Discoverable) station).setDiscovered(conversation.getPlayer().getName(), true);
                 conversation.getPlayer().sendMessage(ChatColor.GREEN + "Du besucht diese Reisestation zum ersten mal!");
             }
         }
 
         GroupedStation groupedStation = plugin.getStationManager().getGroupedStation(station);
-        conversation.set("rct_station_name", station.getPlainName());
+        conversation.set("rct_station_name", station.getName());
         conversation.set("rct_station_group", groupedStation.getGroup().getPlainName());
-        conversation.set("rct_station_friendlyname", station.getName());
+        conversation.set("rct_station_friendlyname", station.getDisplayName());
         conversation.set("rct_station_vehicle", groupedStation.getGroup().getVehicleName());
         conversation.set("rct_station_cooldown", DateUtil.formatSeconds(plugin.getStationLockTask().getRemainingTime(station)));
         conversation.set("rct_station_friendlystate", (plugin.getStationLockTask().isLocked(station)) ? "auf Reise" : "Abfahrt bereit");
-        if(success != null) {
+        if (success != null) {
             conversation.setCurrentStage(success);
             conversation.triggerCurrentStage();
         }

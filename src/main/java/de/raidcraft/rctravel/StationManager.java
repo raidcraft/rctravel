@@ -16,7 +16,11 @@ import de.raidcraft.util.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Philip Urban
@@ -51,14 +55,14 @@ public class StationManager implements Component {
     public void loadStations() {
 
         List<TTravelStation> tTravelStations = RaidCraft.getDatabase(RCTravelPlugin.class).find(TTravelStation.class).findList();
-        for(TTravelStation tTravelStation : tTravelStations) {
+        for (TTravelStation tTravelStation : tTravelStations) {
             Location location = tTravelStation.getBukkitLocation();
-            if(location == null) continue;
+            if (location == null) continue;
 
             Group group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
-            if(group == null) continue;
+            if (group == null) continue;
             double price = group.getDefaultPrice();
-            if(tTravelStation.getPrice() != 0) {
+            if (tTravelStation.getPrice() != 0) {
                 price = tTravelStation.getPrice() / 100D;
             }
             TeleportTravelStation station =
@@ -70,20 +74,20 @@ public class StationManager implements Component {
     public Station getStation(String stationName) {
 
         Station station = null;
-        for(List<Station> stList : cachedStations.values()) {
-            if(station != null) break;
-            for(Station st : stList) {
-                if(st.getName().equalsIgnoreCase(stationName)) {
+        for (List<Station> stList : cachedStations.values()) {
+            if (station != null) break;
+            for (Station st : stList) {
+                if (st.getDisplayName().equalsIgnoreCase(stationName)) {
                     station = st;
                     break;
                 }
             }
         }
-        if(station == null) {
-            for(List<Station> stList : cachedStations.values()) {
-                if(station != null) break;
-                for(Station st : stList) {
-                    if(st.getPlainName().startsWith(StringUtils.formatName(stationName))) {
+        if (station == null) {
+            for (List<Station> stList : cachedStations.values()) {
+                if (station != null) break;
+                for (Station st : stList) {
+                    if (st.getName().startsWith(StringUtils.formatName(stationName))) {
                         station = st;
                         break;
                     }
@@ -95,9 +99,9 @@ public class StationManager implements Component {
 
     public GroupedStation getGroupedStation(Station station) {
 
-        for(GroupedStation groupedStation : groupedStations) {
+        for (GroupedStation groupedStation : groupedStations) {
 
-            if(groupedStation.getStation().equals(station)) {
+            if (groupedStation.getStation().equals(station)) {
                 return groupedStation;
             }
         }
@@ -107,9 +111,9 @@ public class StationManager implements Component {
     public Set<GroupedStation> getGroupedStationsByChunk(ChunkLocation chunkLocation) {
 
         Set<GroupedStation> gps = new HashSet<>();
-        for(GroupedStation groupedStation : groupedStations) {
+        for (GroupedStation groupedStation : groupedStations) {
             ChunkLocation stationChunkLocation = new ChunkLocation(groupedStation.getStation().getLocation());
-            if(chunkLocation.equals(stationChunkLocation)) {
+            if (chunkLocation.equals(stationChunkLocation)) {
                 gps.add(groupedStation);
             }
         }
@@ -120,11 +124,11 @@ public class StationManager implements Component {
 
         List<Station> stations = new ArrayList<>();
         List<Station> groupStations = cachedStations.get(group.getPlainName());
-        if(groupStations == null) return stations;
+        if (groupStations == null) return stations;
 
-        for(Station station : groupStations) {
-            if(station instanceof Discoverable) {
-                if(!((Discoverable) station).hasDiscovered(player)) continue;
+        for (Station station : groupStations) {
+            if (station instanceof Discoverable) {
+                if (!((Discoverable) station).hasDiscovered(player)) continue;
             }
             stations.add(station);
         }
@@ -138,9 +142,9 @@ public class StationManager implements Component {
 
     public Station getNearbyStation(Location location, int radius) {
 
-        for(GroupedStation groupedStation : groupedStations) {
-            if(!groupedStation.getStation().getLocation().getWorld().getName().equalsIgnoreCase(location.getWorld().getName())) continue;
-            if(groupedStation.getStation().getLocation().distance(location) <= radius) {
+        for (GroupedStation groupedStation : groupedStations) {
+            if (!groupedStation.getStation().getLocation().getWorld().getName().equalsIgnoreCase(location.getWorld().getName())) continue;
+            if (groupedStation.getStation().getLocation().distance(location) <= radius) {
                 return groupedStation.getStation();
             }
         }
@@ -150,10 +154,10 @@ public class StationManager implements Component {
     public void buildGroupedStations() {
 
         groupedStations.clear();
-        for(Map.Entry<String, List<Station>> entry : cachedStations.entrySet()) {
+        for (Map.Entry<String, List<Station>> entry : cachedStations.entrySet()) {
             Group group = plugin.getGroupManager().getGroup(entry.getKey());
-            if(group == null) continue;
-            for(Station station : entry.getValue()) {
+            if (group == null) continue;
+            for (Station station : entry.getValue()) {
                 GroupedStation groupedStation = new GroupedStation(station, group);
                 groupedStations.add(groupedStation);
             }
@@ -170,12 +174,12 @@ public class StationManager implements Component {
         // check if station with same name already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
                 .find(TTravelStation.class).where().ieq("name", stationName).findUnique();
-        if(tTravelStation != null) {
+        if (tTravelStation != null) {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
 
         Selection selection = plugin.getWorldEdit().getSelection(player);
-        if(selection == null || selection.getMinimumPoint() == null || selection.getMaximumPoint() == null) {
+        if (selection == null || selection.getMinimumPoint() == null || selection.getMaximumPoint() == null) {
             throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
         }
 
@@ -191,8 +195,8 @@ public class StationManager implements Component {
     public void deleteStation(Station station) throws RaidCraftException {
 
         GroupedStation groupedStation = null;
-        for(GroupedStation gs : groupedStations) {
-            if(gs.getStation().equals(station)) {
+        for (GroupedStation gs : groupedStations) {
+            if (gs.getStation().equals(station)) {
                 groupedStation = gs;
                 break;
             }
@@ -200,22 +204,22 @@ public class StationManager implements Component {
 
         // delete from database
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("name", station.getName()).findUnique();
-        if(tTravelStation != null) {
+                .find(TTravelStation.class).where().ieq("name", station.getDisplayName()).findUnique();
+        if (tTravelStation != null) {
             RaidCraft.getDatabase(RCTravelPlugin.class).delete(tTravelStation);
         }
 
         reload();
 
         // delete schematics if schematic station
-        if(station instanceof SchematicStation) {
-            SchematicStation schematicStation = (SchematicStation)station;
+        if (station instanceof SchematicStation) {
+            SchematicStation schematicStation = (SchematicStation) station;
             plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getUnlockedSchematicName());
             plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getLockedSchematicName());
         }
 
         // delete dynmap marker
-        if(groupedStation != null) {
+        if (groupedStation != null) {
             plugin.getDynmapManager().removeMarker(groupedStation.getStation(), groupedStation.getGroup());
         }
         plugin.reload();
@@ -223,7 +227,7 @@ public class StationManager implements Component {
 
     private void addToCache(Station station, Group group) {
 
-        if(!cachedStations.containsKey(group.getPlainName())) {
+        if (!cachedStations.containsKey(group.getPlainName())) {
             cachedStations.put(group.getPlainName(), new ArrayList<Station>());
         }
         cachedStations.get(group.getPlainName()).add(station);
@@ -232,14 +236,14 @@ public class StationManager implements Component {
     private void saveStation(SchematicStation station, Group group) {
 
         TTravelStation tTravelStation = new TTravelStation();
-        tTravelStation.setName(station.getName());
+        tTravelStation.setName(station.getDisplayName());
         tTravelStation.setGroupName(group.getPlainName());
         tTravelStation.setWorld(station.getLocation().getWorld().getName());
-        tTravelStation.setX((int)(station.getLocation().getX() * 100D));
-        tTravelStation.setY((int)(station.getLocation().getY() * 100D));
-        tTravelStation.setZ((int)(station.getLocation().getZ() * 100D));
-        tTravelStation.setYaw((int)(station.getLocation().getYaw() * 100F));
-        tTravelStation.setPitch((int)(station.getLocation().getPitch() * 100F));
+        tTravelStation.setX((int) (station.getLocation().getX() * 100D));
+        tTravelStation.setY((int) (station.getLocation().getY() * 100D));
+        tTravelStation.setZ((int) (station.getLocation().getZ() * 100D));
+        tTravelStation.setYaw((int) (station.getLocation().getYaw() * 100F));
+        tTravelStation.setPitch((int) (station.getLocation().getPitch() * 100F));
         tTravelStation.setPrice(0);
         tTravelStation.setXMin(station.getMinPoint().getBlockX());
         tTravelStation.setYMin(station.getMinPoint().getBlockY());

@@ -20,8 +20,8 @@ public class StationListener implements Listener {
     public void onStationLockstateChange(StationLockStateChangeEvent event) {
 
         // lock
-        if(event.getNewLockState()) {
-            if(event.getGroupedStation().getStation() instanceof SchematicStation) {
+        if (event.getNewLockState()) {
+            if (event.getGroupedStation().getStation() instanceof SchematicStation) {
                 clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
                 ((SchematicStation) event.getGroupedStation().getStation()).changeSchematic(true);
             }
@@ -30,7 +30,7 @@ public class StationListener implements Listener {
         // unlock
         else {
             // change schematic
-            if(event.getGroupedStation().getStation() instanceof SchematicStation) {
+            if (event.getGroupedStation().getStation() instanceof SchematicStation) {
                 clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
                 ((SchematicStation) event.getGroupedStation().getStation()).changeSchematic(false);
             }
@@ -40,8 +40,8 @@ public class StationListener implements Listener {
 
     private void clearSchematicPlace(SchematicStation schematicStation) {
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if(RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, schematicStation.getMinPoint(), schematicStation.getMaxPoint())) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, schematicStation.getMinPoint(), schematicStation.getMaxPoint())) {
                 player.teleport(schematicStation.getLocation());
             }
         }
@@ -49,22 +49,22 @@ public class StationListener implements Listener {
 
     private void announceArrival(GroupedStation groupedStation) {
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if(!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
-            if(player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
+            if (player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
                 player.sendMessage(ChatColor.GOLD + "*" + ChatColor.GREEN + " Das " + groupedStation.getGroup().getVehicleName()
-                        + " von " + ChatColor.DARK_GREEN + groupedStation.getStation().getName() + ChatColor.GREEN + " ist eingetroffen!");
+                        + " von " + ChatColor.DARK_GREEN + groupedStation.getStation().getDisplayName() + ChatColor.GREEN + " ist eingetroffen!");
             }
         }
     }
 
     private void announceDeparture(GroupedStation groupedStation) {
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            if(!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
-            if(player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
+            if (player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
                 player.sendMessage(ChatColor.GOLD + "*" + ChatColor.RED + " Das " + groupedStation.getGroup().getVehicleName()
-                        + " von " + ChatColor.DARK_RED + groupedStation.getStation().getName() + ChatColor.RED + " ist abgereist!");
+                        + " von " + ChatColor.DARK_RED + groupedStation.getStation().getDisplayName() + ChatColor.RED + " ist abgereist!");
             }
         }
     }

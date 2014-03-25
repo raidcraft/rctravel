@@ -26,7 +26,7 @@ public class DynmapManager {
 
         this.plugin = plugin;
         api = (DynmapAPI) Bukkit.getServer().getPluginManager().getPlugin("dynmap");
-        if(api == null) {
+        if (api == null) {
             return;
         }
         markerAPI = api.getMarkerAPI();
@@ -35,7 +35,7 @@ public class DynmapManager {
     private MarkerSet getMarkerSet(Group group) {
 
         MarkerSet markerSet = markerAPI.getMarkerSet(group.getPlainName());
-        if(markerSet == null) {
+        if (markerSet == null) {
             markerSet = markerAPI.createMarkerSet(group.getPlainName(), group.getName(), null, true);
         }
         return markerSet;
@@ -53,8 +53,8 @@ public class DynmapManager {
 
         removeMarker(station, group);
 
-        markerSet.createMarker(station.getPlainName()
-                , station.getName()
+        markerSet.createMarker(station.getName()
+                , station.getDisplayName()
                 , station.getLocation().getWorld().getName()
                 , station.getLocation().getBlockX()
                 , station.getLocation().getBlockY()
@@ -68,7 +68,7 @@ public class DynmapManager {
         MarkerSet markerSet = getMarkerSet(group);
 
         for (Marker marker : markerSet.getMarkers()) {
-            if (marker.getLabel().equalsIgnoreCase(station.getName()) || marker.getLabel().equalsIgnoreCase(station.getPlainName())) {
+            if (marker.getLabel().equalsIgnoreCase(station.getDisplayName()) || marker.getLabel().equalsIgnoreCase(station.getName())) {
                 marker.deleteMarker();
             }
         }

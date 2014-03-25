@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
  */
 public interface Station {
 
-    public String getName();
+    public String getDisplayName();
 
-    public String getPlainName();
+    public String getName();
 
     public Location getLocation();
 

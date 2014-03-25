@@ -18,13 +18,13 @@ public abstract class AbstractStation implements Station {
     }
 
     @Override
-    public String getName() {
+    public String getDisplayName() {
 
-        return name.replace("_", " ");
+        return name.replace("_", " ").replace("-", " ");
     }
 
     @Override
-    public String getPlainName() {
+    public String getName() {
 
         return StringUtils.formatName(name);
     }

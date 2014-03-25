@@ -36,7 +36,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     public void travel(Player player, Station targetSation) throws RaidCraftException {
 
         // check if player is inside of transport region
-        if(RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, minPoint, maxPoint)) {
+        if (RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, minPoint, maxPoint)) {
             player.teleport(targetSation.getLocation());
             player.sendMessage(ChatColor.GREEN + "Du bist an deinem Reiseziel angekommen.");
             return;
@@ -64,10 +64,9 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     public void changeSchematic(boolean locked) {
 
         String schematicName;
-        if(locked) {
+        if (locked) {
             schematicName = getLockedSchematicName();
-        }
-        else {
+        } else {
             schematicName = getUnlockedSchematicName();
         }
 
@@ -84,10 +83,9 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     public void createSchematic(boolean locked) throws RaidCraftException {
 
         String schematicName;
-        if(locked) {
+        if (locked) {
             schematicName = getLockedSchematicName();
-        }
-        else {
+        } else {
             schematicName = getUnlockedSchematicName();
         }
 
@@ -98,13 +96,13 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     @Override
     public String getLockedSchematicName() {
 
-        return SCHEMATIC_PREFIX + getPlainName() + "_" + "locked";
+        return SCHEMATIC_PREFIX + getName() + "_" + "locked";
     }
 
     @Override
     public String getUnlockedSchematicName() {
 
-        return SCHEMATIC_PREFIX + getPlainName() + "_" + "unlocked";
+        return SCHEMATIC_PREFIX + getName() + "_" + "unlocked";
     }
 
     @Override
