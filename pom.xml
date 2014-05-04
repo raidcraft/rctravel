@@ -28,6 +28,11 @@
         <artifactId>masterpom</artifactId>
         <version>RELEASE</version>
     </parent>
+    
+    <scm>
+        <developerConnection>scm:git:ssh://git@git.raid-craft.de:22109/raid-craft-de/rctravel.git</developerConnection>
+      <tag>HEAD</tag>
+    </scm>
 
     <repositories>
         <repository>
