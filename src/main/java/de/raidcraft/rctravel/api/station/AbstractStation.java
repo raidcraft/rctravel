@@ -10,17 +10,24 @@ public abstract class AbstractStation implements Station {
 
     private String name;
     private Location location;
+    private String displayName;
 
     protected AbstractStation(String name, Location location) {
 
         this.name = name;
         this.location = location;
+        this.displayName = name.replace("_", " ").replace("-", " ");
     }
 
     @Override
     public String getDisplayName() {
 
-        return name.replace("_", " ").replace("-", " ");
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+
+        this.displayName = displayName;
     }
 
     @Override
