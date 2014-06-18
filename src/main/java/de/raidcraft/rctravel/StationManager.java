@@ -186,7 +186,7 @@ public class StationManager implements Component {
         TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
         station.createSchematic(false);
-        ConversationsTrait.create(station.getLocation(), group.getConversationName(), "Reiseleiter", false);
+        ConversationsTrait.create(station.getLocation(), group.getConversationName(), "Reiseleiter");
         saveStation(station, group);
         reload();
         return station;
