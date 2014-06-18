@@ -20,7 +20,7 @@ public class NPCManager {
 
     public void createNPC(GroupedStation groupedStation) {
 
-        ConversationsTrait.create(groupedStation.getStation().getLocation(), groupedStation.getGroup().getConversationName(), "Reiseleiter", false);
+        ConversationsTrait.create(groupedStation.getStation().getLocation(), groupedStation.getGroup().getConversationName(), "Reiseleiter");
     }
 
     public void removeNPC(GroupedStation groupedStation) {
