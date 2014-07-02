@@ -28,7 +28,7 @@ public class TravelCommands {
     }
 
     @Command(
-            aliases = {"travel", "rctravel", "rct"},
+            aliases = {"travel", "rctravel"},
             desc = "Travel commands"
     )
     @NestedCommand(value = NestedCommands.class)
