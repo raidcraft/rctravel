@@ -27,7 +27,8 @@ public class ChunkListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChunkLoad(ChunkLoadEvent event) {
-
+        // TODO: performance
+        // TODO: NPC rework
         Bukkit.getScheduler().runTaskLater(RaidCraft.getComponent(RCTravelPlugin.class), new TravelMasterChecker(event.getWorld(), new ChunkLocation(event.getChunk())), 10);
     }
 
