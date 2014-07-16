@@ -4,6 +4,8 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
+import de.raidcraft.api.npc.NPC_Manager;
+import de.raidcraft.api.npc.RC_Traits;
 import de.raidcraft.rcconversations.actions.ActionManager;
 import de.raidcraft.rctravel.commands.TravelCommands;
 import de.raidcraft.rctravel.conversations.CheckTravelPlayerAction;
@@ -11,6 +13,7 @@ import de.raidcraft.rctravel.conversations.FindTravelStationAction;
 import de.raidcraft.rctravel.conversations.ListStationsAction;
 import de.raidcraft.rctravel.conversations.TravelToStationAction;
 import de.raidcraft.rctravel.listener.StationListener;
+import de.raidcraft.rctravel.npc.StationTrait;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
@@ -39,6 +42,9 @@ public class RCTravelPlugin extends BasePlugin {
 
     @Override
     public void enable() {
+        // register Station trait and load travel npc's
+        NPC_Manager.getInstance().registerTrait(StationTrait.class, RC_Traits.STATION);
+        NPC_Manager.getInstance().loadNPCs(getName());
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
