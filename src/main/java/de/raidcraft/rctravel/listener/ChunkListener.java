@@ -3,7 +3,6 @@ package de.raidcraft.rctravel.listener;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcconversations.RCConversationsPlugin;
 import de.raidcraft.rcconversations.npc.ConversationsTrait;
-import de.raidcraft.rcconversations.npc.NPCRegistry;
 import de.raidcraft.rcconversations.util.ChunkLocation;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
@@ -46,43 +45,43 @@ public class ChunkListener implements Listener {
         @Override
         public void run() {
 
-            Set<GroupedStation> stations = RaidCraft.getComponent(RCTravelPlugin.class).getStationManager().getGroupedStationsByChunk(chunkLocation);
-
-            // if there are stations without npcs -> create new
-
-            for (GroupedStation groupedStation : new HashSet<>(stations)) {
-
-                // check a second time
-                Set<ChunkLocation> affectedChunks = NPCRegistry.INST.getAffectedChunkLocations(chunkLocation);
-                boolean found = false;
-                for (ChunkLocation cl : affectedChunks) {
-                    for (Entity entity : chunkLocation.getChunk(world).getEntities()) {
-                        if (!(entity instanceof LivingEntity)) continue;
-                        if (entity.getLocation().distance(groupedStation.getStation().getLocation()) <= 5) {
-                            NPC npc = RaidCraft.getComponent(RCConversationsPlugin.class).getCitizens().getNPCRegistry().getNPC(entity);
-                            if (npc == null) continue;
-                            ConversationsTrait trait = npc.getTrait(ConversationsTrait.class);
-                            if (trait == null || trait.getConversationName() == null) {
-                                npc.destroy();
-                                continue;
-                            }
-                            if (!trait.getConversationName().equalsIgnoreCase(groupedStation.getGroup().getConversationName())) continue;
-                            stations.remove(groupedStation);
-                            if (found) {
-                                NPCRegistry.INST.unregisterNPC(npc);
-                                npc.destroy();
-                            } else {
-                                found = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (GroupedStation groupedStation : stations) {
-                RaidCraft.LOGGER.info("Create Travel NPC for station: '" + groupedStation.getStation().getDisplayName() + "'!");
-                RaidCraft.getComponent(RCTravelPlugin.class).getNpcManager().createNPC(groupedStation);
-            }
+//            Set<GroupedStation> stations = RaidCraft.getComponent(RCTravelPlugin.class).getStationManager().getGroupedStationsByChunk(chunkLocation);
+//
+//            // if there are stations without npcs -> create new
+//
+//            for (GroupedStation groupedStation : new HashSet<>(stations)) {
+//
+//                // check a second time
+//                Set<ChunkLocation> affectedChunks = NPCRegistry.INST.getAffectedChunkLocations(chunkLocation);
+//                boolean found = false;
+//                for (ChunkLocation cl : affectedChunks) {
+//                    for (Entity entity : chunkLocation.getChunk(world).getEntities()) {
+//                        if (!(entity instanceof LivingEntity)) continue;
+//                        if (entity.getLocation().distance(groupedStation.getStation().getLocation()) <= 5) {
+//                            NPC npc = RaidCraft.getComponent(RCConversationsPlugin.class).getCitizens().getNPCRegistry().getNPC(entity);
+//                            if (npc == null) continue;
+//                            ConversationsTrait trait = npc.getTrait(ConversationsTrait.class);
+//                            if (trait == null || trait.getConversationName() == null) {
+//                                npc.destroy();
+//                                continue;
+//                            }
+//                            if (!trait.getConversationName().equalsIgnoreCase(groupedStation.getGroup().getConversationName())) continue;
+//                            stations.remove(groupedStation);
+//                            if (found) {
+//                                NPCRegistry.INST.unregisterNPC(npc);
+//                                npc.destroy();
+//                            } else {
+//                                found = true;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            for (GroupedStation groupedStation : stations) {
+//                RaidCraft.LOGGER.info("Create Travel NPC for station: '" + groupedStation.getStation().getDisplayName() + "'!");
+//                RaidCraft.getComponent(RCTravelPlugin.class).getNpcManager().createNPC(groupedStation);
+//            }
         }
     }
 }
