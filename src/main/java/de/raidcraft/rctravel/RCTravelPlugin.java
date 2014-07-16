@@ -45,7 +45,7 @@ public class RCTravelPlugin extends BasePlugin {
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
-        registerEvents(new ChunkListener());
+        // registerEvents(new ChunkListener());
 
         ActionManager.registerAction(new CheckTravelPlayerAction());
         ActionManager.registerAction(new FindTravelStationAction());
@@ -64,7 +64,6 @@ public class RCTravelPlugin extends BasePlugin {
         worldGuard = (WorldGuardPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         worldGuardManager = new WorldGuardManager(this, worldGuard);
         travelManager = new TravelManager(this);
-        npcManager = new NPCManager(this);
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
