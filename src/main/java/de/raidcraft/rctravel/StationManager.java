@@ -4,9 +4,7 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.rcconversations.npc.NPC_Conservations_Manager;
 import de.raidcraft.util.ChunkLocation;
-import de.raidcraft.rcconversations.npc.ConversationsTrait;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.SchematicStation;
@@ -67,7 +65,8 @@ public class StationManager implements Component {
                 price = tTravelStation.getPrice() / 100D;
             }
             TeleportTravelStation station =
-                    new TeleportTravelStation(tTravelStation.getName(), location, price, tTravelStation.getBukkitMinPoint(), tTravelStation.getBukkitMaxPoint());
+                    new TeleportTravelStation(tTravelStation.getName(), location,
+                            price, tTravelStation.getBukkitMinPoint(), tTravelStation.getBukkitMaxPoint());
             addToCache(station, group);
         }
     }
@@ -183,11 +182,12 @@ public class StationManager implements Component {
         if (selection == null || selection.getMinimumPoint() == null || selection.getMaximumPoint() == null) {
             throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
         }
-
-        TeleportTravelStation station = new TeleportTravelStation(stationName, player.getLocation(), group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
+        TeleportTravelStation station = new TeleportTravelStation
+                (stationName,  player.getLocation(),
+                 group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
         station.createSchematic(false);
-        NPC_Conservations_Manager.getInstance().spawnPersistNpcConservations(station.getLocation(), "Reiseleiter", plugin.getName(), group.getConversationName());
+
         saveStation(station, group);
         reload();
         return station;

@@ -10,12 +10,10 @@ import de.raidcraft.rctravel.conversations.CheckTravelPlayerAction;
 import de.raidcraft.rctravel.conversations.FindTravelStationAction;
 import de.raidcraft.rctravel.conversations.ListStationsAction;
 import de.raidcraft.rctravel.conversations.TravelToStationAction;
-import de.raidcraft.rctravel.listener.ChunkListener;
 import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
-import de.raidcraft.rctravel.util.NPCManager;
 import de.raidcraft.rctravel.util.SchematicManager;
 import de.raidcraft.rctravel.util.WorldGuardManager;
 import org.bukkit.Bukkit;
@@ -38,14 +36,12 @@ public class RCTravelPlugin extends BasePlugin {
     private WorldEditPlugin worldEdit;
     private WorldGuardPlugin worldGuard;
     private TravelManager travelManager;
-    private NPCManager npcManager;
 
     @Override
     public void enable() {
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
-        // registerEvents(new ChunkListener());
 
         ActionManager.registerAction(new CheckTravelPlayerAction());
         ActionManager.registerAction(new FindTravelStationAction());
@@ -145,10 +141,5 @@ public class RCTravelPlugin extends BasePlugin {
     public TravelManager getTravelManager() {
 
         return travelManager;
-    }
-
-    public NPCManager getNpcManager() {
-
-        return npcManager;
     }
 }

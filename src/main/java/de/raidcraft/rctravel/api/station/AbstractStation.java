@@ -13,7 +13,6 @@ public abstract class AbstractStation implements Station {
     private String displayName;
 
     protected AbstractStation(String name, Location location) {
-
         this.name = name;
         this.location = location;
         this.displayName = name.replace("_", " ").replace("-", " ");
@@ -21,30 +20,25 @@ public abstract class AbstractStation implements Station {
 
     @Override
     public String getDisplayName() {
-
         return displayName;
     }
 
     public void setDisplayName(String displayName) {
-
         this.displayName = displayName;
     }
 
     @Override
     public String getName() {
-
         return StringUtils.formatName(name);
     }
 
     @Override
     public Location getLocation() {
-
         return location;
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -56,7 +50,6 @@ public abstract class AbstractStation implements Station {
 
     @Override
     public int hashCode() {
-
         return name.hashCode();
     }
 }
