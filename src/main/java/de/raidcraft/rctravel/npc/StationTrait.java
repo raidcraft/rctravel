@@ -5,11 +5,7 @@ import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Sebastian
- * Date: 17.07.14
- * Time: 01:37
- * To change this template use File | Settings | File Templates.
+ * @author Dragonfire
  */
 public class StationTrait extends Trait {
     @Persist
