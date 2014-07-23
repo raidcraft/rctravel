@@ -8,6 +8,7 @@ package de.raidcraft.rctravel.api;
  * To change this template use File | Settings | File Templates.
  */
 interface RcTravelPlugin_API {
+
     public void createStation();
 
     public void deleteStation();

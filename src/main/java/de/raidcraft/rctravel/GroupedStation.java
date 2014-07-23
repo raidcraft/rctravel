@@ -14,15 +14,18 @@ public class GroupedStation {
     private Group group;
 
     public GroupedStation(Station station, Group group) {
+
         this.station = station;
         this.group = group;
     }
 
     public Station getStation() {
+
         return station;
     }
 
     public Group getGroup() {
+
         return group;
     }
 }

@@ -62,8 +62,8 @@ public class RCTravelPlugin extends BasePlugin {
         dynmapManager = new DynmapManager(this);
         stationLockTask = new StationLockTask(this);
         schematicManager = new SchematicManager(this);
-        worldEdit = (WorldEditPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
-        worldGuard = (WorldGuardPlugin)Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+        worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+        worldGuard = (WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         worldGuardManager = new WorldGuardManager(this, worldGuard);
         travelManager = new TravelManager(this);
 
@@ -74,6 +74,7 @@ public class RCTravelPlugin extends BasePlugin {
 
     @Override
     public void disable() {
+
     }
 
     @Override

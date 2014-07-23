@@ -26,7 +26,7 @@ public class WorldGuardManager {
     public boolean isInsideRegion(Player player, Location min, Location max) {
 
         Location pLoc = player.getLocation();
-        if(pLoc.getX() >= min.getX() && pLoc.getX() <= max.getX()
+        if (pLoc.getX() >= min.getX() && pLoc.getX() <= max.getX()
                 && pLoc.getY() >= min.getY() && pLoc.getY() <= max.getY()
                 && pLoc.getZ() >= min.getZ() && pLoc.getZ() <= max.getZ()) {
             return true;

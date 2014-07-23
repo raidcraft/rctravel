@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>rctravel</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.5-develop-SNAPSHOT</version>
+    <version>1.1.6-SNAPSHOT</version>
     <name>RCTravel</name>
 
     <parent>
@@ -53,8 +53,8 @@
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
-            <artifactId>citizensapi</artifactId>
-            <version>2.0.12-SNAPSHOT</version>
+            <artifactId>citizens</artifactId>
+            <version>${rc.version}</version>
         </dependency>
         <dependency>
             <groupId>de.raidcraft</groupId>

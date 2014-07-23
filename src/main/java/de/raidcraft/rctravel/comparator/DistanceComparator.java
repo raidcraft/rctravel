@@ -21,8 +21,8 @@ public class DistanceComparator implements Comparator<Station> {
 
         double d1 = start.getLocation().distance(o1.getLocation());
         double d2 = start.getLocation().distance(o2.getLocation());
-        if(d1 > d2) return 1;
-        if(d2 > d1) return -1;
+        if (d1 > d2) return 1;
+        if (d2 > d1) return -1;
         return 0;
     }
 }

@@ -14,8 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 /**
  * @author Philip Urban
  */
@@ -27,6 +25,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     private double price;
 
     public TeleportTravelStation(String name, Location location, double price, Location minPoint, Location maxPoint) {
+
         super(name, location);
         this.minPoint = minPoint;
         this.maxPoint = maxPoint;

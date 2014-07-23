@@ -47,13 +47,12 @@ public class SchematicManager {
             // store blocks
             clipboard.copy(new EditSession(bukkitWorld, Integer.MAX_VALUE));
             // store entities
-//            for (LocalEntity entity : bukkitWorld.getEntities(new CuboidRegion(min, max))) {
-//                clipboard.storeEntity(entity);
-//            }
+            //            for (LocalEntity entity : bukkitWorld.getEntities(new CuboidRegion(min, max))) {
+            //                clipboard.storeEntity(entity);
+            //            }
             // save schematic
             MCEditSchematicFormat.MCEDIT.save(clipboard, file);
-        }
-        catch(IOException | DataException e) {
+        } catch (IOException | DataException e) {
             throw new RaidCraftException("Fehler beim speichern der Schematic!");
         }
     }
@@ -64,11 +63,10 @@ public class SchematicManager {
         try {
             CuboidClipboard clipboard = MCEditSchematicFormat.MCEDIT.load(file);
             clipboard.paste(new EditSession(new BukkitWorld(world), 200000), clipboard.getOrigin(), false);
-//            clipboard.pasteEntities(clipboard.getOrigin());
+            //            clipboard.pasteEntities(clipboard.getOrigin());
         } catch (IOException | DataException e) {
             throw new RaidCraftException("Fehler beim laden der Schematic!");
-        }
-        catch (MaxChangedBlocksException e) {
+        } catch (MaxChangedBlocksException e) {
             throw new RaidCraftException("Fehler beim pasten der Schematic! (Zu viele Blöcke)");
         }
     }
@@ -77,7 +75,7 @@ public class SchematicManager {
 
         File file = new File(getSchematicDir(world), schematicName + SCHEMATIC_SUFFIX);
 
-        if (!file.delete() ) {
+        if (!file.delete()) {
             throw new RaidCraftException("Can't remove schematic file " + file.getAbsolutePath());
         }
     }

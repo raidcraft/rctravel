@@ -4,13 +4,13 @@ import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.util.ChunkLocation;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
+import de.raidcraft.util.ChunkLocation;
 import de.raidcraft.util.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -183,8 +183,8 @@ public class StationManager implements Component {
             throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
         }
         TeleportTravelStation station = new TeleportTravelStation
-                (stationName,  player.getLocation(),
-                 group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
+                (stationName, player.getLocation(),
+                        group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
         station.createSchematic(false);
 

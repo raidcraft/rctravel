@@ -25,9 +25,9 @@ public class GroupManager {
     public Group getGroup(String groupName) {
 
         Group group = cachedGroups.get(groupName);
-        if(group == null) {
-            for(Group gr : cachedGroups.values()) {
-                if(gr.getName().toLowerCase().startsWith(groupName.toLowerCase())) {
+        if (group == null) {
+            for (Group gr : cachedGroups.values()) {
+                if (gr.getName().toLowerCase().startsWith(groupName.toLowerCase())) {
                     group = gr;
                     break;
                 }
@@ -61,7 +61,7 @@ public class GroupManager {
                 String name = file.getName().replace(".yml", "");
                 ConfigurationSection configurationSection = plugin.configure(new SimpleConfiguration<>(plugin, file), false);
                 String groupName = configurationSection.getString("name");
-                if(groupName == null) continue;
+                if (groupName == null) continue;
                 cachedGroups.put(groupName, new ConfigGroup(configurationSection));
             }
         }

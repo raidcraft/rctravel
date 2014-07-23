@@ -35,7 +35,7 @@ public class StationLockTask implements Runnable {
 
     public int getRemainingTime(Station station) {
 
-        if(!remainingCooldowns.containsKey(station)) return 0;
+        if (!remainingCooldowns.containsKey(station)) return 0;
         return remainingCooldowns.get(station).getRemainingTime();
     }
 
@@ -46,7 +46,7 @@ public class StationLockTask implements Runnable {
 
     public void setLocked(Station station, boolean locked) {
 
-        if(!remainingCooldowns.containsKey(station)) return;
+        if (!remainingCooldowns.containsKey(station)) return;
         remainingCooldowns.get(station).setLocked(locked);
     }
 
@@ -55,20 +55,20 @@ public class StationLockTask implements Runnable {
 
         List<GroupedStation> groupedStations = plugin.getStationManager().getGroupedStations();
         // add all stations time shifted to map (preventing laggs)
-        if(index < groupedStations.size()) {
+        if (index < groupedStations.size()) {
             GroupedStation groupedStation = groupedStations.get(index);
-            if(!remainingCooldowns.containsKey(groupedStation.getStation())) {
+            if (!remainingCooldowns.containsKey(groupedStation.getStation())) {
                 remainingCooldowns.put(groupedStation.getStation(), new Cooldown(groupedStation));
             }
             index++;
         }
 
-        for(GroupedStation gs : groupedStations) {
+        for (GroupedStation gs : groupedStations) {
             Cooldown cooldown = remainingCooldowns.get(gs.getStation());
-            if(cooldown == null) continue;
+            if (cooldown == null) continue;
 
             cooldown.process();
-            if(!cooldown.isLocked()) {
+            if (!cooldown.isLocked()) {
                 // travel queued players
                 RaidCraft.getComponent(RCTravelPlugin.class).getTravelManager().startTravel(cooldown.getGroupedStation().getStation());
             }
@@ -102,12 +102,11 @@ public class StationLockTask implements Runnable {
 
         public void setLocked(boolean locked) {
 
-            if(locked) {
+            if (locked) {
                 this.locked = true;
                 time = System.currentTimeMillis();
                 RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, true));
-            }
-            else {
+            } else {
                 this.locked = false;
                 time = System.currentTimeMillis();
                 RaidCraft.callEvent(new StationLockStateChangeEvent(groupedStation, false));
@@ -116,28 +115,26 @@ public class StationLockTask implements Runnable {
 
         private int getRemainingTime(int total) {
 
-            return (int)(total - ((System.currentTimeMillis() - time) / 1000));
+            return (int) (total - ((System.currentTimeMillis() - time) / 1000));
         }
 
         public int getRemainingTime() {
 
-            if(locked){
+            if (locked) {
                 return getRemainingTime(groupedStation.getGroup().getLockTime());
-            }
-            else {
+            } else {
                 return getRemainingTime(groupedStation.getGroup().getUnlockTime());
             }
         }
 
         public void process() {
 
-            if(locked) {
-                if(getRemainingTime() < 0) {
+            if (locked) {
+                if (getRemainingTime() < 0) {
                     setLocked(false);
                 }
-            }
-            else {
-                if(getRemainingTime() < 0) {
+            } else {
+                if (getRemainingTime() < 0) {
                     setLocked(true);
                 }
             }

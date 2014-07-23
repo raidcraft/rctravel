@@ -2,7 +2,11 @@ package de.raidcraft.rctravel.conversations;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcconversations.RCConversationsPlugin;
-import de.raidcraft.rcconversations.api.action.*;
+import de.raidcraft.rcconversations.api.action.AbstractAction;
+import de.raidcraft.rcconversations.api.action.ActionArgumentException;
+import de.raidcraft.rcconversations.api.action.ActionArgumentList;
+import de.raidcraft.rcconversations.api.action.ActionInformation;
+import de.raidcraft.rcconversations.api.action.WrongArgumentValueException;
 import de.raidcraft.rcconversations.api.conversation.Conversation;
 import de.raidcraft.rcconversations.conversations.EndReason;
 import de.raidcraft.rcconversations.util.ParseString;
@@ -31,18 +35,17 @@ public class TravelToStationAction extends AbstractAction {
 
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
         Station targetStation = plugin.getStationManager().getStation(targetName);
-        if(targetStation == null) {
+        if (targetStation == null) {
             throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + targetName + "' does not exists!");
         }
 
         Station startStation;
-        if(startName == null) {
+        if (startName == null) {
             startStation = new SimpleStation(conversation.getName(), conversation.getPlayer().getLocation().clone());
-        }
-        else {
+        } else {
             startStation = plugin.getStationManager().getStation(startName);
         }
-        if(startStation == null) {
+        if (startStation == null) {
             throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + targetName + "' does not exists!");
         }
 
@@ -66,7 +69,7 @@ public class TravelToStationAction extends AbstractAction {
         public void run() {
 
             RaidCraft.getComponent(RCConversationsPlugin.class).getConversationManager().endConversation(player.getName(), EndReason.SILENT);
-            if(start instanceof TeleportTravelStation) {
+            if (start instanceof TeleportTravelStation) {
                 RaidCraft.getComponent(RCTravelPlugin.class).getTravelManager().queuePlayer(player, new Journey(start, target));
             }
 

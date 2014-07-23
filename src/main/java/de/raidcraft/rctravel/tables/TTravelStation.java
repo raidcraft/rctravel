@@ -207,7 +207,7 @@ public class TTravelStation {
     public Location getBukkitMinPoint() {
 
         World world = getBukkitWorld();
-        if(world == null) return null;
+        if (world == null) return null;
 
         return new Location(world, xMin, yMin, zMin);
     }
@@ -215,7 +215,7 @@ public class TTravelStation {
     public Location getBukkitMaxPoint() {
 
         World world = getBukkitWorld();
-        if(world == null) return null;
+        if (world == null) return null;
 
         return new Location(world, xMax, yMax, zMax);
     }
@@ -228,7 +228,7 @@ public class TTravelStation {
     public Location getBukkitLocation() {
 
         World world = getBukkitWorld();
-        if(world == null) return null;
+        if (world == null) return null;
 
         return new Location(world, x / 100D, y / 100D, z / 100D, yaw / 100F, pitch / 100F);
     }
