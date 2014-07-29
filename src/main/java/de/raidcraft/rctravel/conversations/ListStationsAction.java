@@ -70,7 +70,7 @@ public class ListStationsAction extends AbstractAction {
 
         String entranceStage = "rct_stationslist";
 
-        List<Station> stations = plugin.getStationManager().getDiscoveredStations(group, conversation.getPlayer().getName());
+        List<Station> stations = plugin.getStationManager().getDiscoveredStations(group, conversation.getPlayer().getUniqueId());
 
         if (type == ListType.ALPHABETIC) {
             Collections.sort(stations, new AlphabeticComparator());

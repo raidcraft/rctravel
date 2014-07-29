@@ -70,7 +70,7 @@ public class CheckTravelPlayerAction extends AbstractAction {
         }
 
         if (targetStation instanceof Discoverable && checkFamiliarity) {
-            if (!((Discoverable) targetStation).hasDiscovered(conversation.getPlayer().getName())) {
+            if (!((Discoverable) targetStation).hasDiscovered(conversation.getPlayer().getUniqueId())) {
                 setErrorMsg(conversation, "Du musst dieses Reiseziel erst noch kennen lernen!");
                 changeStage(conversation, failure);
                 return;

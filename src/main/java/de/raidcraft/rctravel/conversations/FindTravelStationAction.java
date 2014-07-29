@@ -38,8 +38,8 @@ public class FindTravelStationAction extends AbstractAction {
         }
 
         if (station instanceof Discoverable) {
-            if (!((Discoverable) station).hasDiscovered(conversation.getPlayer().getName())) {
-                ((Discoverable) station).setDiscovered(conversation.getPlayer().getName(), true);
+            if (!((Discoverable) station).hasDiscovered(conversation.getPlayer().getUniqueId())) {
+                ((Discoverable) station).setDiscovered(conversation.getPlayer().getUniqueId(), true);
                 conversation.getPlayer().sendMessage(ChatColor.GREEN + "Du besucht diese Reisestation zum ersten mal!");
             }
         }

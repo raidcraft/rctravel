@@ -1,11 +1,7 @@
 package de.raidcraft.rctravel.api;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Sebastian
- * Date: 16.07.14
- * Time: 09:52
- * To change this template use File | Settings | File Templates.
+ * @author Dragonfire
  */
 interface RcTravelPlugin_API {
 
