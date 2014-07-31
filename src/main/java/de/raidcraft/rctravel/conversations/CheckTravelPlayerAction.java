@@ -62,7 +62,7 @@ public class CheckTravelPlayerAction extends AbstractAction {
             double price = ((Chargeable) targetStation).getPrice((int) startStation.getLocation().distance(targetStation.getLocation()));
             conversation.set("rct_target_price", price);
             conversation.set("rct_target_price_formatted", economy.getFormattedAmount(price));
-            if (checkPrice && !economy.hasEnough(conversation.getPlayer().getName(), price)) {
+            if (checkPrice && !economy.hasEnough(conversation.getPlayer().getUniqueId(), price)) {
                 setErrorMsg(conversation, "Du brauchst " + economy.getFormattedAmount(price) + " um dorthin zu reisen!");
                 changeStage(conversation, failure);
                 return;
