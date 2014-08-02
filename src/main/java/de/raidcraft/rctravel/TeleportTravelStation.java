@@ -75,6 +75,8 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
             Vector origin = new Vector(getLocation().getX(), getLocation().getY(), getLocation().getZ());
             // TODO: sense?
             //            world.removeEntities(EntityType.ITEMS, origin, 30);
+            // WorldEdit changed API used now: EntityRemover
+            // call very complicated in UtilityCommands
         } catch (RaidCraftException e) {
             RaidCraft.LOGGER.warning("[RCTravel] " + e.getMessage());
         }
