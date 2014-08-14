@@ -69,7 +69,8 @@ public class RCTravelPlugin extends BasePlugin {
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
-        Bukkit.getScheduler().runTaskTimer(this, stationLockTask, 0, 5 * 20);
+        // TODO: for timeout
+        //        Bukkit.getScheduler().runTaskTimer(this, stationLockTask, 0, 5 * 20);
     }
 
     @Override

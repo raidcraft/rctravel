@@ -6,6 +6,7 @@ import de.raidcraft.api.economy.BalanceSource;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.util.CaseInsensitiveMap;
+import de.raidcraft.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -38,7 +39,7 @@ public class TravelManager {
 
         for (Map.Entry<String, Journey> entry : new CaseInsensitiveMap<>(queuedPlayers).entrySet()) {
             if (!entry.getValue().getStation().equals(station)) continue;
-            Player player = Bukkit.getPlayer(entry.getKey());
+            Player player = Bukkit.getPlayer(UUIDUtil.convertPlayer(entry.getKey()));
             if (player == null) continue;
             try {
                 Station target = entry.getValue().getTarget();
