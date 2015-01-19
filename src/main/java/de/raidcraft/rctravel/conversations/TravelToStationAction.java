@@ -68,7 +68,7 @@ public class TravelToStationAction extends AbstractAction {
         @Override
         public void run() {
 
-            RaidCraft.getComponent(RCConversationsPlugin.class).getConversationManager().endConversation(player.getUniqueId(), EndReason.SILENT);
+            RaidCraft.getComponent(RCConversationsPlugin.class).getConversationManager().endConversation(player.getName(), EndReason.SILENT);
             if (start instanceof TeleportTravelStation) {
                 RaidCraft.getComponent(RCTravelPlugin.class).getTravelManager().queuePlayer(player, new Journey(start, target));
             }
