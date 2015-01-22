@@ -40,10 +40,6 @@
             <id>raidcraft</id>
             <url>http://repo.raid-craft.eu/artifactory/repo/</url>
         </repository>
-        <repository>
-            <id>Citizens</id>
-            <url>http://repo.citizensnpcs.co</url>
-        </repository>
     </repositories>
 
     <dependencies>
