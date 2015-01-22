@@ -6,6 +6,7 @@ import de.raidcraft.api.economy.BalanceSource;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.util.CaseInsensitiveMap;
+import de.raidcraft.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -38,14 +39,14 @@ public class TravelManager {
 
         for (Map.Entry<String, Journey> entry : new CaseInsensitiveMap<>(queuedPlayers).entrySet()) {
             if (!entry.getValue().getStation().equals(station)) continue;
-            Player player = Bukkit.getPlayer(entry.getKey());
+            Player player = Bukkit.getPlayer(UUIDUtil.convertPlayer(entry.getKey()));
             if (player == null) continue;
             try {
                 Station target = entry.getValue().getTarget();
                 Station start = entry.getValue().getStation();
                 // check money
                 if (target instanceof Chargeable) {
-                    if (!RaidCraft.getEconomy().hasEnough(player.getName(), ((Chargeable) target).getPrice((int) start.getLocation().distance(target.getLocation())))) {
+                    if (!RaidCraft.getEconomy().hasEnough(player.getUniqueId(), ((Chargeable) target).getPrice((int) start.getLocation().distance(target.getLocation())))) {
                         throw new RaidCraftException("Not enough money!");
                     }
                 }
@@ -54,7 +55,7 @@ public class TravelManager {
                 queuedPlayers.remove(entry.getKey());
                 // charge player
                 if (entry.getValue().getTarget() instanceof Chargeable) {
-                    RaidCraft.getEconomy().substract(player.getName(), ((Chargeable) entry.getValue().getTarget()).getPrice(), BalanceSource.TRAVEL, start.getDisplayName() + " -> " + target.getDisplayName());
+                    RaidCraft.getEconomy().substract(player.getUniqueId(), ((Chargeable) entry.getValue().getTarget()).getPrice(), BalanceSource.TRAVEL, start.getDisplayName() + " -> " + target.getDisplayName());
                 }
             } catch (RaidCraftException e) {
                 // ignore travel exceptions here

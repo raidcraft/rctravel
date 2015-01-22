@@ -1,6 +1,5 @@
 package de.raidcraft.rctravel;
 
-import com.sk89q.worldedit.EntityType;
 import com.sk89q.worldedit.LocalWorld;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
@@ -74,7 +73,10 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
             RaidCraft.getComponent(RCTravelPlugin.class).getSchematicManager().pasteSchematic(getLocation().getWorld(), schematicName);
             LocalWorld world = new BukkitWorld(getLocation().getWorld());
             Vector origin = new Vector(getLocation().getX(), getLocation().getY(), getLocation().getZ());
-            world.removeEntities(EntityType.ITEMS, origin, 30);
+            // TODO: sense?
+            //            world.removeEntities(EntityType.ITEMS, origin, 30);
+            // WorldEdit changed API used now: EntityRemover
+            // call very complicated in UtilityCommands
         } catch (RaidCraftException e) {
             RaidCraft.LOGGER.warning("[RCTravel] " + e.getMessage());
         }

@@ -1,7 +1,7 @@
 package de.raidcraft.rctravel.util;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.databases.ProtectionDatabaseException;
+import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import org.bukkit.Bukkit;
@@ -39,7 +39,7 @@ public class WorldGuardManager {
         for (World world : Bukkit.getServer().getWorlds()) {
             try {
                 worldGuard.getRegionManager(world).save();
-            } catch (ProtectionDatabaseException e) {
+            } catch (StorageException e) {
                 RaidCraft.LOGGER.warning(e.getMessage());
             }
         }

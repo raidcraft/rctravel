@@ -15,7 +15,6 @@ import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.TeleportTravelStation;
 import de.raidcraft.rctravel.api.station.SimpleStation;
 import de.raidcraft.rctravel.api.station.Station;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -49,7 +48,8 @@ public class TravelToStationAction extends AbstractAction {
             throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + targetName + "' does not exists!");
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, new TakeoffDelayedTask(startStation, targetStation, conversation.getPlayer()), delay);
+        // TODO: for timeout
+        //        Bukkit.getScheduler().runTaskLater(plugin, new TakeoffDelayedTask(startStation, targetStation, conversation.getPlayer()), delay);
     }
 
     public class TakeoffDelayedTask implements Runnable {

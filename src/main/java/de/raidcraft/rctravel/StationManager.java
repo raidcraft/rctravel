@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
@@ -120,7 +121,7 @@ public class StationManager implements Component {
         return gps;
     }
 
-    public List<Station> getDiscoveredStations(Group group, String player) {
+    public List<Station> getDiscoveredStations(Group group, UUID player) {
 
         List<Station> stations = new ArrayList<>();
         List<Station> groupStations = cachedStations.get(group.getPlainName());
