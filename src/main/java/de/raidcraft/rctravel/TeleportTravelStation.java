@@ -4,6 +4,7 @@ import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.station.AbstractStation;
 import de.raidcraft.rctravel.api.station.Chargeable;
+import de.raidcraft.rctravel.api.station.RegionStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.util.RegionUtil;
 import org.bukkit.ChatColor;
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player;
 /**
  * @author Philip Urban
  */
-public class TeleportTravelStation extends AbstractStation implements Chargeable {
+public class TeleportTravelStation extends AbstractStation implements Chargeable, RegionStation {
 
     private final static String SCHEMATIC_PREFIX = "tp_station_";
     private Location minPoint;
@@ -43,6 +44,16 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     public boolean isLocked() {
 
         return RaidCraft.getComponent(RCTravelPlugin.class).getStationLockTask().isLocked(this);
+    }
+
+    @Override
+    public Location getMinPoint() {
+        return minPoint;
+    }
+
+    @Override
+    public Location getMaxPoint() {
+        return maxPoint;
     }
 
     @Override

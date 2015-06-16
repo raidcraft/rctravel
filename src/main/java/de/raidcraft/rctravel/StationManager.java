@@ -6,6 +6,7 @@ import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Discoverable;
+import de.raidcraft.rctravel.api.station.RegionStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
@@ -186,7 +187,6 @@ public class StationManager implements Component {
                 (stationName, player.getLocation(),
                         group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
         plugin.getDynmapManager().addStationMarker(station, group);
-        station.createSchematic(false);
 
         saveStation(station, group);
         reload();
@@ -212,13 +212,6 @@ public class StationManager implements Component {
 
         reload();
 
-        // delete schematics if schematic station
-        if (station instanceof SchematicStation) {
-            SchematicStation schematicStation = (SchematicStation) station;
-            plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getUnlockedSchematicName());
-            plugin.getSchematicManager().deleteSchematic(station.getLocation().getWorld(), schematicStation.getLockedSchematicName());
-        }
-
         // delete dynmap marker
         if (groupedStation != null) {
             plugin.getDynmapManager().removeMarker(groupedStation.getStation(), groupedStation.getGroup());
@@ -234,7 +227,7 @@ public class StationManager implements Component {
         cachedStations.get(group.getPlainName()).add(station);
     }
 
-    private void saveStation(SchematicStation station, Group group) {
+    private void saveStation(RegionStation station, Group group) {
 
         TTravelStation tTravelStation = new TTravelStation();
         tTravelStation.setName(station.getDisplayName());
