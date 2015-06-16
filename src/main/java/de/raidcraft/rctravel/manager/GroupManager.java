@@ -1,6 +1,8 @@
-package de.raidcraft.rctravel;
+package de.raidcraft.rctravel.manager;
 
 import de.raidcraft.api.config.SimpleConfiguration;
+import de.raidcraft.rctravel.ConfigGroup;
+import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.util.CaseInsensitiveMap;
 import org.bukkit.configuration.ConfigurationSection;

@@ -13,11 +13,14 @@ import de.raidcraft.rctravel.conversations.FindTravelStationAction;
 import de.raidcraft.rctravel.conversations.ListStationsAction;
 import de.raidcraft.rctravel.conversations.TravelToStationAction;
 import de.raidcraft.rctravel.listener.StationListener;
+import de.raidcraft.rctravel.manager.GroupManager;
+import de.raidcraft.rctravel.manager.StationManager;
+import de.raidcraft.rctravel.manager.TravelManager;
+import de.raidcraft.rctravel.manager.TravelMasterNPCManager;
 import de.raidcraft.rctravel.npc.StationTrait;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
-import de.raidcraft.rctravel.util.RegionUtil;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -39,9 +42,8 @@ public class RCTravelPlugin extends BasePlugin {
 
     @Override
     public void enable() {
-        // register Station trait and load travel npc's
+        // register Station trait
         NPC_Manager.getInstance().registerTrait(StationTrait.class, RC_Traits.STATION);
-        NPC_Manager.getInstance().loadNPCs(getName());
 
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
@@ -61,6 +63,8 @@ public class RCTravelPlugin extends BasePlugin {
         worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
         worldGuard = (WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
         travelManager = new TravelManager(this);
+
+        TravelMasterNPCManager.spawnAllDragonGuardNPCs(stationManager);
 
         // start station schedule calculation
         // every 5 seconds one station will be checked
@@ -82,6 +86,9 @@ public class RCTravelPlugin extends BasePlugin {
         getStationManager().reload();
         getStationLockTask().reload();
         getTravelManager().reload();
+
+        TravelMasterNPCManager.removeAllDragonGuards();
+        TravelMasterNPCManager.spawnAllDragonGuardNPCs(stationManager);
     }
 
     @Override

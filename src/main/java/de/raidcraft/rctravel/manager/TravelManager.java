@@ -1,8 +1,10 @@
-package de.raidcraft.rctravel;
+package de.raidcraft.rctravel.manager;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.api.economy.BalanceSource;
+import de.raidcraft.rctravel.Journey;
+import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.util.CaseInsensitiveMap;

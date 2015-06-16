@@ -1,9 +1,12 @@
-package de.raidcraft.rctravel;
+package de.raidcraft.rctravel.manager;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
+import de.raidcraft.rctravel.GroupedStation;
+import de.raidcraft.rctravel.RCTravelPlugin;
+import de.raidcraft.rctravel.TeleportTravelStation;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.RegionStation;
