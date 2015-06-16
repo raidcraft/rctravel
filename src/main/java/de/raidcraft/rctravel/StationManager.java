@@ -6,7 +6,6 @@ import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Discoverable;
-import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;

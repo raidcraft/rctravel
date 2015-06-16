@@ -9,7 +9,6 @@ import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
-import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -138,37 +137,6 @@ public class TravelCommands {
             player.teleport(station.getLocation());
 
             sender.sendMessage(ChatColor.GREEN + "Du wurdest zur Station '" + station.getDisplayName() + "' teleportiert!");
-        }
-
-        @Command(
-                aliases = {"schematic", "sch"},
-                desc = "Recreate station schematic",
-                flags = "u",
-                min = 1,
-                usage = "<Station> -u (unlocked)"
-        )
-        @CommandPermissions("rctravel.cmd.schematic")
-        public void schematic(CommandContext args, CommandSender sender) throws CommandException {
-
-            if (!(sender instanceof Player)) throw new CommandException("Player required!");
-            Player player = (Player) sender;
-
-            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
-            if (station == null) {
-                throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
-            }
-            boolean locked = !args.hasFlag('u');
-
-            if (!(station instanceof SchematicStation)) {
-                throw new CommandException("Diese Station unterstüzt keine Schematics!");
-            }
-
-            try {
-                ((SchematicStation) station).createSchematic(locked);
-            } catch (RaidCraftException e) {
-                throw new CommandException(e.getMessage());
-            }
-            player.sendMessage(ChatColor.GREEN + "Die Schematic für die Station '" + station.getDisplayName() + "' wurde erstellt!");
         }
 
         @Command(

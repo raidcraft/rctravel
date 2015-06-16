@@ -1,14 +1,11 @@
 package de.raidcraft.rctravel;
 
-import com.sk89q.worldedit.LocalWorld;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.station.AbstractStation;
 import de.raidcraft.rctravel.api.station.Chargeable;
-import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.api.station.Station;
+import de.raidcraft.rctravel.util.RegionUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,7 +13,7 @@ import org.bukkit.entity.Player;
 /**
  * @author Philip Urban
  */
-public class TeleportTravelStation extends AbstractStation implements Chargeable, SchematicStation {
+public class TeleportTravelStation extends AbstractStation implements Chargeable {
 
     private final static String SCHEMATIC_PREFIX = "tp_station_";
     private Location minPoint;
@@ -35,7 +32,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     public void travel(Player player, Station targetSation) throws RaidCraftException {
 
         // check if player is inside of transport region
-        if (RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, minPoint, maxPoint)) {
+        if (RegionUtil.isInsideRegion(player, minPoint, maxPoint)) {
             player.teleport(targetSation.getLocation());
             player.sendMessage(ChatColor.GREEN + "Du bist an deinem Reiseziel angekommen.");
             return;
@@ -43,68 +40,9 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
         throw new RaidCraftException("Der Spieler befindet sich nicht am Abfahrtsort!");
     }
 
-    @Override
-    public Location getMinPoint() {
-
-        return minPoint;
-    }
-
-    @Override
-    public Location getMaxPoint() {
-
-        return maxPoint;
-    }
-
     public boolean isLocked() {
 
         return RaidCraft.getComponent(RCTravelPlugin.class).getStationLockTask().isLocked(this);
-    }
-
-    public void changeSchematic(boolean locked) {
-
-        String schematicName;
-        if (locked) {
-            schematicName = getLockedSchematicName();
-        } else {
-            schematicName = getUnlockedSchematicName();
-        }
-
-        try {
-            RaidCraft.getComponent(RCTravelPlugin.class).getSchematicManager().pasteSchematic(getLocation().getWorld(), schematicName);
-            LocalWorld world = new BukkitWorld(getLocation().getWorld());
-            Vector origin = new Vector(getLocation().getX(), getLocation().getY(), getLocation().getZ());
-            // TODO: sense?
-            //            world.removeEntities(EntityType.ITEMS, origin, 30);
-            // WorldEdit changed API used now: EntityRemover
-            // call very complicated in UtilityCommands
-        } catch (RaidCraftException e) {
-            RaidCraft.LOGGER.warning("[RCTravel] " + e.getMessage());
-        }
-    }
-
-    public void createSchematic(boolean locked) throws RaidCraftException {
-
-        String schematicName;
-        if (locked) {
-            schematicName = getLockedSchematicName();
-        } else {
-            schematicName = getUnlockedSchematicName();
-        }
-
-        RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-        plugin.getSchematicManager().createSchematic(getLocation().getWorld(), minPoint, maxPoint, schematicName);
-    }
-
-    @Override
-    public String getLockedSchematicName() {
-
-        return SCHEMATIC_PREFIX + getName() + "_" + "locked";
-    }
-
-    @Override
-    public String getUnlockedSchematicName() {
-
-        return SCHEMATIC_PREFIX + getName() + "_" + "unlocked";
     }
 
     @Override

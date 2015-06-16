@@ -1,9 +1,6 @@
 package de.raidcraft.rctravel.listener;
 
-import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.GroupedStation;
-import de.raidcraft.rctravel.RCTravelPlugin;
-import de.raidcraft.rctravel.api.station.SchematicStation;
 import de.raidcraft.rctravel.events.StationLockStateChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,29 +19,11 @@ public class StationListener implements Listener {
 
         // lock
         if (event.getNewLockState()) {
-            if (event.getGroupedStation().getStation() instanceof SchematicStation) {
-                clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
-                ((SchematicStation) event.getGroupedStation().getStation()).changeSchematic(true);
-            }
             announceDeparture(event.getGroupedStation());
         }
         // unlock
         else {
-            // change schematic
-            if (event.getGroupedStation().getStation() instanceof SchematicStation) {
-                clearSchematicPlace((SchematicStation) event.getGroupedStation().getStation());
-                ((SchematicStation) event.getGroupedStation().getStation()).changeSchematic(false);
-            }
             announceArrival(event.getGroupedStation());
-        }
-    }
-
-    private void clearSchematicPlace(SchematicStation schematicStation) {
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (RaidCraft.getComponent(RCTravelPlugin.class).getWorldGuardManager().isInsideRegion(player, schematicStation.getMinPoint(), schematicStation.getMaxPoint())) {
-                player.teleport(schematicStation.getLocation());
-            }
         }
     }
 

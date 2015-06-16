@@ -17,8 +17,7 @@ import de.raidcraft.rctravel.npc.StationTrait;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.rctravel.tasks.StationLockTask;
 import de.raidcraft.rctravel.util.DynmapManager;
-import de.raidcraft.rctravel.util.SchematicManager;
-import de.raidcraft.rctravel.util.WorldGuardManager;
+import de.raidcraft.rctravel.util.RegionUtil;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -34,8 +33,6 @@ public class RCTravelPlugin extends BasePlugin {
     private GroupManager groupManager;
     private DynmapManager dynmapManager;
     private StationLockTask stationLockTask;
-    private SchematicManager schematicManager;
-    private WorldGuardManager worldGuardManager;
     private WorldEditPlugin worldEdit;
     private WorldGuardPlugin worldGuard;
     private TravelManager travelManager;
@@ -61,10 +58,8 @@ public class RCTravelPlugin extends BasePlugin {
         stationManager = new StationManager(this);
         dynmapManager = new DynmapManager(this);
         stationLockTask = new StationLockTask(this);
-        schematicManager = new SchematicManager(this);
         worldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
         worldGuard = (WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-        worldGuardManager = new WorldGuardManager(this, worldGuard);
         travelManager = new TravelManager(this);
 
         // start station schedule calculation
@@ -126,11 +121,6 @@ public class RCTravelPlugin extends BasePlugin {
         return stationLockTask;
     }
 
-    public SchematicManager getSchematicManager() {
-
-        return schematicManager;
-    }
-
     public WorldEditPlugin getWorldEdit() {
 
         return worldEdit;
@@ -139,11 +129,6 @@ public class RCTravelPlugin extends BasePlugin {
     public WorldGuardPlugin getWorldGuard() {
 
         return worldGuard;
-    }
-
-    public WorldGuardManager getWorldGuardManager() {
-
-        return worldGuardManager;
     }
 
     public TravelManager getTravelManager() {

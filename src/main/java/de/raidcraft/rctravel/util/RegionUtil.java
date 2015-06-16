@@ -12,18 +12,9 @@ import org.bukkit.entity.Player;
 /**
  * @author Philip Urban
  */
-public class WorldGuardManager {
+public class RegionUtil {
 
-    private RCTravelPlugin plugin;
-    private WorldGuardPlugin worldGuard;
-
-    public WorldGuardManager(RCTravelPlugin plugin, WorldGuardPlugin worldGuard) {
-
-        this.plugin = plugin;
-        this.worldGuard = worldGuard;
-    }
-
-    public boolean isInsideRegion(Player player, Location min, Location max) {
+    public static boolean isInsideRegion(Player player, Location min, Location max) {
 
         Location pLoc = player.getLocation();
         if (pLoc.getX() >= min.getX() && pLoc.getX() <= max.getX()
@@ -32,16 +23,5 @@ public class WorldGuardManager {
             return true;
         }
         return false;
-    }
-
-    public void save() {
-
-        for (World world : Bukkit.getServer().getWorlds()) {
-            try {
-                worldGuard.getRegionManager(world).save();
-            } catch (StorageException e) {
-                RaidCraft.LOGGER.warning(e.getMessage());
-            }
-        }
     }
 }
