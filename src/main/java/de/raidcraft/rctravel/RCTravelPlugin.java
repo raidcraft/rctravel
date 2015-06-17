@@ -86,9 +86,6 @@ public class RCTravelPlugin extends BasePlugin {
         getStationManager().reload();
         getStationLockTask().reload();
         getTravelManager().reload();
-
-        TravelMasterNPCManager.removeAllDragonGuards();
-        TravelMasterNPCManager.spawnAllDragonGuardNPCs(stationManager);
     }
 
     @Override

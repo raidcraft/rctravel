@@ -53,6 +53,9 @@ public class StationManager implements Component {
         cachedStations.clear();
         groupedStations.clear();
         load();
+
+        TravelMasterNPCManager.removeAllDragonGuards();
+        TravelMasterNPCManager.spawnAllDragonGuardNPCs(this);
     }
 
     public void loadStations() {
