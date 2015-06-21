@@ -196,6 +196,7 @@ public class StationManager implements Component {
 
         saveStation(station, group);
         reload();
+        plugin.getStationLockTask().reload();
         return station;
     }
 
