@@ -61,7 +61,6 @@ public class TravelManager {
                 }
             } catch (RaidCraftException e) {
                 // ignore travel exceptions here
-                e.printStackTrace(); //TODO remove
             }
         }
     }
