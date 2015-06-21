@@ -41,10 +41,9 @@ public class TravelManager {
 
         for (Map.Entry<String, Journey> entry : new CaseInsensitiveMap<>(queuedPlayers).entrySet()) {
             if (!entry.getValue().getStation().getName().equals(station.getName())) continue;
-            Player player = Bukkit.getPlayer(UUIDUtil.convertPlayer(entry.getKey()));
+            Player player = Bukkit.getPlayer(entry.getKey());
             if (player == null) continue;
             try {
-                RaidCraft.LOGGER.info("[Travel] Found queued player: " + player.getName());
                 Station target = entry.getValue().getTarget();
                 Station start = entry.getValue().getStation();
                 // check money
