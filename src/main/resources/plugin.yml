@@ -5,6 +5,5 @@ description: Provides player travel.
 author: Strasse36
 website: http://www.raid-craft.de
 depend: [RaidCraft-API]
-softdepend: [RCConversations2]
 database: true
 
