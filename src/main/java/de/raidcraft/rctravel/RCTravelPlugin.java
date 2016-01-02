@@ -48,10 +48,10 @@ public class RCTravelPlugin extends BasePlugin {
         registerCommands(TravelCommands.class);
         registerEvents(new StationListener());
 
-//        ActionManager.registerAction(new CheckTravelPlayerAction());
-//        ActionManager.registerAction(new FindTravelStationAction());
-//        ActionManager.registerAction(new TravelToStationAction());
-//        ActionManager.registerAction(new ListStationsAction());
+        ActionManager.registerAction(new CheckTravelPlayerAction());
+        ActionManager.registerAction(new FindTravelStationAction());
+        ActionManager.registerAction(new TravelToStationAction());
+        ActionManager.registerAction(new ListStationsAction());
 
         config = new LocalConfiguration(this);
 
