@@ -20,10 +20,10 @@ public class TravelMasterNPCManager {
 
         Location improvedLocation = station.getStation().getLocation().clone();
         improvedLocation.setY(improvedLocation.getY() + 1.5);
-//        RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-//        NPC npc = NPC_Conservations_Manager.getInstance().spawnNonPersistNpcConservations(improvedLocation, "Reiseleiter", plugin.getName(), station.getGroup().getConversationName());
-//        npc.addTrait(StationTrait.class);
-//        npc.getTrait(StationTrait.class).setStationName(station.getStation().getName());
+        RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
+        NPC npc = NPC_Conservations_Manager.getInstance().spawnNonPersistNpcConservations(improvedLocation, "Reiseleiter", plugin.getName(), station.getGroup().getConversationName());
+        npc.addTrait(StationTrait.class);
+        npc.getTrait(StationTrait.class).setStationName(station.getStation().getName());
     }
 
     public static void spawnAllDragonGuardNPCs(StationManager stationManager) {
