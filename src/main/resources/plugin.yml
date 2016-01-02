@@ -4,6 +4,6 @@ version: ${project.version}#${BUILDS_ALL_TIME}
 description: Provides player travel.
 author: Strasse36
 website: http://www.raid-craft.de
-depend: [RaidCraft-API]
+depend: [RaidCraft-API, RCConversations]
 database: true
 
