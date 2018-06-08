@@ -1,12 +1,13 @@
-package de.raidcraft.rctravel.conversations.legacy;
+package de.raidcraft.rctravel.conversations;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.action.action.Action;
+import de.raidcraft.api.conversations.conversation.Conversation;
+import de.raidcraft.api.conversations.conversation.ConversationEndReason;
 import de.raidcraft.rcconversations.actions.common.StageAction;
 import de.raidcraft.rcconversations.actions.variables.SetVariableAction;
-import de.raidcraft.rcconversations.api.action.*;
 import de.raidcraft.rcconversations.api.answer.Answer;
 import de.raidcraft.rcconversations.api.answer.SimpleAnswer;
-import de.raidcraft.rcconversations.api.conversation.Conversation;
 import de.raidcraft.rcconversations.api.stage.SimpleStage;
 import de.raidcraft.rcconversations.api.stage.Stage;
 import de.raidcraft.rcconversations.util.ParseString;
@@ -16,7 +17,9 @@ import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.comparator.AlphabeticComparator;
 import de.raidcraft.rctravel.comparator.DistanceComparator;
+import de.raidcraft.util.ConfigUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -24,8 +27,23 @@ import java.util.*;
 /**
  * @author Philip
  */
-@ActionInformation(name = "LIST_TRAVEL_STATIONS")
-public class ListStationsAction extends AbstractAction {
+public class ListStationsAction implements Action<Conversation> {
+
+    @Override
+    public void accept(Conversation conversation, ConfigurationSection config) {
+        String groupName = config.getString("group");
+        String typeName = config.getString("type");
+        ListType type = ListType.valueOf(typeName);
+
+        if (type == null) {
+            conversation.sendMessage(ChatColor.RED + "Invalid type in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
+            conversation.abort(ConversationEndReason.ERROR);
+            return;
+        }
+        if (groupName == null) {
+
+        }
+    }
 
     @Override
     public void run(Conversation conversation, ActionArgumentList args) throws ActionArgumentException {
