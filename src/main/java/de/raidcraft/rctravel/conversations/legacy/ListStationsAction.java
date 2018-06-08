@@ -1,14 +1,9 @@
-package de.raidcraft.rctravel.conversations;
+package de.raidcraft.rctravel.conversations.legacy;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcconversations.actions.common.StageAction;
 import de.raidcraft.rcconversations.actions.variables.SetVariableAction;
-import de.raidcraft.rcconversations.api.action.AbstractAction;
-import de.raidcraft.rcconversations.api.action.ActionArgumentException;
-import de.raidcraft.rcconversations.api.action.ActionArgumentList;
-import de.raidcraft.rcconversations.api.action.ActionInformation;
-import de.raidcraft.rcconversations.api.action.MissingArgumentException;
-import de.raidcraft.rcconversations.api.action.WrongArgumentValueException;
+import de.raidcraft.rcconversations.api.action.*;
 import de.raidcraft.rcconversations.api.answer.Answer;
 import de.raidcraft.rcconversations.api.answer.SimpleAnswer;
 import de.raidcraft.rcconversations.api.conversation.Conversation;
@@ -24,11 +19,7 @@ import de.raidcraft.rctravel.comparator.DistanceComparator;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Philip
@@ -44,20 +35,20 @@ public class ListStationsAction extends AbstractAction {
         String typeName = args.getString("type");
         ListType type = ListType.valueOf(typeName);
         if (type == null) {
-            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Type '" + typeName + "' does not exists!");
+            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Type '" + typeName + "' does not exists!");
         }
         if (groupName == null) {
-            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': GroupName is not configured!");
+            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': GroupName is not configured!");
         }
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
         Group group = plugin.getGroupManager().getGroup(groupName);
         if (group == null) {
-            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Group '" + typeName + "' does not exists!");
+            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Group '" + typeName + "' does not exists!");
         }
         Station currentStation = plugin.getStationManager().getStation(conversation.getString("rct_station_name"));
 
         if (currentStation == null) {
-            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + conversation.getString("rct_station_name") + "' does not exists!");
+            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Station '" + conversation.getString("rct_station_name") + "' does not exists!");
         }
 
         String confirmStage = args.getString("confirmstage");
@@ -65,7 +56,7 @@ public class ListStationsAction extends AbstractAction {
         int pageSize = args.getInt("pagesize", 4);
 
         if (confirmStage == null || returnStage == null) {
-            throw new MissingArgumentException("Missing argument in action '" + getName() + "': Confirmstage or Returnstage is missing!");
+            throw new MissingArgumentException("Missing argument in withAction '" + getName() + "': Confirmstage or Returnstage is missing!");
         }
 
         String entranceStage = "rct_stationslist";
@@ -191,7 +182,7 @@ public class ListStationsAction extends AbstractAction {
 
         private String infoText;
 
-        private ListType(String infoText) {
+        ListType(String infoText) {
 
             this.infoText = infoText;
         }

@@ -4,14 +4,15 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.config.ConfigurationBase;
+import de.raidcraft.api.conversations.Conversations;
 import de.raidcraft.api.npc.NPC_Manager;
 import de.raidcraft.api.npc.RC_Traits;
 import de.raidcraft.rcconversations.actions.ActionManager;
 import de.raidcraft.rctravel.commands.TravelCommands;
-import de.raidcraft.rctravel.conversations.CheckTravelPlayerAction;
-import de.raidcraft.rctravel.conversations.FindTravelStationAction;
-import de.raidcraft.rctravel.conversations.ListStationsAction;
-import de.raidcraft.rctravel.conversations.TravelToStationAction;
+import de.raidcraft.rctravel.conversations.legacy.CheckTravelPlayerAction;
+import de.raidcraft.rctravel.conversations.legacy.FindTravelStationAction;
+import de.raidcraft.rctravel.conversations.legacy.ListStationsAction;
+import de.raidcraft.rctravel.conversations.legacy.TravelToStationAction;
 import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.manager.GroupManager;
 import de.raidcraft.rctravel.manager.StationManager;
@@ -66,7 +67,7 @@ public class RCTravelPlugin extends BasePlugin {
 
         TravelMasterNPCManager.spawnAllDragonGuardNPCs(stationManager);
 
-        // start station schedule calculation
+        // startStage station schedule calculation
         // every 5 seconds one station will be checked
         Bukkit.getScheduler().runTaskTimer(this, stationLockTask, 0, 5 * 20);
     }
@@ -88,7 +89,6 @@ public class RCTravelPlugin extends BasePlugin {
         getTravelManager().reload();
     }
 
-    @Override
     public List<Class<?>> getDatabaseClasses() {
 
         List<Class<?>> databases = new ArrayList<>();
@@ -102,6 +102,14 @@ public class RCTravelPlugin extends BasePlugin {
 
             super(plugin, "config.yml");
         }
+    }
+
+    public void registerActionApi() {
+
+    }
+
+    public void registerConversations() {
+        Conversations.createConversationTemplate()
     }
 
     public StationManager getStationManager() {

@@ -1,4 +1,4 @@
-package de.raidcraft.rctravel.conversations;
+package de.raidcraft.rctravel.conversations.legacy;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rcconversations.api.action.AbstractAction;

@@ -1,14 +1,8 @@
-package de.raidcraft.rctravel.conversations;
+package de.raidcraft.rctravel.conversations.legacy;
 
 import de.raidcraft.RaidCraft;
-import de.raidcraft.rcconversations.RCConversationsPlugin;
-import de.raidcraft.rcconversations.api.action.AbstractAction;
-import de.raidcraft.rcconversations.api.action.ActionArgumentException;
-import de.raidcraft.rcconversations.api.action.ActionArgumentList;
-import de.raidcraft.rcconversations.api.action.ActionInformation;
-import de.raidcraft.rcconversations.api.action.WrongArgumentValueException;
+import de.raidcraft.rcconversations.api.action.*;
 import de.raidcraft.rcconversations.api.conversation.Conversation;
-import de.raidcraft.rcconversations.conversations.EndReason;
 import de.raidcraft.rcconversations.util.ParseString;
 import de.raidcraft.rctravel.Journey;
 import de.raidcraft.rctravel.RCTravelPlugin;
@@ -27,7 +21,7 @@ public class TravelToStationAction extends AbstractAction {
     @Override
     public void run(Conversation conversation, ActionArgumentList args) throws ActionArgumentException {
 
-        String startName = args.getString("start", null);
+        String startName = args.getString("startStage", null);
         String targetName = args.getString("target", null);
         targetName = ParseString.INST.parse(conversation, targetName);
         startName = ParseString.INST.parse(conversation, startName);
@@ -36,7 +30,7 @@ public class TravelToStationAction extends AbstractAction {
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
         Station targetStation = plugin.getStationManager().getStation(targetName);
         if (targetStation == null) {
-            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + targetName + "' does not exists!");
+            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Station '" + targetName + "' does not exists!");
         }
 
         Station startStation;
@@ -46,7 +40,7 @@ public class TravelToStationAction extends AbstractAction {
             startStation = plugin.getStationManager().getStation(startName);
         }
         if (startStation == null) {
-            throw new WrongArgumentValueException("Wrong argument value in action '" + getName() + "': Station '" + targetName + "' does not exists!");
+            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Station '" + targetName + "' does not exists!");
         }
 
         Bukkit.getScheduler().runTaskLater(plugin, new TakeoffDelayedTask(startStation, targetStation, conversation.getPlayer()), delay);

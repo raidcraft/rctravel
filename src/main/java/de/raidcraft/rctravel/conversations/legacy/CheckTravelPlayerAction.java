@@ -1,8 +1,7 @@
-package de.raidcraft.rctravel.conversations;
+package de.raidcraft.rctravel.conversations.legacy;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.economy.Economy;
-import de.raidcraft.rcconversations.api.action.AbstractAction;
 import de.raidcraft.rcconversations.api.action.ActionArgumentException;
 import de.raidcraft.rcconversations.api.action.ActionArgumentList;
 import de.raidcraft.rcconversations.api.action.ActionInformation;
@@ -17,12 +16,12 @@ import de.raidcraft.rctravel.api.station.Station;
  * @author Philip
  */
 @ActionInformation(name = "TRAVEL_CHECK_PLAYER")
-public class CheckTravelPlayerAction extends AbstractAction {
+public class CheckTravelPlayerAction extends {
 
     @Override
     public void run(Conversation conversation, ActionArgumentList args) throws ActionArgumentException {
 
-        String startName = args.getString("start", null);
+        String startName = args.getString("startStage", null);
         startName = ParseString.INST.parse(conversation, startName);
         String targetName = args.getString("target", null);
         targetName = ParseString.INST.parse(conversation, targetName);
