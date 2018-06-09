@@ -69,7 +69,7 @@ public class StationLockTask implements Runnable {
 
             cooldown.process();
             if (!cooldown.isLocked()) {
-                // travel queued players
+                // travelTo queued players
                 RaidCraft.getComponent(RCTravelPlugin.class).getTravelManager().startTravel(cooldown.getGroupedStation().getStation());
             }
         }

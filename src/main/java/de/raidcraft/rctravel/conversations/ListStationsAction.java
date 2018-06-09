@@ -44,11 +44,11 @@ public class ListStationsAction implements Action<Conversation> {
 
     @Override
     @Information(
-            value = "stations.list",
+            value = "station.conv.list",
             desc = "Lists all target stations in a conversation.",
             type = Conversation.class,
             conf = {
-                    "group: travel scope",
+                    "group: travelTo scope",
                     "stationName: the station that should list its targets",
                     "useNearestStation: [true/->false] - if true station name can be blank",
                     "searchRadius: radius to search for nearest station",
@@ -94,10 +94,10 @@ public class ListStationsAction implements Action<Conversation> {
                 .sorted()
                 .collect(Collectors.toList());
 
-        conversation.changeToStage(buildStationList(conversation, stations));
+        conversation.changeToStage(buildStationList(conversation, stations, currentStation.get()));
     }
 
-    private StageTemplate buildStationList(Conversation conversation, List<Station> stations) {
+    private StageTemplate buildStationList(Conversation conversation, List<Station> stations, Station startStation) {
 
         StageBuilder stage = Conversations.buildStage("list-stations");
 
@@ -124,7 +124,12 @@ public class ListStationsAction implements Action<Conversation> {
                                             : new FancyMessage("Kostenlos").color(ChatColor.GREEN)
                                             .text("]").color(ChatColor.BLUE)
                             ),
-                    answer -> answer.withAction(Action.of(TravelToStationConversationAction.class), action -> action.withConfig("station", station.getName()))
+                    answer -> answer.withAction(Action.of(TravelToStationAction.class), action -> {
+                        action.withConfig("target", station.getName());
+                        action.withConfig("start", startStation.getName());
+                        action.withConfig("confirm", true);
+                        action.withConfig("pay", true);
+                    })
             );
         });
 

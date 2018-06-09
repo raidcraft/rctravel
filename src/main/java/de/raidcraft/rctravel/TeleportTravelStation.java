@@ -1,12 +1,12 @@
 package de.raidcraft.rctravel;
 
 import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.api.station.AbstractStation;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.RegionStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.util.RegionUtil;
+import de.raidcraft.tables.RcLogLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,15 +30,34 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
     }
 
     @Override
-    public void travel(Player player, Station targetSation) throws RaidCraftException {
+    public void travelFrom(Player player, Station sourceStation) {
+
+        if (sourceStation instanceof TeleportTravelStation) {
+            sourceStation.travelTo(player, this);
+            return;
+        } else {
+            travel(player, sourceStation.getLocation(), getLocation());
+        }
+
+        RaidCraft.log("Der Spieler befindet sich nicht am Abfahrtsort!", "TeleportTravelStation", RcLogLevel.WARNING);
+    }
+
+    @Override
+    public void travelTo(Player player, Station targetStation) {
 
         // check if player is inside of transport region
         if (RegionUtil.isInsideRegion(player, minPoint, maxPoint)) {
-            player.teleport(targetSation.getLocation());
+            player.teleport(targetStation.getLocation());
             player.sendMessage(ChatColor.GREEN + "Du bist an deinem Reiseziel angekommen.");
             return;
         }
-        throw new RaidCraftException("Der Spieler befindet sich nicht am Abfahrtsort!");
+
+        RaidCraft.log("Der Spieler befindet sich nicht am Abfahrtsort!", "TeleportTravelStation", RcLogLevel.WARNING);
+    }
+
+    @Override
+    public void travel(Player player, Location from, Location to) {
+
     }
 
     public boolean isLocked() {

@@ -1,10 +1,6 @@
 package de.raidcraft.rctravel.commands;
 
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.minecraft.util.commands.NestedCommand;
+import com.sk89q.minecraft.util.commands.*;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
@@ -13,6 +9,8 @@ import de.raidcraft.rctravel.api.station.Station;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 /**
  * @author Philip Urban
@@ -27,11 +25,11 @@ public class TravelCommands {
     }
 
     @Command(
-            aliases = {"travel", "rctravel"},
+            aliases = {"travelTo", "rctravel"},
             desc = "Travel commands"
     )
     @NestedCommand(value = NestedCommands.class)
-    public void travel(CommandContext args, CommandSender sender) throws CommandException {
+    public void travel(CommandContext args, CommandSender sender) {
 
     }
 
@@ -46,10 +44,10 @@ public class TravelCommands {
 
         @Command(
                 aliases = {"reload"},
-                desc = "Reload travel plugin"
+                desc = "Reload travelTo plugin"
         )
         @CommandPermissions("rctravel.cmd.reload")
-        public void reload(CommandContext args, CommandSender sender) throws CommandException {
+        public void reload(CommandContext args, CommandSender sender) {
 
             plugin.reload();
 
@@ -62,7 +60,7 @@ public class TravelCommands {
 
         @Command(
                 aliases = {"create"},
-                desc = "Create travel station",
+                desc = "Create travelTo station",
                 min = 2,
                 usage = "<group> <name>"
         )
@@ -73,13 +71,13 @@ public class TravelCommands {
             Player player = (Player) sender;
 
             // check if group exists
-            Group group = plugin.getGroupManager().getGroup(args.getString(0));
-            if (group == null) {
+            Optional<Group> group = plugin.getGroupManager().getGroup(args.getString(0));
+            if (!group.isPresent()) {
                 throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
             }
 
             try {
-                Station station = plugin.getStationManager().createStation(args.getJoinedStrings(1).replace(" ", "_"), player, group);
+                Station station = plugin.getStationManager().createStation(args.getJoinedStrings(1).replace(" ", "_"), player, group.get());
                 sender.sendMessage(ChatColor.GREEN + "Die Station '" + station.getDisplayName() + "' wurde erfolgreich erstellt!");
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());
@@ -89,7 +87,7 @@ public class TravelCommands {
 
         @Command(
                 aliases = {"delete", "remove"},
-                desc = "Delete travel station",
+                desc = "Delete travelTo station",
                 min = 1,
                 usage = "<name>"
         )
@@ -100,20 +98,16 @@ public class TravelCommands {
             Player player = (Player) sender;
 
             // check if station exists
-            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
-            if (station == null) {
+            Optional<Station> station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
+            if (!station.isPresent()) {
                 throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
 
-            GroupedStation groupedStation = plugin.getStationManager().getGroupedStation(station);
+            GroupedStation groupedStation = plugin.getStationManager().getGroupedStation(station.get());
 
-            try {
-                plugin.getStationManager().deleteStation(station);
-            } catch (RaidCraftException e) {
-                throw new CommandException(e.getMessage());
-            }
+            plugin.getStationManager().deleteStation(station.get());
 
-            sender.sendMessage(ChatColor.GREEN + "Die Station '" + station.getDisplayName() + "' wurde erfolgreich gelöscht!");
+            sender.sendMessage(ChatColor.GREEN + "Die Station '" + station.get().getDisplayName() + "' wurde erfolgreich gelöscht!");
         }
 
         @Command(
@@ -129,14 +123,14 @@ public class TravelCommands {
             Player player = (Player) sender;
 
             // check if station exists
-            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
-            if (station == null) {
+            Optional<Station> station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
+            if (!station.isPresent()) {
                 throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
 
-            player.teleport(station.getLocation());
+            player.teleport(station.get().getLocation());
 
-            sender.sendMessage(ChatColor.GREEN + "Du wurdest zur Station '" + station.getDisplayName() + "' teleportiert!");
+            sender.sendMessage(ChatColor.GREEN + "Du wurdest zur Station '" + station.get().getDisplayName() + "' teleportiert!");
         }
 
         @Command(
@@ -152,12 +146,12 @@ public class TravelCommands {
             Player player = (Player) sender;
 
             // check if station exists
-            Station station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
-            if (station == null) {
+            Optional<Station> station = plugin.getStationManager().getStation(args.getJoinedStrings(0));
+            if (!station.isPresent()) {
                 throw new CommandException("Es gibt keine Station mit dem namen '" + args.getJoinedStrings(0) + "'!");
             }
 
-            plugin.getStationLockTask().setLocked(station, false);
+            plugin.getStationLockTask().setLocked(station.get(), false);
         }
     }
 }

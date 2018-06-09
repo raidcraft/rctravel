@@ -1,15 +1,16 @@
 package de.raidcraft.rctravel.manager;
 
 import de.raidcraft.RaidCraft;
+import de.raidcraft.api.conversations.Conversations;
+import de.raidcraft.api.conversations.host.ConversationHost;
 import de.raidcraft.api.npc.NPC_Manager;
-import de.raidcraft.rcconversations.npc.NPC_Conservations_Manager;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.npc.StationTrait;
-import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Philip Urban
@@ -21,9 +22,10 @@ public class TravelMasterNPCManager {
         Location improvedLocation = station.getStation().getLocation().clone();
         improvedLocation.setY(improvedLocation.getY() + 1.5);
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-        NPC npc = NPC_Conservations_Manager.getInstance().spawnNonPersistNpcConservations(improvedLocation, "Reiseleiter", plugin.getName(), station.getGroup().getConversationName());
-        npc.addTrait(StationTrait.class);
-        npc.getTrait(StationTrait.class).setStationName(station.getStation().getName());
+        Optional<ConversationHost<?>> host = Conversations.spawnConversationHost(plugin.getName(), "Reiseleiter", station.getGroup().getConversationName(), improvedLocation);
+
+        host.ifPresent(h -> h.addTrait(StationTrait.class));
+        host.ifPresent(h -> h.getTrait(StationTrait.class).ifPresent(trait -> trait.setStationName(station.getStation().getName())));
     }
 
     public static void spawnAllDragonGuardNPCs(StationManager stationManager) {

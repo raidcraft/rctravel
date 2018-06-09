@@ -2,9 +2,12 @@ package de.raidcraft.rctravel.conversations;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.action.action.Action;
+import de.raidcraft.api.conversations.Conversations;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.SimpleStation;
 import de.raidcraft.rctravel.api.station.Station;
+import de.raidcraft.rctravel.manager.StationManager;
+import de.raidcraft.rctravel.manager.TravelManager;
 import de.raidcraft.rctravel.tasks.TakeoffDelayedTask;
 import de.raidcraft.util.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -12,17 +15,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 public class TravelToStationAction implements Action<Player> {
+
+    private final RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
+    private final TravelManager travelManager = plugin.getTravelManager();
+    private final StationManager stationManager = plugin.getStationManager();
 
     @Override
     @Information(
-            value = "travel-to-station",
+            value = "station.travel",
             desc = "Travels to the given station. Uses the current player position or given station as start.",
             aliases = {"travel"},
             conf = {
                     "start: [station name]",
                     "target: <station name>",
-                    "delay: [in sec]"
+                    "delay: [in sec]",
+                    "confirm: true/->false asks the player to confirm the travelTo",
+                    "pay: true/->false if the player must pay for the trip"
             }
     )
     public void accept(Player player, ConfigurationSection config) {
@@ -32,24 +43,43 @@ public class TravelToStationAction implements Action<Player> {
         int delay = config.getInt("delay", 0);
 
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-        Station targetStation = plugin.getStationManager().getStation(targetName);
+        Optional<Station> targetStation = plugin.getStationManager().getStation(targetName);
 
-        if (targetStation == null) {
+        if (!targetStation.isPresent()) {
             player.sendMessage(ChatColor.RED + "Invalid target station in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
             return;
         }
 
-        Station startStation;
+        Optional<Station> startStation;
         if (startName == null) {
-            startStation = new SimpleStation(getIdentifier(), player.getLocation().clone());
+            startStation = Optional.of(new SimpleStation(getIdentifier(), player.getLocation().clone()));
         } else {
             startStation = plugin.getStationManager().getStation(startName);
         }
-        if (startStation == null) {
+        if (!startStation.isPresent()) {
             player.sendMessage(ChatColor.RED + "Invalid start station in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
             return;
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, new TakeoffDelayedTask(startStation, targetStation, player), delay);
+        double price = targetStation.get().getPrice(startStation.get().getLocation());
+
+        if (config.getBoolean("confirm", false)) {
+            Conversations.getOrStartConversation(player).changeToStage(
+                    Conversations.buildStage("confirm-travelTo")
+                            .withText("Möchtest du nach " + targetStation.get().getDisplayName() + " reisen?",
+                                    config.getBoolean("pay", false) && price > 0
+                                            ? "Das kostet dich " + RaidCraft.getEconomy().getFormattedAmount(price) + "."
+                                            : "Diese Reise ist für dich kostenlos."
+                            )
+                            .withAnswer("Ja auf gehts!", answer -> answer
+                                    .withRequirement((type, config1) -> RaidCraft.getEconomy().hasEnough(player.getUniqueId(), price))
+                                    .withAction((type, config1) -> startStation.get().travelTo(player, targetStation.get()))
+                                    .withAction((type, config1) -> RaidCraft.getEconomy().substract(player.getUniqueId(), price))
+                            )
+                            .withAnswer("Nein danke, ich habe es mir anders überlegt.", answer -> Action.changeToPreviousStage()).build()
+            );
+        } else {
+            Bukkit.getScheduler().runTaskLater(plugin, new TakeoffDelayedTask(startStation.get(), targetStation.get(), player), delay);
+        }
     }
 }

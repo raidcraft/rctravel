@@ -1,6 +1,5 @@
 package de.raidcraft.rctravel.api.station;
 
-import de.raidcraft.api.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -15,8 +14,7 @@ public class SimpleStation extends AbstractStation {
     }
 
     @Override
-    public void travel(Player player, Station station) throws RaidCraftException {
-
-        player.teleport(station.getLocation());
+    public void travel(Player player, Location from, Location to) {
+        player.teleport(to);
     }
 }

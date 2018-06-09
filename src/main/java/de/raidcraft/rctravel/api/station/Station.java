@@ -1,6 +1,5 @@
 package de.raidcraft.rctravel.api.station;
 
-import de.raidcraft.api.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -17,7 +16,15 @@ public interface Station extends Comparable<Station> {
 
     double getDistance(Location location);
 
-    void travel(Player player, Station station) throws RaidCraftException;
+    double getPrice(Location start);
+
+    void travel(Player player, Location from, Location to);
+
+    void travelFrom(Player player, Station sourceStation);
+
+    void travelTo(Player player, Station targetStation);
+
+    void travelTo(Player player);
 
     boolean equals(Object obj);
 

@@ -5,12 +5,12 @@ package de.raidcraft.rctravel.api.station;
  */
 public interface Chargeable {
 
-    public default boolean isFree() {
+    default boolean isFree() {
 
         return getPrice() <= 0;
     }
 
-    public double getPrice();
+    double getPrice();
 
-    public double getPrice(int distance);
+    double getPrice(int distance);
 }

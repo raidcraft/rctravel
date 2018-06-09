@@ -8,7 +8,6 @@ import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.util.CaseInsensitiveMap;
-import de.raidcraft.util.UUIDUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -53,14 +52,14 @@ public class TravelManager {
                     }
                 }
 
-                start.travel(player, entry.getValue().getTarget());
+                target.travelFrom(player, start);
                 queuedPlayers.remove(entry.getKey());
                 // charge player
                 if (entry.getValue().getTarget() instanceof Chargeable) {
                     RaidCraft.getEconomy().substract(player.getUniqueId(), ((Chargeable) entry.getValue().getTarget()).getPrice(), BalanceSource.TRAVEL, start.getDisplayName() + " -> " + target.getDisplayName());
                 }
             } catch (RaidCraftException e) {
-                // ignore travel exceptions here
+                // ignore travelTo exceptions here
             }
         }
     }
