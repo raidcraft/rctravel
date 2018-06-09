@@ -2,205 +2,166 @@ package de.raidcraft.rctravel.conversations;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.action.action.Action;
+import de.raidcraft.api.conversations.Conversations;
+import de.raidcraft.api.conversations.builder.StageBuilder;
 import de.raidcraft.api.conversations.conversation.Conversation;
-import de.raidcraft.api.conversations.conversation.ConversationEndReason;
-import de.raidcraft.rcconversations.actions.common.StageAction;
-import de.raidcraft.rcconversations.actions.variables.SetVariableAction;
-import de.raidcraft.rcconversations.api.answer.Answer;
-import de.raidcraft.rcconversations.api.answer.SimpleAnswer;
-import de.raidcraft.rcconversations.api.stage.SimpleStage;
-import de.raidcraft.rcconversations.api.stage.Stage;
-import de.raidcraft.rcconversations.util.ParseString;
+import de.raidcraft.api.conversations.stage.StageTemplate;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.group.Group;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
-import de.raidcraft.rctravel.comparator.AlphabeticComparator;
-import de.raidcraft.rctravel.comparator.DistanceComparator;
+import de.raidcraft.rctravel.manager.GroupManager;
+import de.raidcraft.rctravel.manager.StationManager;
 import de.raidcraft.util.ConfigUtil;
+import de.raidcraft.util.EnumUtils;
+import de.raidcraft.util.fanciful.FancyMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Philip
  */
 public class ListStationsAction implements Action<Conversation> {
 
-    @Override
-    public void accept(Conversation conversation, ConfigurationSection config) {
-        String groupName = config.getString("group");
-        String typeName = config.getString("type");
-        ListType type = ListType.valueOf(typeName);
+    private final RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
+    private final GroupManager groupManager = plugin.getGroupManager();
+    private final StationManager stationManager = plugin.getStationManager();
 
-        if (type == null) {
-            conversation.sendMessage(ChatColor.RED + "Invalid type in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
-            conversation.abort(ConversationEndReason.ERROR);
+    private static boolean isFreeStation(Station station) {
+        double price = 0;
+        if (station instanceof Chargeable) {
+            price = ((Chargeable) station).getPrice();
+        }
+
+        return price == 0;
+    }
+
+    @Override
+    @Information(
+            value = "stations.list",
+            desc = "Lists all target stations in a conversation.",
+            type = Conversation.class,
+            conf = {
+                    "group: travel scope",
+                    "stationName: the station that should list its targets",
+                    "useNearestStation: [true/->false] - if true station name can be blank",
+                    "searchRadius: radius to search for nearest station",
+                    "allowTravelToUndiscovered: [true/->false] - if true the player can only choose discovered stations",
+                    "order: ->ALPHABETIC_ASC | ALPHABETIC_DESC | DISTANCE_ASC | DISTANCE_DESC | PRICE_ASC | PRICE_DESC",
+                    "filter: FREE | ->DISCOVERED | ALL"
+            }
+    )
+    public void accept(Conversation conversation, ConfigurationSection config) {
+
+        Optional<Group> group = groupManager.getGroup(config.getString("group"));
+        if (!group.isPresent()) {
+            Conversations.error(conversation, "Invalid group in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
             return;
         }
-        if (groupName == null) {
 
+        Optional<Station> currentStation = stationManager.getStation(config.getString("stationName"));
+        if (config.getBoolean("useNearestStation", false)) {
+            currentStation.orElseGet(() -> stationManager.getNearbyStation(conversation.getLocation(), config.getInt("searchRadius", 10)));
         }
+        if (!currentStation.isPresent()) {
+            Conversations.error(conversation, "Invalid station in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
+            return;
+        }
+
+        EnumSet<StationListFilter> filters = EnumUtils.getEnumSetFromString(StationListFilter.class, config.getString("filter", "DISCOVERED"));
+        StationListOrder order = EnumUtils.getEnumFromString(StationListOrder.class, config.getString("order", "ALPHABETIC_ASC"));
+
+        List<Station> stations = new ArrayList<>();
+
+        if (filters.contains(StationListFilter.ALL)) {
+            stations = stationManager.getAllStations(group.get().getName());
+        } else if (filters.contains(StationListFilter.DISCOVERED)) {
+            stations = stationManager.getDiscoveredStations(group.get(), conversation.getOwner().getUniqueId());
+        }
+
+        if (filters.contains(StationListFilter.FREE)) {
+            stations = stations.stream().filter(ListStationsAction::isFreeStation).collect(Collectors.toList());
+        }
+
+        stations = stations.stream()
+                .filter(station -> !station.equals(currentStation))
+                .sorted()
+                .collect(Collectors.toList());
+
+        conversation.changeToStage(buildStationList(conversation, stations));
     }
 
-    @Override
-    public void run(Conversation conversation, ActionArgumentList args) throws ActionArgumentException {
+    private StageTemplate buildStationList(Conversation conversation, List<Station> stations) {
 
-        String groupName = args.getString("group");
-        groupName = ParseString.INST.parse(conversation, groupName);
-        String typeName = args.getString("type");
-        ListType type = ListType.valueOf(typeName);
-        if (type == null) {
-            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Type '" + typeName + "' does not exists!");
-        }
-        if (groupName == null) {
-            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': GroupName is not configured!");
-        }
-        RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-        Group group = plugin.getGroupManager().getGroup(groupName);
-        if (group == null) {
-            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Group '" + typeName + "' does not exists!");
-        }
-        Station currentStation = plugin.getStationManager().getStation(conversation.getString("rct_station_name"));
+        StageBuilder stage = Conversations.buildStage("list-stations");
 
-        if (currentStation == null) {
-            throw new WrongArgumentValueException("Wrong argument value in withAction '" + getName() + "': Station '" + conversation.getString("rct_station_name") + "' does not exists!");
+        if (stations.size() < 1) {
+            return stage.withText("Tut mir leid, du kennst keine passenden Stationen.")
+                    .withAction(Action.changeToPreviousStage())
+                    .build();
         }
 
-        String confirmStage = args.getString("confirmstage");
-        String returnStage = args.getString("returnstage");
-        int pageSize = args.getInt("pagesize", 4);
+        stage.withText("Du kennst folgende Stationen:");
 
-        if (confirmStage == null || returnStage == null) {
-            throw new MissingArgumentException("Missing argument in withAction '" + getName() + "': Confirmstage or Returnstage is missing!");
-        }
+        stations.forEach(station -> {
+            int distance = (int) station.getDistance(conversation.getLocation());
+            double price = station instanceof Chargeable ? ((Chargeable) station).getPrice(distance) : 0;
+            stage.withAnswer(
+                    new FancyMessage("[").color(ChatColor.BLUE)
+                            .text(station.getDisplayName()).color(ChatColor.YELLOW)
+                            .formattedTooltip(
+                                    new FancyMessage(station.getDisplayName()).color(ChatColor.YELLOW),
+                                    new FancyMessage("Distanz: ").color(ChatColor.YELLOW)
+                                            .text(station.getDistance(conversation.getLocation()) + "m").color(ChatColor.AQUA),
+                                    price > 0 ? new FancyMessage("Preis: ").color(ChatColor.YELLOW)
+                                            .text(RaidCraft.getEconomy().getFormattedAmount(price))
+                                            : new FancyMessage("Kostenlos").color(ChatColor.GREEN)
+                                            .text("]").color(ChatColor.BLUE)
+                            ),
+                    answer -> answer.withAction(Action.of(TravelToStationConversationAction.class), action -> action.withConfig("station", station.getName()))
+            );
+        });
 
-        String entranceStage = "rct_stationslist";
-
-        List<Station> stations = plugin.getStationManager().getDiscoveredStations(group, conversation.getPlayer().getUniqueId());
-
-        if (type == ListType.ALPHABETIC) {
-            Collections.sort(stations, new AlphabeticComparator());
-        }
-        if (type == ListType.DISTANCE) {
-            Collections.sort(stations, new DistanceComparator(currentStation));
-        }
-
-        if (type == ListType.FREE) {
-            List<Station> freeStations = new ArrayList<>();
-            double price;
-            for (Station s : stations) {
-                price = 0;
-                if (s instanceof Chargeable) {
-                    price = ((Chargeable) s).getPrice();
-                }
-
-                if (price == 0) {
-                    freeStations.add(s);
-                }
-            }
-            stations = freeStations;
-        }
-
-        for (Station station : stations) {
-            if (station.equals(currentStation)) {
-                stations.remove(station);
-                break;
-            }
-        }
-
-        if (stations.size() == 0) {
-            List<Answer> answers = new ArrayList<>();
-            answers.add(new SimpleAnswer("1", "Ok zurück", new ActionArgumentList("A", StageAction.class, "stage", returnStage)));
-            conversation.addStage(new SimpleStage(entranceStage, "Du kennst keine passende Stationen!", answers));
-        }
-
-        int pages = (int) (((double) stations.size() / (double) pageSize) + 0.5);
-        if (pages == 0) pages = 1;
-        for (int i = 0; i < pages; i++) {
-
-            Stage stage;
-            List<Answer> answers = new ArrayList<>();
-            String text;
-
-            text = "Du kennst folgende Stationen (" + (i + 1) + "/" + pages + "):|&7(" + type.getInfoText() + ")";
-            int a;
-
-            for (a = 0; a < pageSize; a++) {
-                if (stations.size() <= a + (i * pageSize)) break;
-                answers.add(createStationAnswer(conversation.getPlayer(), a, currentStation, stations.get(i * pageSize + a), confirmStage));
-            }
-            a++;
-
-            String nextStage;
-            if (pages - 1 == i) {
-                nextStage = entranceStage;
-            } else {
-                nextStage = entranceStage + "_" + (i + 1);
-            }
-            String thisStage;
-            if (i == 0) {
-                thisStage = entranceStage;
-            } else {
-                thisStage = entranceStage + "_" + i;
-            }
-
-            if (pages > 1) {
-                answers.add(new SimpleAnswer(String.valueOf(a), "&7Nächste Seite", new ActionArgumentList(String.valueOf(a), StageAction.class, "stage", nextStage)));
-            }
-            stage = new SimpleStage(thisStage, text, answers);
-
-            conversation.addStage(stage);
-        }
-
-        conversation.setCurrentStage(entranceStage);
-        conversation.triggerCurrentStage();
+        return stage.build();
     }
 
-    private Answer createStationAnswer(Player player, int number, Station start, Station target, String confirmStage) {
+    public enum StationListOrder {
 
-        List<ActionArgumentList> actions = new ArrayList<>();
-        int i = 0;
-        Map<String, Object> data = new HashMap<>();
-        data.put("variable", "rct_target_name");
-        data.put("local", true);
-        data.put("value", target.getDisplayName());
-        actions.add(new ActionArgumentList(String.valueOf(i++), SetVariableAction.class, data));
-        actions.add(new ActionArgumentList(String.valueOf(i++), StageAction.class, "stage", confirmStage));
-
-        StringBuilder builder = new StringBuilder();
-        double price = 0;
-        if (target instanceof Chargeable) {
-            price = ((Chargeable) target).getPrice((int) start.getLocation().distance(target.getLocation()));
-            if (!RaidCraft.getEconomy().hasEnough(player.getUniqueId(), price)) {
-                builder.append(ChatColor.DARK_GRAY);
-            }
-        }
-
-        builder.append(target.getDisplayName());
-        builder.append(" ").append(RaidCraft.getEconomy().getFormattedAmount(price));
-
-        int distance = (int) start.getLocation().distance(target.getLocation());
-        if (distance < 1000) {
-            builder.append(ChatColor.GRAY).append(" (").append(distance).append("m)");
-        } else {
-            builder.append(ChatColor.GRAY).append(" (").append(((double) distance) / 1000.).append("km)");
-        }
-
-        return new SimpleAnswer(String.valueOf(number + 1), builder.toString(), actions);
-    }
-
-    public enum ListType {
-
-        ALPHABETIC("Alphabetisch sortiert"),
-        DISTANCE("Nach Entfernung sortiert"),
-        FREE("Es werden nur kostenlose angezeigt");
+        ALPHABETIC_ASC("Alphabetisch von A-Z sortiert."),
+        ALPHABETIC_DESC("Alphabetisch von Z-A sortiert."),
+        DISTANCE_ASC("Nach Entfernung (nah bis fern) sortiert."),
+        DISTANCE_DESC("Nach Entfernung (fern bis nah) sortiert."),
+        PRICE_ASC("Nach Preis (günstig bis teuer) sortiert."),
+        PRICE_DESC("Nach Preis (teuer bis günstig) sortiert.");
 
         private String infoText;
 
-        ListType(String infoText) {
+        StationListOrder(String infoText) {
+
+            this.infoText = infoText;
+        }
+
+        public String getInfoText() {
+
+            return infoText;
+        }
+    }
+
+    public enum StationListFilter {
+
+        ALL("Es werden alle Stationen angezeigt."),
+        FREE("Es werden nur kostenlose Stationen angezeigt."),
+        DISCOVERED("Es werden nur entdeckte Stationen angezeigt.");
+
+        private String infoText;
+
+        StationListFilter(String infoText) {
 
             this.infoText = infoText;
         }

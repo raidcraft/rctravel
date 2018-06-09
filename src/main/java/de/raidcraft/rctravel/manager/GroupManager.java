@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Philip Urban
@@ -24,7 +25,9 @@ public class GroupManager {
         reload();
     }
 
-    public Group getGroup(String groupName) {
+    public Optional<Group> getGroup(String groupName) {
+
+        if (groupName == null) return Optional.empty();
 
         Group group = cachedGroups.get(groupName);
         if (group == null) {
@@ -35,7 +38,7 @@ public class GroupManager {
                 }
             }
         }
-        return group;
+        return Optional.ofNullable(group);
     }
 
     public void loadGroups() {

@@ -5,10 +5,11 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import de.raidcraft.api.BasePlugin;
 import de.raidcraft.api.action.ActionAPI;
 import de.raidcraft.api.config.ConfigurationBase;
-import de.raidcraft.api.conversations.Conversations;
+import de.raidcraft.api.conversations.conversation.Conversation;
 import de.raidcraft.api.npc.NPC_Manager;
 import de.raidcraft.api.npc.RC_Traits;
 import de.raidcraft.rctravel.commands.TravelCommands;
+import de.raidcraft.rctravel.conversations.ListStationsAction;
 import de.raidcraft.rctravel.conversations.TravelToStationAction;
 import de.raidcraft.rctravel.listener.StationListener;
 import de.raidcraft.rctravel.manager.GroupManager;
@@ -101,11 +102,12 @@ public class RCTravelPlugin extends BasePlugin {
     public void registerActionApi() {
 
         ActionAPI.register(this)
-                .action(new TravelToStationAction());
+                .action(new TravelToStationAction())
+                .action(new ListStationsAction(), Conversation.class);
     }
 
     public void registerConversations() {
-        Conversations.createConversationTemplate()
+        
     }
 
     public StationManager getStationManager() {

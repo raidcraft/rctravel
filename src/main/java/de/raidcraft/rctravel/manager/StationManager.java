@@ -18,12 +18,7 @@ import de.raidcraft.util.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Philip Urban
@@ -65,20 +60,22 @@ public class StationManager implements Component {
             Location location = tTravelStation.getBukkitLocation();
             if (location == null) continue;
 
-            Group group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
-            if (group == null) continue;
-            double price = group.getDefaultPrice();
+            Optional<Group> group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
+            if (!group.isPresent()) continue;
+            double price = group.get().getDefaultPrice();
             if (tTravelStation.getPrice() != 0) {
                 price = tTravelStation.getPrice() / 100D;
             }
             TeleportTravelStation station =
                     new TeleportTravelStation(tTravelStation.getName(), location,
                             price, tTravelStation.getBukkitMinPoint(), tTravelStation.getBukkitMaxPoint());
-            addToCache(station, group);
+            addToCache(station, group.get());
         }
     }
 
-    public Station getStation(String stationName) {
+    public Optional<Station> getStation(String stationName) {
+
+        if (stationName == null) return Optional.empty();
 
         Station station = null;
         for (List<Station> stList : cachedStations.values()) {
@@ -101,7 +98,7 @@ public class StationManager implements Component {
                 }
             }
         }
-        return station;
+        return Optional.ofNullable(station);
     }
 
     public GroupedStation getGroupedStation(Station station) {
@@ -142,7 +139,7 @@ public class StationManager implements Component {
         return stations;
     }
 
-    public List<Station> getGroupStations(String group) {
+    public List<Station> getAllStations(String group) {
 
         return cachedStations.get(StringUtils.formatName(group));
     }
@@ -162,10 +159,10 @@ public class StationManager implements Component {
 
         groupedStations.clear();
         for (Map.Entry<String, List<Station>> entry : cachedStations.entrySet()) {
-            Group group = plugin.getGroupManager().getGroup(entry.getKey());
-            if (group == null) continue;
+            Optional<Group> group = plugin.getGroupManager().getGroup(entry.getKey());
+            if (!group.isPresent()) continue;
             for (Station station : entry.getValue()) {
-                GroupedStation groupedStation = new GroupedStation(station, group);
+                GroupedStation groupedStation = new GroupedStation(station, group.get());
                 groupedStations.add(groupedStation);
             }
         }
@@ -200,7 +197,7 @@ public class StationManager implements Component {
         return station;
     }
 
-    public void deleteStation(Station station) throws RaidCraftException {
+    public void deleteStation(Station station) {
 
         GroupedStation groupedStation = null;
         for (GroupedStation gs : groupedStations) {

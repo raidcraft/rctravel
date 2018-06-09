@@ -1,23 +1,27 @@
 package de.raidcraft.rctravel.api.group;
 
 /**
+ * A group clusters travel stations together.
+ * A player can only travel between stations in the same group.
+ * A group also defines the vehicle and base price for all contained stations.
+ *
  * @author Philip Urban
  */
 public interface Group {
 
-    public String getName();
+    String getName();
 
-    public String getPlainName();
+    String getPlainName();
 
-    public String getIconName();
+    String getIconName();
 
-    public String getVehicleName();
+    String getVehicleName();
 
-    public String getConversationName();
+    String getConversationName();
 
-    public double getDefaultPrice();
+    double getDefaultPrice();
 
-    public int getLockTime();
+    int getLockTime();
 
-    public int getUnlockTime();
+    int getUnlockTime();
 }

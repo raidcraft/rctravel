@@ -7,17 +7,19 @@ import org.bukkit.entity.Player;
 /**
  * @author Philip Urban
  */
-public interface Station {
+public interface Station extends Comparable<Station> {
 
-    public String getDisplayName();
+    String getDisplayName();
 
-    public String getName();
+    String getName();
 
-    public Location getLocation();
+    Location getLocation();
 
-    public void travel(Player player, Station station) throws RaidCraftException;
+    double getDistance(Location location);
 
-    public boolean equals(Object obj);
+    void travel(Player player, Station station) throws RaidCraftException;
 
-    public int hashCode();
+    boolean equals(Object obj);
+
+    int hashCode();
 }

@@ -43,6 +43,16 @@ public abstract class AbstractStation implements Station {
     }
 
     @Override
+    public double getDistance(Location location) {
+        return getLocation().distance(location);
+    }
+
+    @Override
+    public int compareTo(Station o) {
+        return getDisplayName().compareTo(o.getDisplayName());
+    }
+
+    @Override
     public boolean equals(Object o) {
 
         if (this == o) return true;
