@@ -3,19 +3,16 @@ package de.raidcraft.rctravel.conversations;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.action.action.Action;
 import de.raidcraft.api.conversations.Conversations;
-import de.raidcraft.api.conversations.builder.StageBuilder;
 import de.raidcraft.api.conversations.conversation.Conversation;
-import de.raidcraft.api.conversations.stage.StageTemplate;
 import de.raidcraft.rctravel.RCTravelPlugin;
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.manager.GroupManager;
 import de.raidcraft.rctravel.manager.StationManager;
+import de.raidcraft.rctravel.util.StationConversationUtil;
 import de.raidcraft.util.ConfigUtil;
 import de.raidcraft.util.EnumUtils;
-import de.raidcraft.util.fanciful.FancyMessage;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -29,9 +26,6 @@ import java.util.stream.Collectors;
  */
 public class ListStationsAction implements Action<Conversation> {
 
-    private final RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-    private final GroupManager groupManager = plugin.getGroupManager();
-    private final StationManager stationManager = plugin.getStationManager();
 
     private static boolean isFreeStation(Station station) {
         double price = 0;
@@ -59,7 +53,12 @@ public class ListStationsAction implements Action<Conversation> {
     )
     public void accept(Conversation conversation, ConfigurationSection config) {
 
-        Optional<Group> group = groupManager.getGroup(config.getString("group"));
+        RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
+        GroupManager groupManager = plugin.getGroupManager();
+        StationManager stationManager = plugin.getStationManager();
+
+
+        Optional<StationGroup> group = groupManager.getGroup(config.getString("group"));
         if (!group.isPresent()) {
             Conversations.error(conversation, "Invalid group in action " + getIdentifier() + " and config: " + ConfigUtil.getFileName(config));
             return;
@@ -74,18 +73,17 @@ public class ListStationsAction implements Action<Conversation> {
             return;
         }
 
-        EnumSet<StationListFilter> filters = EnumUtils.getEnumSetFromString(StationListFilter.class, config.getString("filter", "DISCOVERED"));
-        StationListOrder order = EnumUtils.getEnumFromString(StationListOrder.class, config.getString("order", "ALPHABETIC_ASC"));
+        EnumSet<StationConversationUtil.StationListFilter> filters = EnumUtils.getEnumSetFromString(StationConversationUtil.StationListFilter.class, config.getString("filter", "DISCOVERED"));
 
         List<Station> stations = new ArrayList<>();
 
-        if (filters.contains(StationListFilter.ALL)) {
+        if (filters.contains(StationConversationUtil.StationListFilter.ALL)) {
             stations = stationManager.getAllStations(group.get().getName());
-        } else if (filters.contains(StationListFilter.DISCOVERED)) {
+        } else if (filters.contains(StationConversationUtil.StationListFilter.DISCOVERED)) {
             stations = stationManager.getDiscoveredStations(group.get(), conversation.getOwner().getUniqueId());
         }
 
-        if (filters.contains(StationListFilter.FREE)) {
+        if (filters.contains(StationConversationUtil.StationListFilter.FREE)) {
             stations = stations.stream().filter(ListStationsAction::isFreeStation).collect(Collectors.toList());
         }
 
@@ -94,86 +92,11 @@ public class ListStationsAction implements Action<Conversation> {
                 .sorted()
                 .collect(Collectors.toList());
 
-        conversation.changeToStage(buildStationList(conversation, stations, currentStation.get()));
-    }
-
-    private StageTemplate buildStationList(Conversation conversation, List<Station> stations, Station startStation) {
-
-        StageBuilder stage = Conversations.buildStage("list-stations");
-
-        if (stations.size() < 1) {
-            return stage.withText("Tut mir leid, du kennst keine passenden Stationen.")
-                    .withAction(Action.changeToPreviousStage())
-                    .build();
-        }
-
-        stage.withText("Du kennst folgende Stationen:");
-
-        stations.forEach(station -> {
-            int distance = (int) station.getDistance(conversation.getLocation());
-            double price = station instanceof Chargeable ? ((Chargeable) station).getPrice(distance) : 0;
-            stage.withAnswer(
-                    new FancyMessage("[").color(ChatColor.BLUE)
-                            .text(station.getDisplayName()).color(ChatColor.YELLOW)
-                            .formattedTooltip(
-                                    new FancyMessage(station.getDisplayName()).color(ChatColor.YELLOW),
-                                    new FancyMessage("Distanz: ").color(ChatColor.YELLOW)
-                                            .text(station.getDistance(conversation.getLocation()) + "m").color(ChatColor.AQUA),
-                                    price > 0 ? new FancyMessage("Preis: ").color(ChatColor.YELLOW)
-                                            .text(RaidCraft.getEconomy().getFormattedAmount(price))
-                                            : new FancyMessage("Kostenlos").color(ChatColor.GREEN)
-                                            .text("]").color(ChatColor.BLUE)
-                            ),
-                    answer -> answer.withAction(Action.of(TravelToStationAction.class), action -> {
-                        action.withConfig("target", station.getName());
-                        action.withConfig("start", startStation.getName());
-                        action.withConfig("confirm", true);
-                        action.withConfig("pay", true);
-                    })
-            );
-        });
-
-        return stage.build();
-    }
-
-    public enum StationListOrder {
-
-        ALPHABETIC_ASC("Alphabetisch von A-Z sortiert."),
-        ALPHABETIC_DESC("Alphabetisch von Z-A sortiert."),
-        DISTANCE_ASC("Nach Entfernung (nah bis fern) sortiert."),
-        DISTANCE_DESC("Nach Entfernung (fern bis nah) sortiert."),
-        PRICE_ASC("Nach Preis (günstig bis teuer) sortiert."),
-        PRICE_DESC("Nach Preis (teuer bis günstig) sortiert.");
-
-        private String infoText;
-
-        StationListOrder(String infoText) {
-
-            this.infoText = infoText;
-        }
-
-        public String getInfoText() {
-
-            return infoText;
-        }
-    }
-
-    public enum StationListFilter {
-
-        ALL("Es werden alle Stationen angezeigt."),
-        FREE("Es werden nur kostenlose Stationen angezeigt."),
-        DISCOVERED("Es werden nur entdeckte Stationen angezeigt.");
-
-        private String infoText;
-
-        StationListFilter(String infoText) {
-
-            this.infoText = infoText;
-        }
-
-        public String getInfoText() {
-
-            return infoText;
-        }
+        conversation.changeToStage(StationConversationUtil.buildStationList(conversation, stations, TravelToStationAction.class, (station, actionBuilder) -> {
+            actionBuilder.withConfig("target", station.getName());
+            actionBuilder.withConfig("start", currentStation.get().getName());
+            actionBuilder.withConfig("confirm", true);
+            actionBuilder.withConfig("pay", true);
+        }));
     }
 }

@@ -22,7 +22,7 @@ public class TravelMasterNPCManager {
         Location improvedLocation = station.getStation().getLocation().clone();
         improvedLocation.setY(improvedLocation.getY() + 1.5);
         RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-        Optional<ConversationHost<?>> host = Conversations.spawnConversationHost(plugin.getName(), "Reiseleiter", station.getGroup().getConversationName(), improvedLocation);
+        Optional<ConversationHost<?>> host = Conversations.spawnConversationHost(plugin.getName(), "Reiseleiter", station.getStationGroup().getConversationName(), improvedLocation);
 
         host.ifPresent(h -> h.addTrait(StationTrait.class));
         host.ifPresent(h -> h.getTrait(StationTrait.class).ifPresent(trait -> trait.setStationName(station.getStation().getName())));

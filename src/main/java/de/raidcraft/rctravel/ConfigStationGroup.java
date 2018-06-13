@@ -1,13 +1,13 @@
 package de.raidcraft.rctravel;
 
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * @author Philip Urban
  */
-public class ConfigGroup implements Group {
+public class ConfigStationGroup implements StationGroup {
 
     private String name;
     private String iconName;
@@ -17,7 +17,7 @@ public class ConfigGroup implements Group {
     private int lockTime;
     private int unlockTime;
 
-    public ConfigGroup(ConfigurationSection config) {
+    public ConfigStationGroup(ConfigurationSection config) {
 
         this.name = config.getString("name");
         this.iconName = config.getString("icon", "sign");

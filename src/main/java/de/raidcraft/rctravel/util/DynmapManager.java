@@ -2,7 +2,7 @@ package de.raidcraft.rctravel.util;
 
 import de.raidcraft.RaidCraft;
 import de.raidcraft.rctravel.RCTravelPlugin;
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.rctravel.api.station.Station;
 import org.bukkit.Bukkit;
 import org.dynmap.DynmapAPI;
@@ -32,16 +32,16 @@ public class DynmapManager {
         markerAPI = api.getMarkerAPI();
     }
 
-    private MarkerSet getMarkerSet(Group group) {
+    private MarkerSet getMarkerSet(StationGroup stationGroup) {
 
-        MarkerSet markerSet = markerAPI.getMarkerSet(group.getPlainName());
+        MarkerSet markerSet = markerAPI.getMarkerSet(stationGroup.getPlainName());
         if (markerSet == null) {
-            markerSet = markerAPI.createMarkerSet(group.getPlainName(), group.getName(), null, true);
+            markerSet = markerAPI.createMarkerSet(stationGroup.getPlainName(), stationGroup.getName(), null, true);
         }
         return markerSet;
     }
 
-    public void addStationMarker(Station station, Group group) {
+    public void addStationMarker(Station station, StationGroup stationGroup) {
 
 
         if (markerAPI == null) {
@@ -49,9 +49,9 @@ public class DynmapManager {
             return;
         }
 
-        MarkerSet markerSet = getMarkerSet(group);
+        MarkerSet markerSet = getMarkerSet(stationGroup);
 
-        removeMarker(station, group);
+        removeMarker(station, stationGroup);
 
         markerSet.createMarker(station.getName()
                 , station.getDisplayName()
@@ -59,13 +59,13 @@ public class DynmapManager {
                 , station.getLocation().getBlockX()
                 , station.getLocation().getBlockY()
                 , station.getLocation().getBlockZ()
-                , markerAPI.getMarkerIcon(group.getIconName())
+                , markerAPI.getMarkerIcon(stationGroup.getIconName())
                 , true);
     }
 
-    public void removeMarker(Station station, Group group) {
+    public void removeMarker(Station station, StationGroup stationGroup) {
 
-        MarkerSet markerSet = getMarkerSet(group);
+        MarkerSet markerSet = getMarkerSet(stationGroup);
 
         for (Marker marker : markerSet.getMarkers()) {
             if (marker.getLabel().equalsIgnoreCase(station.getDisplayName()) || marker.getLabel().equalsIgnoreCase(station.getName())) {

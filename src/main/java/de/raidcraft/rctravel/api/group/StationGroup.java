@@ -7,7 +7,7 @@ package de.raidcraft.rctravel.api.group;
  *
  * @author Philip Urban
  */
-public interface Group {
+public interface StationGroup {
 
     String getName();
 

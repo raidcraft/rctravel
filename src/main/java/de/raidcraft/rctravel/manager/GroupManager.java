@@ -1,9 +1,9 @@
 package de.raidcraft.rctravel.manager;
 
 import de.raidcraft.api.config.SimpleConfiguration;
-import de.raidcraft.rctravel.ConfigGroup;
+import de.raidcraft.rctravel.ConfigStationGroup;
 import de.raidcraft.rctravel.RCTravelPlugin;
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.util.CaseInsensitiveMap;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class GroupManager {
 
     private RCTravelPlugin plugin;
-    private Map<String, Group> cachedGroups = new CaseInsensitiveMap<>();
+    private Map<String, StationGroup> cachedGroups = new CaseInsensitiveMap<>();
 
     public GroupManager(RCTravelPlugin plugin) {
 
@@ -25,20 +25,20 @@ public class GroupManager {
         reload();
     }
 
-    public Optional<Group> getGroup(String groupName) {
+    public Optional<StationGroup> getGroup(String groupName) {
 
         if (groupName == null) return Optional.empty();
 
-        Group group = cachedGroups.get(groupName);
-        if (group == null) {
-            for (Group gr : cachedGroups.values()) {
+        StationGroup stationGroup = cachedGroups.get(groupName);
+        if (stationGroup == null) {
+            for (StationGroup gr : cachedGroups.values()) {
                 if (gr.getName().toLowerCase().startsWith(groupName.toLowerCase())) {
-                    group = gr;
+                    stationGroup = gr;
                     break;
                 }
             }
         }
-        return Optional.ofNullable(group);
+        return Optional.ofNullable(stationGroup);
     }
 
     public void loadGroups() {
@@ -56,6 +56,7 @@ public class GroupManager {
 
     private void loadConfig(File dir) {
 
+
         for (File file : dir.listFiles()) {
             if (file.isDirectory()) {
                 // recursive loading of all sub directories
@@ -67,7 +68,7 @@ public class GroupManager {
                 ConfigurationSection configurationSection = plugin.configure(new SimpleConfiguration<>(plugin, file), false);
                 String groupName = configurationSection.getString("name");
                 if (groupName == null) continue;
-                cachedGroups.put(groupName, new ConfigGroup(configurationSection));
+                cachedGroups.put(groupName, new ConfigStationGroup(configurationSection));
             }
         }
     }

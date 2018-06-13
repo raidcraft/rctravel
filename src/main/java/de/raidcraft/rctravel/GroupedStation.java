@@ -1,6 +1,6 @@
 package de.raidcraft.rctravel;
 
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.rctravel.api.station.Station;
 
 /**
@@ -11,12 +11,12 @@ import de.raidcraft.rctravel.api.station.Station;
 public class GroupedStation {
 
     private Station station;
-    private Group group;
+    private StationGroup stationGroup;
 
-    public GroupedStation(Station station, Group group) {
+    public GroupedStation(Station station, StationGroup stationGroup) {
 
         this.station = station;
-        this.group = group;
+        this.stationGroup = stationGroup;
     }
 
     public Station getStation() {
@@ -24,8 +24,8 @@ public class GroupedStation {
         return station;
     }
 
-    public Group getGroup() {
+    public StationGroup getStationGroup() {
 
-        return group;
+        return stationGroup;
     }
 }

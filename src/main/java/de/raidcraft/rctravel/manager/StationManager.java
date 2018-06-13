@@ -7,7 +7,7 @@ import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.TeleportTravelStation;
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.rctravel.api.station.Discoverable;
 import de.raidcraft.rctravel.api.station.RegionStation;
 import de.raidcraft.rctravel.api.station.Station;
@@ -60,7 +60,7 @@ public class StationManager implements Component {
             Location location = tTravelStation.getBukkitLocation();
             if (location == null) continue;
 
-            Optional<Group> group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
+            Optional<StationGroup> group = plugin.getGroupManager().getGroup(tTravelStation.getGroupName());
             if (!group.isPresent()) continue;
             double price = group.get().getDefaultPrice();
             if (tTravelStation.getPrice() != 0) {
@@ -124,10 +124,10 @@ public class StationManager implements Component {
         return gps;
     }
 
-    public List<Station> getDiscoveredStations(Group group, UUID player) {
+    public List<Station> getDiscoveredStations(StationGroup stationGroup, UUID player) {
 
         List<Station> stations = new ArrayList<>();
-        List<Station> groupStations = cachedStations.get(group.getPlainName());
+        List<Station> groupStations = cachedStations.get(stationGroup.getPlainName());
         if (groupStations == null) return stations;
 
         for (Station station : groupStations) {
@@ -159,7 +159,7 @@ public class StationManager implements Component {
 
         groupedStations.clear();
         for (Map.Entry<String, List<Station>> entry : cachedStations.entrySet()) {
-            Optional<Group> group = plugin.getGroupManager().getGroup(entry.getKey());
+            Optional<StationGroup> group = plugin.getGroupManager().getGroup(entry.getKey());
             if (!group.isPresent()) continue;
             for (Station station : entry.getValue()) {
                 GroupedStation groupedStation = new GroupedStation(station, group.get());
@@ -173,7 +173,7 @@ public class StationManager implements Component {
         return groupedStations;
     }
 
-    public Station createStation(String stationName, Player player, Group group) throws RaidCraftException {
+    public Station createStation(String stationName, Player player, StationGroup stationGroup) throws RaidCraftException {
 
         // check if station with same name already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
@@ -188,10 +188,10 @@ public class StationManager implements Component {
         }
         TeleportTravelStation station = new TeleportTravelStation
                 (stationName, player.getLocation(),
-                        group.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
-        plugin.getDynmapManager().addStationMarker(station, group);
+                        stationGroup.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
+        plugin.getDynmapManager().addStationMarker(station, stationGroup);
 
-        saveStation(station, group);
+        saveStation(station, stationGroup);
         reload();
         plugin.getStationLockTask().reload();
         return station;
@@ -218,24 +218,24 @@ public class StationManager implements Component {
 
         // delete dynmap marker
         if (groupedStation != null) {
-            plugin.getDynmapManager().removeMarker(groupedStation.getStation(), groupedStation.getGroup());
+            plugin.getDynmapManager().removeMarker(groupedStation.getStation(), groupedStation.getStationGroup());
         }
         plugin.reload();
     }
 
-    private void addToCache(Station station, Group group) {
+    private void addToCache(Station station, StationGroup stationGroup) {
 
-        if (!cachedStations.containsKey(group.getPlainName())) {
-            cachedStations.put(group.getPlainName(), new ArrayList<Station>());
+        if (!cachedStations.containsKey(stationGroup.getPlainName())) {
+            cachedStations.put(stationGroup.getPlainName(), new ArrayList<Station>());
         }
-        cachedStations.get(group.getPlainName()).add(station);
+        cachedStations.get(stationGroup.getPlainName()).add(station);
     }
 
-    private void saveStation(RegionStation station, Group group) {
+    private void saveStation(RegionStation station, StationGroup stationGroup) {
 
         TTravelStation tTravelStation = new TTravelStation();
         tTravelStation.setName(station.getDisplayName());
-        tTravelStation.setGroupName(group.getPlainName());
+        tTravelStation.setGroupName(stationGroup.getPlainName());
         tTravelStation.setWorld(station.getLocation().getWorld().getName());
         tTravelStation.setX((int) (station.getLocation().getX() * 100D));
         tTravelStation.setY((int) (station.getLocation().getY() * 100D));

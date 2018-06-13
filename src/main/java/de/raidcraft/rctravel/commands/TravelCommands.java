@@ -4,7 +4,7 @@ import com.sk89q.minecraft.util.commands.*;
 import de.raidcraft.api.RaidCraftException;
 import de.raidcraft.rctravel.GroupedStation;
 import de.raidcraft.rctravel.RCTravelPlugin;
-import de.raidcraft.rctravel.api.group.Group;
+import de.raidcraft.rctravel.api.group.StationGroup;
 import de.raidcraft.rctravel.api.station.Station;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -53,7 +53,7 @@ public class TravelCommands {
 
             // update dynmap marker
             for (GroupedStation groupedStation : plugin.getStationManager().getGroupedStations()) {
-                plugin.getDynmapManager().addStationMarker(groupedStation.getStation(), groupedStation.getGroup());
+                plugin.getDynmapManager().addStationMarker(groupedStation.getStation(), groupedStation.getStationGroup());
             }
             sender.sendMessage(ChatColor.GREEN + "RCTravel wurde neugeladen!");
         }
@@ -71,7 +71,7 @@ public class TravelCommands {
             Player player = (Player) sender;
 
             // check if group exists
-            Optional<Group> group = plugin.getGroupManager().getGroup(args.getString(0));
+            Optional<StationGroup> group = plugin.getGroupManager().getGroup(args.getString(0));
             if (!group.isPresent()) {
                 throw new CommandException("Es gibt keine Gruppe mit dem namen '" + args.getString(0) + "'!");
             }

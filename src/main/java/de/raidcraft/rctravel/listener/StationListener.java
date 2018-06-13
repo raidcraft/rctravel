@@ -32,7 +32,7 @@ public class StationListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
             if (player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
-                player.sendMessage(ChatColor.GOLD + "*" + ChatColor.GREEN + " Das " + groupedStation.getGroup().getVehicleName()
+                player.sendMessage(ChatColor.GOLD + "*" + ChatColor.GREEN + " Das " + groupedStation.getStationGroup().getVehicleName()
                         + " von " + ChatColor.DARK_GREEN + groupedStation.getStation().getDisplayName() + ChatColor.GREEN + " ist eingetroffen!");
             }
         }
@@ -43,7 +43,7 @@ public class StationListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.getWorld().equals(groupedStation.getStation().getLocation().getWorld())) continue;
             if (player.getLocation().distance(groupedStation.getStation().getLocation()) < 250) {
-                player.sendMessage(ChatColor.GOLD + "*" + ChatColor.RED + " Das " + groupedStation.getGroup().getVehicleName()
+                player.sendMessage(ChatColor.GOLD + "*" + ChatColor.RED + " Das " + groupedStation.getStationGroup().getVehicleName()
                         + " von " + ChatColor.DARK_RED + groupedStation.getStation().getDisplayName() + ChatColor.RED + " ist abgereist!");
             }
         }

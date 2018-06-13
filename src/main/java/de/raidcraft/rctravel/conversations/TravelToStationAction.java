@@ -6,8 +6,6 @@ import de.raidcraft.api.conversations.Conversations;
 import de.raidcraft.rctravel.RCTravelPlugin;
 import de.raidcraft.rctravel.api.station.SimpleStation;
 import de.raidcraft.rctravel.api.station.Station;
-import de.raidcraft.rctravel.manager.StationManager;
-import de.raidcraft.rctravel.manager.TravelManager;
 import de.raidcraft.rctravel.tasks.TakeoffDelayedTask;
 import de.raidcraft.util.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -18,10 +16,6 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 public class TravelToStationAction implements Action<Player> {
-
-    private final RCTravelPlugin plugin = RaidCraft.getComponent(RCTravelPlugin.class);
-    private final TravelManager travelManager = plugin.getTravelManager();
-    private final StationManager stationManager = plugin.getStationManager();
 
     @Override
     @Information(

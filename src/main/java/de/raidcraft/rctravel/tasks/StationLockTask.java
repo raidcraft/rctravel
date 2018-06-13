@@ -121,9 +121,9 @@ public class StationLockTask implements Runnable {
         public int getRemainingTime() {
 
             if (locked) {
-                return getRemainingTime(groupedStation.getGroup().getLockTime());
+                return getRemainingTime(groupedStation.getStationGroup().getLockTime());
             } else {
-                return getRemainingTime(groupedStation.getGroup().getUnlockTime());
+                return getRemainingTime(groupedStation.getStationGroup().getUnlockTime());
             }
         }
 
