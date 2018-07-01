@@ -26,7 +26,7 @@ import java.util.*;
 public class StationManager implements Component {
 
     private RCTravelPlugin plugin;
-    // map: key -> group name | value -> list of stations
+    // map: key -> group displayName | value -> list of stations
     private Map<String, List<Station>> cachedStations = new CaseInsensitiveMap<>();
     List<GroupedStation> groupedStations = new ArrayList<>();
 
@@ -175,7 +175,7 @@ public class StationManager implements Component {
 
     public Station createStation(String stationName, Player player, StationGroup stationGroup) throws RaidCraftException {
 
-        // check if station with same name already exists
+        // check if station with same displayName already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
                 .find(TTravelStation.class).where().ieq("name", stationName).findUnique();
         if (tTravelStation != null) {

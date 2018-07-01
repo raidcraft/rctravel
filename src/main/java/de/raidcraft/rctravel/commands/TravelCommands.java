@@ -62,7 +62,7 @@ public class TravelCommands {
                 aliases = {"create"},
                 desc = "Create travelTo station",
                 min = 2,
-                usage = "<group> <name>"
+                usage = "<group> <displayName>"
         )
         @CommandPermissions("rctravel.cmd.create")
         public void create(CommandContext args, CommandSender sender) throws CommandException {
@@ -89,7 +89,7 @@ public class TravelCommands {
                 aliases = {"delete", "remove"},
                 desc = "Delete travelTo station",
                 min = 1,
-                usage = "<name>"
+                usage = "<displayName>"
         )
         @CommandPermissions("rctravel.cmd.delete")
         public void delete(CommandContext args, CommandSender sender) throws CommandException {

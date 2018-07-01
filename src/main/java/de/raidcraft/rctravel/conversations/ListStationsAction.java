@@ -44,7 +44,7 @@ public class ListStationsAction implements Action<Conversation> {
             conf = {
                     "group: travelTo scope",
                     "stationName: the station that should list its targets",
-                    "useNearestStation: [true/->false] - if true station name can be blank",
+                    "useNearestStation: [true/->false] - if true station displayName can be blank",
                     "searchRadius: radius to search for nearest station",
                     "allowTravelToUndiscovered: [true/->false] - if true the player can only choose discovered stations",
                     "order: ->ALPHABETIC_ASC | ALPHABETIC_DESC | DISTANCE_ASC | DISTANCE_DESC | PRICE_ASC | PRICE_DESC",

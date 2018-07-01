@@ -24,7 +24,7 @@ public class ConfigStationGroup implements StationGroup {
         this.defaultPrice = config.getDouble("default-price", 0);
         this.lockTime = config.getInt("lock-time", 15);
         this.unlockTime = config.getInt("unlock-time", 3);
-        this.vehicleName = config.getString("vehicle-name", "Transportmittel");
+        this.vehicleName = config.getString("vehicle-displayName", "Transportmittel");
         this.conversationName = config.getString("conversation", "rctravel-master");
     }
 
