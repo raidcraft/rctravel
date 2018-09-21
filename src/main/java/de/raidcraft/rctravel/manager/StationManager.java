@@ -177,7 +177,7 @@ public class StationManager implements Component {
 
         // check if station with same displayName already exists
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("name", stationName).findUnique();
+                .find(TTravelStation.class).where().ieq("name", stationName).findOne();
         if (tTravelStation != null) {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
@@ -209,7 +209,7 @@ public class StationManager implements Component {
 
         // delete from database
         TTravelStation tTravelStation = RaidCraft.getDatabase(RCTravelPlugin.class)
-                .find(TTravelStation.class).where().ieq("name", station.getDisplayName()).findUnique();
+                .find(TTravelStation.class).where().ieq("name", station.getDisplayName()).findOne();
         if (tTravelStation != null) {
             RaidCraft.getDatabase(RCTravelPlugin.class).delete(tTravelStation);
         }
