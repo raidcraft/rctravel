@@ -17,17 +17,15 @@ public class GenerateDbMigration {
      */
     public static void main(String[] args) throws IOException {
 
-        // optionally specify the version and name
-        System.setProperty("ddl.migration.version", "1.0");
-        System.setProperty("ddl.migration.name", "initial");
-
         // generate a migration using drops from a prior version
         //System.setProperty("ddl.migration.pendingDropsFor", "1.2");
 
         DbMigration dbMigration = new DefaultDbMigration();
         dbMigration.setPlatform(Platform.MYSQL);
+        dbMigration.setName("initial");
+        dbMigration.setVersion("1.0");
         // generate the migration ddl and xml
         // ... with EbeanServer in "offline" mode
-        dbMigration.generateMigration();
+        String script = dbMigration.generateMigration();
     }
 }
