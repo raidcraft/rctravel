@@ -6,7 +6,6 @@ import de.raidcraft.rctravel.api.station.Chargeable;
 import de.raidcraft.rctravel.api.station.RegionStation;
 import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.util.RegionUtil;
-import de.raidcraft.tables.RcLogLevel;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -39,7 +38,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
             travel(player, sourceStation.getLocation(), getLocation());
         }
 
-        RaidCraft.log("Der Spieler befindet sich nicht am Abfahrtsort!", "TeleportTravelStation", RcLogLevel.WARNING);
+        RaidCraft.LOGGER.warning("Der Spieler befindet sich nicht am Abfahrtsort!");
     }
 
     @Override
@@ -52,7 +51,7 @@ public class TeleportTravelStation extends AbstractStation implements Chargeable
             return;
         }
 
-        RaidCraft.log("Der Spieler befindet sich nicht am Abfahrtsort!", "TeleportTravelStation", RcLogLevel.WARNING);
+        RaidCraft.LOGGER.warning("Der Spieler befindet sich nicht am Abfahrtsort!");
     }
 
     @Override
