@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * @author Philip Urban
  */
 @Entity
-@Table(name = "rctravel_stations")
+@Table(name = "rc_travel_stations")
 public class TTravelStation {
 
     @Id

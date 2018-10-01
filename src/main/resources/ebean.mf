@@ -1,0 +1,3 @@
+entity-packages: de.raidcraft.rctravel
+transactional-packages: de.raidcraft.rctravel
+querybean-packages: de.raidcraft.rctravel
