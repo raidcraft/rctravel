@@ -1,6 +1,9 @@
 package de.raidcraft.rctravel.manager;
 
-import com.sk89q.worldedit.bukkit.selections.Selection;
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.regions.Region;
 import de.raidcraft.RaidCraft;
 import de.raidcraft.api.Component;
 import de.raidcraft.api.RaidCraftException;
@@ -14,6 +17,7 @@ import de.raidcraft.rctravel.api.station.Station;
 import de.raidcraft.rctravel.tables.TTravelStation;
 import de.raidcraft.util.CaseInsensitiveMap;
 import de.raidcraft.util.ChunkLocation;
+import de.raidcraft.util.LocationUtil;
 import de.raidcraft.util.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -182,13 +186,20 @@ public class StationManager implements Component {
             throw new RaidCraftException("Es existiert bereits eine Station mit diesem Namen!");
         }
 
-        Selection selection = plugin.getWorldEdit().getSelection(player);
+        Region selection;
+        try {
+            selection = plugin.getWorldEdit().getSession(player).getSelection(new BukkitWorld(player.getWorld()));
+        } catch (IncompleteRegionException e) {
+            throw new RaidCraftException(e.getMessage());
+        }
         if (selection == null || selection.getMinimumPoint() == null || selection.getMaximumPoint() == null) {
             throw new RaidCraftException("Es muss das Transportmittel mit WorldEdit selektiert sein!");
         }
         TeleportTravelStation station = new TeleportTravelStation
                 (stationName, player.getLocation(),
-                        stationGroup.getDefaultPrice(), selection.getMinimumPoint(), selection.getMaximumPoint());
+                        stationGroup.getDefaultPrice(),
+                        new Location(player.getWorld(), selection.getMinimumPoint().getBlockX(), selection.getMinimumPoint().getBlockY(), selection.getMinimumPoint().getBlockZ()),
+                        new Location(player.getWorld(), selection.getMaximumPoint().getBlockX(), selection.getMaximumPoint().getBlockY(), selection.getMaximumPoint().getBlockZ()));
         plugin.getDynmapManager().addStationMarker(station, stationGroup);
 
         saveStation(station, stationGroup);
