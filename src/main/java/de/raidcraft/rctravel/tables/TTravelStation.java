@@ -1,6 +1,5 @@
 package de.raidcraft.rctravel.tables;
 
-import com.sk89q.worldedit.Vector;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -192,16 +191,6 @@ public class TTravelStation {
     public void setZMax(int zMax) {
 
         this.zMax = zMax;
-    }
-
-    public Vector getSk89qMinPoint() {
-
-        return new Vector(xMin, yMin, zMin);
-    }
-
-    public Vector getSk89qMaxPoint() {
-
-        return new Vector(xMax, yMax, zMax);
     }
 
     public Location getBukkitMinPoint() {

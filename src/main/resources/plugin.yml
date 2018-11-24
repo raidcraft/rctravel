@@ -6,4 +6,4 @@ author: Strasse36
 website: http://www.raid-craft.de
 depend: [RaidCraft-API, RCConversations]
 database: true
-
+api-version: 1.13
